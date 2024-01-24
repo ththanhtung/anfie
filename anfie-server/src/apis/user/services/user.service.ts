@@ -18,7 +18,11 @@ export class UserService {
 		return this.userRepository.findOneByEmail(email);
 	}
 
-	async updateRefreshToken(userId: string, refreshToken: string | null) {
+	async findOneById(id: number) {
+		return this.userRepository.findOneById(id);
+	}
+
+	async updateRefreshToken(userId: number, refreshToken: string | null) {
 		return this.userRepository.updateRefreshToken(userId, refreshToken);
 	}
 }

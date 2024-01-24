@@ -36,13 +36,26 @@ export class UserRepository extends Repository<Users> {
 		return user;
 	}
 
+	async findOneById(id: number) {
+		const user = await this.findOne({ where: { id: id } });
+		if (!user) {
+			throw new ConflictException([
+				{
+					field: 'id',
+					message: 'user not found'
+				}
+			]);
+		}
+		return user;
+	}
+
 	async createOne(input: CreateUserDto) {
 		await this.checkExist(input.email);
 		const user = this.create(input);
 		return this.save(user);
 	}
 
-	async updateRefreshToken(userId: string, refreshToken: string | null) {
+	async updateRefreshToken(userId: number, refreshToken: string | null) {
 		const user = await this.findOne({ where: { id: userId } });
 		user.refreshToken = refreshToken;
 		return this.save(user);

@@ -7,7 +7,7 @@ export class BaseEntity<T> {
 	}
 
 	@PrimaryGeneratedColumn()
-	id: string;
+	id: number;
 
 	@CreateDateColumn()
 	created_at!: Date;

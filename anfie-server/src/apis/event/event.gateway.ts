@@ -4,6 +4,7 @@ import { Server, Socket } from 'socket.io';
 import { socketAuthMiddleware } from 'src/common/middlewares';
 import { AuthenticatedSocket } from 'src/common/interfaces';
 import { EventSessionManager } from './event.sesstion';
+import { OnEvent } from '@nestjs/event-emitter';
 
 @WebSocketGateway({
 	cors: {
@@ -34,12 +35,10 @@ export class EventGateway {
 		console.log(socket.user);
 	}
 
-	@SubscribeMessage('message')
-	message(@MessageBody() data: any) {
-		return 'hello';
-	}
-
-	sendMessage(data: any) {
-		this.server.emit('message', data);
+	@OnEvent('conversation.created')
+	handleConversationCreated(conversation: any) {
+		this.server.emit('conversation.created', conversation);
+		// console.log(conversation);
+		this.server.emit('onConversationCreated', conversation);
 	}
 }
