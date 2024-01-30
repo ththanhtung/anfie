@@ -1,0 +1,16 @@
+import { ENDPOINT_APIS, HttpClient } from "./network";
+
+export class AuthServiceApis extends HttpClient {
+  constructor() {
+    super();
+  }
+
+  public async postLoginUser(form: TFormLogin) {
+    const { data } = await this.instance.post(ENDPOINT_APIS.auth.login, {
+      ...form,
+    });
+    return data;
+  }
+}
+
+export const authService = new AuthServiceApis();

@@ -1,0 +1,13 @@
+.login-wrapper {
+    .login-right-panel{
+        @apply overflow-hidden;
+    }
+}
+
+.right-panel {
+    @apply h-full w-full flex justify-center items-center bg-blue-500 text-white text-7xl font-bold
+}
+
+.login-right-panel {
+    @apply h-screen flex justify-center items-center bg-white
+}

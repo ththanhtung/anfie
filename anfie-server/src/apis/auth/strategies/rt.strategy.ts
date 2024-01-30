@@ -14,7 +14,7 @@ export class RtStrategy extends PassportStrategy(Strategy, 'rt-jwt') {
 		});
 	}
 
-	validate(req: Request, payload: any) {
+	validate(req: Request, payload: TUserJwt) {
 		const refreshToken = req.body.refreshToken.replace('Bearer ', '');
 
 		if (!refreshToken) throw new ForbiddenException('Refresh token malformed');

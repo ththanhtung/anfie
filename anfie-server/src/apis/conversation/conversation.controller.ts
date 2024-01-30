@@ -6,6 +6,7 @@ import { AtGuard } from 'src/common/guards';
 import { GetCurrentUser } from 'src/common/decorators';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
+@UseGuards(AtGuard)
 @Controller('conversations')
 export class ConversationController {
 	constructor(
@@ -14,21 +15,20 @@ export class ConversationController {
 	) {}
 
 	@Post()
-	@UseGuards(AtGuard)
-	async create(@GetCurrentUser() user: TUserJwt, @Body() dto: CreateConversationDto) { 
+	async create(@GetCurrentUser() user: TUserJwt, @Body() dto: CreateConversationDto) {
 		const conversation = await this.conversationService.create(user, dto);
 		this.events.emit('conversation.created', conversation);
 		return conversation;
 	}
 
 	@Get()
-	findAll() {
-		return this.conversationService.findAll();
+	async findAll(@GetCurrentUser() user: TUserJwt) {
+		return this.conversationService.findAll(user.userId);
 	}
 
 	@Get(':id')
 	findOne(@Param('id') id: string) {
-		return this.conversationService.findOne(+id);
+		return this.conversationService.findOneById(+id);
 	}
 
 	@Patch(':id')

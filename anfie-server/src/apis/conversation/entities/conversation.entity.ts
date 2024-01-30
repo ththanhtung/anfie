@@ -1,32 +1,34 @@
 import { Message } from 'src/apis/message/entities';
 import { Users } from 'src/apis/user/entities';
 import { BaseEntity } from 'src/database';
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 
 @Entity()
 export class Conversation extends BaseEntity<Conversation> {
-	@PrimaryColumn({
-		type: 'int',
+	@Column({
 		name: 'conversation_creator_id'
 	})
 	creatorId: number;
 
-	@PrimaryColumn({
-		type: 'int',
+	@Column({
 		name: 'conversation_recipient_id'
 	})
 	recipientId: number;
 
-	@OneToMany(() => Message, (message) => message.conversation, {
-		cascade: true
-	})
+	@OneToMany(() => Message, (message) => message.conversation, { nullable: true })
 	@JoinColumn()
 	messages: Message[];
 
 	@OneToOne(() => Users)
+	@JoinColumn({
+		name: 'conversation_creator_id'
+	})
 	creator: Users;
 
 	@OneToOne(() => Users)
+	@JoinColumn({
+		name: 'conversation_recipient_id'
+	})
 	recipient: Users;
 
 	@Column({
@@ -38,6 +40,5 @@ export class Conversation extends BaseEntity<Conversation> {
 	@OneToMany(() => Message, (message) => message.conversation, {
 		cascade: true
 	})
-	@JoinColumn()
 	lastMessage: Message;
 }

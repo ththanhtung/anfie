@@ -9,8 +9,6 @@ export class UserController {
 	@Post('/create')
 	@HttpCode(201)
 	async createUser(@Body() dto: CreateUserDto) {
-		console.log(dto);
-		
 		return this.userService.createOne(dto);
 	}
 }

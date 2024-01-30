@@ -60,4 +60,17 @@ export class UserRepository extends Repository<Users> {
 		user.refreshToken = refreshToken;
 		return this.save(user);
 	}
+
+	async findOneByRefreshToken(refreshToken: string) {
+		const user = await this.findOne({ where: { refreshToken: refreshToken } });
+		if (!user) {
+			throw new ConflictException([
+				{
+					field: 'refreshToken',
+					message: 'user not found'
+				}
+			]);
+		}
+		return user;
+	}
 }

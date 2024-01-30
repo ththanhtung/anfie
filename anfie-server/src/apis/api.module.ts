@@ -10,8 +10,10 @@ import { CommentModule } from './comment/comment.module';
 import { GroupModule } from './group/group.module';
 import { FriendModule } from './friend/friend.module';
 import { FriendRequestModule } from './friend-request/friend-request.module';
+import { MediaUploaderModule } from './media-uploader/media-uploader.module';
+import { MessageMediaModule } from './message-media/message-media.module';
 
 @Module({
-    imports:[AuthModule, UserModule, EventModule, MessageModule, ConversationModule, PostModule, CommentModule, GroupModule, FriendModule, FriendRequestModule],
+    imports:[AuthModule, UserModule, EventModule, MessageModule, ConversationModule, PostModule, CommentModule, GroupModule, FriendModule, FriendRequestModule, MediaUploaderModule, MessageMediaModule],
 })
 export class ApiModule {}

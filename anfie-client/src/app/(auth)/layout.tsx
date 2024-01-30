@@ -1,7 +1,8 @@
+import { LayoutAuth } from "@/components";
 import React, { PropsWithChildren } from "react";
 
 const AuthLayout = ({ children }: PropsWithChildren) => {
-  return <div>{children}</div>;
+  return <LayoutAuth>{children}</LayoutAuth>;
 };
 
 export default AuthLayout;

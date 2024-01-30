@@ -1,9 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
 import { LoginDto } from '../dtos';
 import { UserService } from 'src/apis/user/services';
 import * as argon from 'argon2';
 import { getTokens } from 'src/common/helpers';
-import { Users } from 'src/apis/user/entities';
+import { Request, Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -13,7 +13,7 @@ export class AuthService {
 		return true;
 	}
 
-	async login(dto: LoginDto) {
+	async login(dto: LoginDto, res: Response) {
 		const user = await this.userServices.findOneByEmail(dto.email);
 
 		const comparePassword = await argon.verify(user.hash, dto.password);
@@ -29,17 +29,39 @@ export class AuthService {
 
 		const { accessToken, refreshToken } = await getTokens(user.id, user.email);
 
-		return { accessToken, refreshToken };
+		this.userServices.updateRefreshToken(user.id, refreshToken);
+
+		res.cookie('jwt', refreshToken, {
+			maxAge: 24 * 3 * 60 * 60 * 1000,
+			sameSite: 'none',
+			secure: true
+		});
+
+		return {
+			user,
+			tokens: { accessToken }
+		};
 	}
 
 	async logout() {
 		return true;
 	}
 
-	async refreshToken(user: Users) {
-		const { accessToken, refreshToken } = await getTokens(user.id, user.email);
+	async refreshToken(user: TUserJwt, req: Request) {
+		const refreshTokenFromCoookie = req.cookies?.jwt;
 
-		await this.userServices.updateRefreshToken(user.id, refreshToken);
+		const foundUser = await this.userServices.findOneByRefreshToken(refreshTokenFromCoookie);
+		if (foundUser.id !== user.userId) {
+			throw new ForbiddenException([
+				{
+					message: 'forbidden error'
+				}
+			]);
+		}
+
+		const { accessToken, refreshToken } = await getTokens(user.userId, user.email);
+
+		await this.userServices.updateRefreshToken(user.userId, refreshToken);
 
 		return { accessToken, refreshToken };
 	}

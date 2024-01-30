@@ -26,4 +26,27 @@ export class ConversationRepository extends Repository<Conversation> {
 			]);
 		}
 	}
+
+	async findOneById(id: number) {
+		const conversation = await this.findOne({ where: { id: id } });
+		if (!conversation) {
+			throw new ConflictException([
+				{
+					field: 'id',
+					message: 'conversation not found'
+				}
+			]);
+		}
+		return conversation;
+	}
+
+	async getConversations(userId: number) {
+		return this.createQueryBuilder('conversation')
+			.leftJoinAndSelect('conversation.lastMessage', 'lastMessage')
+			.leftJoinAndSelect('conversation.creator', 'creator')
+			.leftJoinAndSelect('conversation.recipient', 'recipient')
+			.where('creator.id = :id', { id: userId })
+			.orWhere('recipient.id = :id', { id: userId })
+			.getMany();
+	}
 }

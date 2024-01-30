@@ -17,12 +17,12 @@ export class ConversationService {
 		return conversation;
 	}
 
-	findAll() {
-		return `This action returns all conversation`;
+	async findAll(userId: number) {
+		return this.conversationRepository.getConversations(userId);
 	}
 
-	findOne(id: number) {
-		return `This action returns a #${id} conversation`;
+	findOneById(id: number) {
+		return this.conversationRepository.findOneById(id);
 	}
 
 	update(id: number, updateConversationDto: UpdateConversationDto) {
