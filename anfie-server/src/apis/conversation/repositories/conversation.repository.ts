@@ -3,6 +3,7 @@ import { Conversation } from '../entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateConversationDto } from '../dto';
+import { PaginationDto, pagination } from 'src/common';
 @Injectable()
 export class ConversationRepository extends Repository<Conversation> {
 	constructor(@InjectRepository(Conversation) repository: Repository<Conversation>) {
@@ -17,7 +18,19 @@ export class ConversationRepository extends Repository<Conversation> {
 	}
 
 	async checkExist(userId: number, recipientId: number) {
-		const conversation = await this.findOne({ where: { creatorId: userId, recipientId: recipientId } });
+		const conversation = await this.findOne({
+			where: [
+				{
+					creatorId: userId,
+					recipientId: recipientId
+				},
+				{
+					creatorId: recipientId,
+					recipientId: userId
+				}
+			]
+		});
+
 		if (conversation) {
 			throw new ConflictException([
 				{
@@ -40,13 +53,15 @@ export class ConversationRepository extends Repository<Conversation> {
 		return conversation;
 	}
 
-	async getConversations(userId: number) {
-		return this.createQueryBuilder('conversation')
-			.leftJoinAndSelect('conversation.lastMessage', 'lastMessage')
-			.leftJoinAndSelect('conversation.creator', 'creator')
-			.leftJoinAndSelect('conversation.recipient', 'recipient')
-			.where('creator.id = :id', { id: userId })
-			.orWhere('recipient.id = :id', { id: userId })
-			.getMany();
+	async getConversations(userId: number, query: PaginationDto) {
+		return pagination(this, query, {
+			where: [
+				{
+					creatorId: userId
+				},
+				{ recipientId: userId }
+			],
+			relations: ['creator', 'recipient', 'lastMessage']
+		});
 	}
 }

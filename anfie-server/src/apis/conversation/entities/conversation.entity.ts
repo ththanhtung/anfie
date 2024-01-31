@@ -1,9 +1,10 @@
 import { Message } from 'src/apis/message/entities';
 import { Users } from 'src/apis/user/entities';
 import { BaseEntity } from 'src/database';
-import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 
 @Entity()
+@Index(['creatorId', 'recipientId'], { unique: true })
 export class Conversation extends BaseEntity<Conversation> {
 	@Column({
 		name: 'conversation_creator_id'
@@ -11,21 +12,28 @@ export class Conversation extends BaseEntity<Conversation> {
 	creatorId: number;
 
 	@Column({
-		name: 'conversation_recipient_id'
+		name: 'conversation_recipient_id',
+		unique: false
 	})
 	recipientId: number;
 
-	@OneToMany(() => Message, (message) => message.conversation, { nullable: true })
+	@OneToMany(() => Message, (message) => message.conversation, { nullable: true, cascade: true })
 	@JoinColumn()
 	messages: Message[];
 
-	@OneToOne(() => Users)
+	@OneToOne(() => Users, {
+		cascade: true,
+		createForeignKeyConstraints: false
+	})
 	@JoinColumn({
 		name: 'conversation_creator_id'
 	})
 	creator: Users;
 
-	@OneToOne(() => Users)
+	@OneToOne(() => Users, {
+		cascade: true,
+		createForeignKeyConstraints: false
+	})
 	@JoinColumn({
 		name: 'conversation_recipient_id'
 	})

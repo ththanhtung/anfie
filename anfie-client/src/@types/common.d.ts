@@ -1,0 +1,1 @@
+type TSort = "DESC" | "ASC" | "updatedAt";

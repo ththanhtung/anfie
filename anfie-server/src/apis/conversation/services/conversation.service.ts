@@ -3,6 +3,8 @@ import { CreateConversationDto } from '../dto/create-conversation.dto';
 import { UpdateConversationDto } from '../dto/update-conversation.dto';
 import { UserService } from 'src/apis/user/services';
 import { ConversationRepository } from '../repositories';
+import { GetConversationsDto } from '../dto';
+import { pagination } from 'src/common';
 
 @Injectable()
 export class ConversationService {
@@ -17,8 +19,8 @@ export class ConversationService {
 		return conversation;
 	}
 
-	async findAll(userId: number) {
-		return this.conversationRepository.getConversations(userId);
+	async findAll(userId: number, query: GetConversationsDto) {
+		return this.conversationRepository.getConversations(userId, query);
 	}
 
 	findOneById(id: number) {

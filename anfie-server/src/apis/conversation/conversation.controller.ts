@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query } from '@nestjs/common';
 import { ConversationService } from './services/conversation.service';
 import { CreateConversationDto } from './dto/create-conversation.dto';
 import { UpdateConversationDto } from './dto/update-conversation.dto';
 import { AtGuard } from 'src/common/guards';
 import { GetCurrentUser } from 'src/common/decorators';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { GetConversationsDto } from './dto';
 
 @UseGuards(AtGuard)
 @Controller('conversations')
@@ -22,9 +23,9 @@ export class ConversationController {
 	}
 
 	@Get()
-	async findAll(@GetCurrentUser() user: TUserJwt) {
-		return this.conversationService.findAll(user.userId);
-	}
+	async findAll(@GetCurrentUser() user: TUserJwt, @Query() query: GetConversationsDto) {
+		return this.conversationService.findAll(user.userId, query);
+	} 
 
 	@Get(':id')
 	findOne(@Param('id') id: string) {
