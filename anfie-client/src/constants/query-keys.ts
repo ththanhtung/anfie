@@ -7,3 +7,9 @@ export const LocalKey = {
 export const mutationKeys = {
   MUTATION_LOGIN: "mutation_login",
 };
+
+export const queryKeys = {
+  GET_LIST_INFINITE_CONVERSATIONS: "GET_LIST_INFINITE_CONVERSATIONS",
+
+  GET_LIST_INFINITE_MESSAGES: "GET_LIST_INFINITE_MESSAGES",
+};

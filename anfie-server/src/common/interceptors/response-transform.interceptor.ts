@@ -19,8 +19,8 @@ export class ResponseTransformInterceptor implements NestInterceptor {
 					const { page: pageQuery, limit: limitQuery } = request.query;
 					const page = pageQuery ? +pageQuery : 1;
 					const limit = limitQuery ? +limitQuery : 10;
-					const total_items = data[1];
-					const total_page = Math.ceil(data[1] / +limit);
+					const totalItems = data[1];
+					const totalPage = Math.ceil(data[1] / +limit);
 
 					return {
 						code,
@@ -31,8 +31,8 @@ export class ResponseTransformInterceptor implements NestInterceptor {
 						metadata: {
 							page,
 							limit,
-							total_items,
-							total_page
+							totalItems,
+							totalPage
 						}
 					};
 				}

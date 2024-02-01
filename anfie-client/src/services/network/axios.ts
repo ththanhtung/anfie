@@ -1,5 +1,5 @@
 import { LocalKey } from "@/constants";
-import { deleteCookieValue, getCookieValue } from "@/utils";
+import { deleteCookieValue, getCookieValue, localStorageService } from "@/utils";
 import axios, {
   AxiosError,
   AxiosInstance,
@@ -87,9 +87,13 @@ export default abstract class HttpClient {
   private _handleRequest(
     config: InternalAxiosRequestConfig<AxiosRequestConfig>
   ) {
-    const accessToken = localStorage.getItem(LocalKey.ACCESS_TOKEN_LOCALKEY);
+    let accessToken = localStorageService.getLocalStorage(LocalKey.ACCESS_TOKEN_LOCALKEY)
+    accessToken = accessToken?.accessToken
+
     if (accessToken) {
-      (config.headers as AxiosRequestHeaders).Authorization = accessToken;
+      (
+        config.headers as AxiosRequestHeaders
+      ).Authorization = `Bearer ${accessToken}`;
     }
     return config;
   }

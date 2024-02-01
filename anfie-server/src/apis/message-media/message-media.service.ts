@@ -9,7 +9,7 @@ export class MessageMediaService {
 		private readonly mediaUploaderService: MediaUploaderService
 	) {}
 	async create(messageId: number, medias: Express.Multer.File[]) {
-		if (!medias) {
+		if (!medias || medias === undefined) {
 			return;
 		}
 		const promise = medias.map((media) => {

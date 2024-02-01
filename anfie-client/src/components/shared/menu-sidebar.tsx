@@ -2,6 +2,7 @@ import { images } from "@/constants";
 import {
   BellOutlined,
   HomeOutlined,
+  LogoutOutlined,
   MessageOutlined,
   SnippetsOutlined,
   UserOutlined,
@@ -20,7 +21,7 @@ const MenuSidebar = ({ href }: TProps) => {
     {
       key: "0",
       icon: <HomeOutlined />,
-      label: 'home'
+      label: "home",
     },
     {
       key: "1",
@@ -47,18 +48,23 @@ const MenuSidebar = ({ href }: TProps) => {
       icon: <UserOutlined />,
       label: "profile",
     },
+    {
+      key: "6",
+      icon: <LogoutOutlined style={{color: 'red'}}/>,
+      label: 'logout',
+    },
   ];
   return (
-    <>
-      <Link href={`/${href}`}>
+    <div className="flex flex-col items-center">
+      <Link href={`/${href}`} className="flex w-full items-center p-4">
         <Image src={images.LOGO} alt="logo" width={35} height={35} priority />
-        <p>anfie</p>
+        <p className="ml-2 text-lg font-bold">Anfie</p>
       </Link>
-      <Menu theme="light" mode="inline" items={items} />
-      <Button type="primary" htmlType="submit" shape="round">
+      <Menu theme="light" mode="inline" items={items} style={{border: 'none'}}/>
+      <Button type="primary" htmlType="submit" shape="round" size="large">
         NEW FRIEND
       </Button>
-    </>
+    </div>
   );
 };
 

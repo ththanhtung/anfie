@@ -5,11 +5,11 @@ type TProps = PropsWithChildren & {
 };
 const LayoutConversation = ({ renderLeft, children }: TProps) => {
   return (
-    <Row className="min-w-full">
-      <Col md={8} lg={8} className="overflow-scroll h-full">
+    <Row className="w-full bg-slate-100 py-4">
+      <Col md={8} lg={8} className="h-full">
         {renderLeft}
       </Col>
-      <Col md={12} lg={12}>
+      <Col md={12} lg={15}>
         {children}
       </Col>
     </Row>

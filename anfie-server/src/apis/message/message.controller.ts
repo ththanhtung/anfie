@@ -1,10 +1,25 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGuards, UploadedFiles } from '@nestjs/common';
+import {
+	Controller,
+	Get,
+	Post,
+	Body,
+	Patch,
+	Param,
+	Delete,
+	ParseIntPipe,
+	UseGuards,
+	UploadedFiles,
+	UseInterceptors,
+	Query
+} from '@nestjs/common';
 import { MessageService } from './services/message.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { AtGuard } from 'src/common/guards';
 import { GetCurrentUser } from 'src/common/decorators';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { GetMessagesDto } from './dto';
 
 @UseGuards(AtGuard)
 @Controller('conversation/:conversationId/messages')
@@ -15,10 +30,11 @@ export class MessageController {
 	) {}
 
 	@Post()
+	@UseInterceptors(FilesInterceptor('medias'))
 	async create(
 		@GetCurrentUser() user: TUserJwt,
 		@Param('conversationId', ParseIntPipe) conversationId: number,
-		@UploadedFiles() { medias }: { medias: Express.Multer.File[] },
+		@UploadedFiles() medias: Express.Multer.File[],
 		@Body() createMessageDto: CreateMessageDto
 	) {
 		const message = await this.messageService.create({
@@ -34,8 +50,8 @@ export class MessageController {
 	}
 
 	@Get()
-	async getMessagesFromConversation(@Param('conversationId', ParseIntPipe) conversationId: number) {
-		return this.messageService.getMessagesFromConversation(conversationId);
+	async getMessagesFromConversation(@Param('conversationId', ParseIntPipe) conversationId: number, @Query() query: GetMessagesDto) {
+		return this.messageService.getMessagesFromConversation(conversationId, query);
 	}
 
 	@Patch(':id')

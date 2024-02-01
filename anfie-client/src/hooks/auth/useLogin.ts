@@ -1,7 +1,6 @@
-import { LocalKey, mutationKeys, routes } from "@/constants";
+import { mutationKeys, routes } from "@/constants";
 import { authService } from "@/services";
 import { accessTokenStoreAtom, userInfoStoreAtom } from "@/stores";
-import { getCookieValue } from "@/utils";
 import { useMutation } from "@tanstack/react-query";
 import { message } from "antd";
 import { useSetAtom } from "jotai";

@@ -1,6 +1,8 @@
 import { Repository } from 'typeorm';
 import { Message } from '../entities';
 import { InjectRepository } from '@nestjs/typeorm';
+import { pagination } from 'src/common';
+import { GetMessagesDto } from '../dto';
 
 export class MessageRepository extends Repository<Message> {
 	constructor(@InjectRepository(Message) repository: Repository<Message>) {
@@ -15,8 +17,8 @@ export class MessageRepository extends Repository<Message> {
 		return this.save(message);
 	}
 
-	async getMessagesFromConversation(conversationId: number) {
-		return this.find({
+	async getMessagesFromConversation(conversationId: number, query: GetMessagesDto) {
+		return pagination(this, query, {
 			where: {
 				conversationId: conversationId
 			}

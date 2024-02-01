@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { UpdateMessageDto } from '../dto';
+import { GetMessagesDto, UpdateMessageDto } from '../dto';
 import { ConversationService } from 'src/apis/conversation/services';
 import { MessageRepository } from '../repositories';
 import { MessageMediaService } from 'src/apis/message-media/message-media.service';
@@ -21,8 +21,8 @@ export class MessageService {
 		return message;
 	}
 
-	async getMessagesFromConversation(conversationId: number) {
-		return this.messageRepository.getMessagesFromConversation(conversationId);
+	async getMessagesFromConversation(conversationId: number, query: GetMessagesDto) {
+		return this.messageRepository.getMessagesFromConversation(conversationId, query);
 	}
 
 	findAll() {
