@@ -17,6 +17,12 @@ export class Conversation extends BaseEntity<Conversation> {
 	})
 	recipientId: number;
 
+	@Column({
+		name: 'conversation_last_message_id',
+		nullable: true
+	})
+	lastMessageId: number;
+
 	@OneToMany(() => Message, (message) => message.conversation, { nullable: true, cascade: true })
 	@JoinColumn()
 	messages: Message[];
@@ -45,8 +51,11 @@ export class Conversation extends BaseEntity<Conversation> {
 	})
 	lastMessageDate: Date;
 
-	@OneToMany(() => Message, (message) => message.conversation, {
+	@OneToOne(() => Message, (message) => message.conversation, {
 		cascade: true
+	})
+	@JoinColumn({
+		name: 'conversation_last_message_id'
 	})
 	lastMessage: Message;
 }

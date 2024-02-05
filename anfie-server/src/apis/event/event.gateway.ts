@@ -27,7 +27,9 @@ export class EventGateway {
 	handleConnection(socket: AuthenticatedSocket, ...args: any[]) {
 		console.log('Incoming Connection');
 		this.sessionManager.setUserSocket(socket.user.userId, socket);
-		socket.emit('connected', {});
+		socket.emit('connected', {
+			status: 'connected'
+		});
 	}
 
 	handleDisconnect(socket: AuthenticatedSocket) {

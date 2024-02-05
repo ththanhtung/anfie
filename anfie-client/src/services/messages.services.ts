@@ -7,11 +7,19 @@ export class MessagesServiceApis extends HttpClient {
 
   public async getListMessagesByConversationId(
     params: TMessageParams,
-    conversationId: string
+    conversationId: string = ""
   ) {
     const { data } = await this.instance.get(
       `${ENDPOINT_APIS.conversation.list}/${conversationId}/messages`,
       { params }
+    );
+    return data;
+  }
+
+  public async postCreateMessage(form: TMessageForm, conversationId: string = "") {
+    const { data } = await this.instance.post(
+      `${ENDPOINT_APIS.conversation.list}/${conversationId}/messages`,
+      form
     );
     return data;
   }

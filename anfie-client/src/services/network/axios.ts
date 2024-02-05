@@ -88,7 +88,6 @@ export default abstract class HttpClient {
     config: InternalAxiosRequestConfig<AxiosRequestConfig>
   ) {
     let accessToken = localStorageService.getLocalStorage(LocalKey.ACCESS_TOKEN_LOCALKEY)
-    accessToken = accessToken?.accessToken
 
     if (accessToken) {
       (
@@ -105,7 +104,7 @@ export default abstract class HttpClient {
     });
     try {
       const response = await this.instance.post(
-        `${refreshUrl}/refresh-token`,
+        `/api/auth/refresh-token`,
         { token: refreshToken },
         { headers: { Authorization: "" } }
       );

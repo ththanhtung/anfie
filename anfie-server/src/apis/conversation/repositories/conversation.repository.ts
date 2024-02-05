@@ -64,4 +64,8 @@ export class ConversationRepository extends Repository<Conversation> {
 			relations: ['creator', 'recipient', 'lastMessage']
 		});
 	}
+
+	async updateLastMessage({ conversationId, messageId }: TUpdateLastMessageParams) {
+		return this.update(conversationId, { lastMessageId: messageId });
+	}
 }

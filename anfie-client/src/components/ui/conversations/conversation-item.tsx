@@ -5,10 +5,25 @@ type TProps = {
   avatar?: string;
   username: string;
   lastMessage: TMessage;
+  id: number;
+  value?: number;
+  onClick: () => void;
 };
-const ConversationItem = ({ avatar, username, lastMessage }: TProps) => {
+const ConversationItem = ({
+  avatar,
+  username,
+  lastMessage,
+  id,
+  value,
+  onClick,
+}: TProps) => {
   return (
-    <div className="flex items-center justify-between px-6 py-3 w-[80%] bg-white p-2 rounded-md mb-2 mx-auto cursor-pointer hover:shadow-md hover:scale-[1.02] ease-in duration-150">
+    <div
+      className={`conversation-item hover: shadow-md hover:scale-[1.02] ${
+        id === value && "conversation-item-active"
+      }`}
+      onClick={onClick}
+    >
       <Avatar icon={<UserOutlined />} size="large" />
       <div className="item-body">
         <h3 className="font-semibold">{username}</h3>

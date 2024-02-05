@@ -22,7 +22,7 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { GetMessagesDto } from './dto';
 
 @UseGuards(AtGuard)
-@Controller('conversation/:conversationId/messages')
+@Controller('conversations/:conversationId/messages')
 export class MessageController {
 	constructor(
 		private readonly messageService: MessageService,

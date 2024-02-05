@@ -4,11 +4,12 @@ import { messagesService } from "@/services";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 
-export const useListInfiniteMessages = (conversationId: string) => {
+export const useListInfiniteMessages = (conversationId?: string) => {
   const [params, setParams] = useState<TConversationParams>({
     page: 1,
     limit: 10,
-    sort: "ASC",
+    sort: "DESC",
+    orderBy: "created_at"
   });
   const {
     data,
@@ -27,6 +28,7 @@ export const useListInfiniteMessages = (conversationId: string) => {
         },
         conversationId
       ),
+    enabled: Boolean(conversationId),
     getNextPageParam: (lastPage, allPages) => {
       const { metadata } = lastPage;
       if (params.page * metadata.limit > metadata.totalItems) return undefined;

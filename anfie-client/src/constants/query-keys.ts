@@ -6,6 +6,7 @@ export const LocalKey = {
 
 export const mutationKeys = {
   MUTATION_LOGIN: "mutation_login",
+  MUTATION_CREATE_MESSAGE: "MUTATION_CREATE_MESSAGE",
 };
 
 export const queryKeys = {

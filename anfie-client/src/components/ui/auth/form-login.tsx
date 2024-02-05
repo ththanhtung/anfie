@@ -33,16 +33,18 @@ const FormLogin = () => {
         <Input
           prefix={<UserOutlined className="site-form-item-icon" />}
           placeholder="Email"
+          allowClear
         />
       </Form.Item>
       <Form.Item
         name="password"
         rules={[{ required: true, message: "Please input your Password!" }]}
       >
-        <Input
+        <Input.Password
           prefix={<LockOutlined className="site-form-item-icon" />}
           type="password"
           placeholder="Password"
+          allowClear
         />
       </Form.Item>
       <Button type="primary" htmlType="submit" loading={isPending}>

@@ -21,7 +21,8 @@ export class MessageRepository extends Repository<Message> {
 		return pagination(this, query, {
 			where: {
 				conversationId: conversationId
-			}
+			},
+			relations: ['user']
 		});
 	}
 }

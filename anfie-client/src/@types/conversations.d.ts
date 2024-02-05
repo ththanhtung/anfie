@@ -14,18 +14,18 @@ type TConversation = {
   lastMessageDate: any;
   creator: TCreator;
   recipient: TRecipient;
-  lastMessage: TMessage[];
+  lastMessage: TMessage;
 };
 
 type TCreator = {
-  id: number
+  id: string
   created_at: string
   updated_at: string
   email: string
 }
 
 type TRecipient = {
-  id: number
+  id: string
   created_at: string
   updated_at: string
   email: string

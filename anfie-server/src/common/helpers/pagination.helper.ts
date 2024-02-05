@@ -23,7 +23,7 @@ export const pagination = async <T>(repo: Repository<T>, query: PaginationDto, o
 		order: {
 			...order,
 			//@ts-ignore
-			id: 'DESC'
+			created_at: 'ASC'
 		}
 	});
 

@@ -1,8 +1,13 @@
 import { LayoutMain } from "@/components";
+import { SocketProvider } from "@/configs";
 import React, { PropsWithChildren } from "react";
 
 const ConversationLayout = ({ children }: PropsWithChildren) => {
-  return <LayoutMain>{children}</LayoutMain>;
+  return (
+    <LayoutMain>
+      <SocketProvider>{children}</SocketProvider>
+    </LayoutMain>
+  );
 };
 
 export default ConversationLayout;

@@ -28,15 +28,15 @@ export const useLogin = () => {
           message.error(error.message);
         },
         onSuccess: async (data) => {
-          message.success("login success");
           const userInfo = data.data.user;
           const accessToken = data.data.tokens;
-          setUserInfo(userInfo);
-          setAccessToken(accessToken);
+          setUserInfo({ userId: userInfo.id, ...userInfo });
+          setAccessToken(accessToken?.accessToken);
+          router.push(routes.CONVERSATIONS);
         },
       });
     },
-    [mutate, setAccessToken, setUserInfo]
+    [mutate, router, setAccessToken, setUserInfo]
   );
 
   return {

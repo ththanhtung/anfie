@@ -16,6 +16,11 @@ export class MessageService {
 
 		const message = await this.messageRepository.createOne(createMessageParams);
 
+		await this.conversationService.updateLastMessage({
+			conversationId: createMessageParams.conversationId,
+			messageId: message.id
+		});
+
 		this.messageMediaService.create(message.id, createMessageParams.medias);
 
 		return message;

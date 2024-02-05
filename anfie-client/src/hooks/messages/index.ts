@@ -1,1 +1,2 @@
-export * from './useListInfiniteMessages'
+export * from "./useListInfiniteMessages";
+export * from "./useMutationMessage";

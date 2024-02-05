@@ -23,6 +23,10 @@ export class ConversationService {
 		return this.conversationRepository.getConversations(userId, query);
 	}
 
+	async updateLastMessage({ conversationId, messageId }: TUpdateLastMessageParams) {
+		return this.conversationRepository.updateLastMessage({ conversationId, messageId });
+	}
+
 	findOneById(id: number) {
 		return this.conversationRepository.findOneById(id);
 	}
