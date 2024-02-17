@@ -23,7 +23,7 @@ export class Conversation extends BaseEntity<Conversation> {
 	})
 	lastMessageId: number;
 
-	@OneToMany(() => Message, (message) => message.conversation, { nullable: true, cascade: true })
+	@OneToMany(() => Message, (message) => message.conversation, { nullable: true, cascade: true, onDelete: 'CASCADE' })
 	@JoinColumn()
 	messages: Message[];
 

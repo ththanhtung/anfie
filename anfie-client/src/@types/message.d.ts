@@ -3,6 +3,7 @@ type TMessage = {
   userId: string;
   user: TUser;
   conversationId: number;
+  conversation: TConversation;
   groupId: null;
   id: number;
   created_at: string;

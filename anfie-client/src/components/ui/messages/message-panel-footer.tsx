@@ -1,5 +1,5 @@
-import { Form, Input, Tooltip, Button } from "antd";
-import React, { useCallback } from "react";
+import { Form, Input, Tooltip, Button, InputRef, Upload } from "antd";
+import React, { useCallback, useRef } from "react";
 import { LuSendHorizonal } from "react-icons/lu";
 import { FiImage } from "react-icons/fi";
 import { FaCirclePlus } from "react-icons/fa6";
@@ -8,14 +8,23 @@ type TProps = {
   sendMessage: ({ content }: TMessageForm) => void;
 };
 const MessagePanelFooter = ({ sendMessage }: TProps) => {
-  const onFinish = useCallback((value: TMessageForm) => {
-    sendMessage({
-      content: value?.content,
-    });
-  }, [sendMessage]);
+  const { Dragger } = Upload;
+  const [form] = Form.useForm();
+  const onFinish = useCallback(
+    (value: TMessageForm) => {
+      sendMessage(value);
+      form.resetFields();
+    },
+    [form, sendMessage]
+  );
 
   return (
-    <Form className="flex gap-2 w-full" layout="horizontal" onFinish={onFinish}>
+    <Form
+      form={form}
+      className="flex gap-2 w-full"
+      layout="horizontal"
+      onFinish={onFinish}
+    >
       <Tooltip title="More">
         <Button
           shape="circle"
@@ -24,11 +33,13 @@ const MessagePanelFooter = ({ sendMessage }: TProps) => {
         />
       </Tooltip>
       <Tooltip title="Attachment">
-        <Button
-          shape="circle"
-          icon={<FiImage size={22} />}
-          className="border-transparent shadow-none"
-        />
+        <Upload multiple maxCount={5} showUploadList={false}>
+          <Button
+            shape="circle"
+            icon={<FiImage size={22} />}
+            className="border-transparent shadow-none"
+          />
+        </Upload>
       </Tooltip>
       <Form.Item name="content" className="w-full">
         <Input

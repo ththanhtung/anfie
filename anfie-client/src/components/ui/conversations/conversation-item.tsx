@@ -30,6 +30,7 @@ const ConversationItem = ({
         <p className="text-slate-500">{lastMessage?.content}</p>
       </div>
       <Button
+        className=""
         type="primary"
         shape="round"
         // style={{ backgroundColor: "#87d068" }}

@@ -6,6 +6,7 @@ import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { HttpExceptionFilter } from './common/filters';
 import { ResponseTransformInterceptor } from './common/interceptors';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { ScheduleModule } from '@nestjs/schedule';
 
 const exceptionFactory = (errors: ValidationError[]) => {
 	throw new BadRequestException(
@@ -27,7 +28,7 @@ const validationErrors = (err: ValidationError) => {
 };
 
 @Module({
-	imports: [ConfigModule, DatabaseModule, ApiModule, EventEmitterModule.forRoot()],
+	imports: [ConfigModule, DatabaseModule, ApiModule, EventEmitterModule.forRoot(), ScheduleModule.forRoot()],
 	providers: [
 		{
 			provide: APP_PIPE,

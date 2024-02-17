@@ -6,9 +6,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConversationModule } from '../conversation/conversation.module';
 import { MessageRepository } from './repositories';
 import { MessageMediaModule } from '../message-media/message-media.module';
+import { UserModule } from '../user/user.module';
 
 @Module({
-	imports: [TypeOrmModule.forFeature([Message]), ConversationModule, MessageMediaModule],
+	imports: [TypeOrmModule.forFeature([Message]), ConversationModule, MessageMediaModule, UserModule],
 	controllers: [MessageController],
 	providers: [MessageService, MessageRepository]
 })

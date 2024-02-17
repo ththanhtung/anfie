@@ -1,7 +1,7 @@
 type TConversationParams = {
   page: number;
   limit: number;
-  orderBy?: string;
+  order_by?: string;
   sort?: TSort;
 };
 

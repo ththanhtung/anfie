@@ -5,13 +5,16 @@ import {
   MessagePanel,
 } from "@/components";
 import { useSocketContext } from "@/configs";
+import { queryKeys } from "@/constants";
 import { useListInfiniteConversations } from "@/hooks";
+import { useQueryClient } from "@tanstack/react-query";
 import { List } from "antd";
 import React, { useCallback, useContext, useEffect } from "react";
 
 const ConversationPage = () => {
   const { conversations, isFetchingNextPage, total, fetchNextPage, isLoading } =
     useListInfiniteConversations();
+  const queryClient = useQueryClient();
   const [valueChecked, setValueChecked] = React.useState<number>();
   const [selectedConversation, setSelectedConversation] =
     React.useState<TConversation>();
@@ -21,7 +24,105 @@ const ConversationPage = () => {
     socket.on?.("connected", (payload) => {
       console.log({ payload });
     });
-  }, [socket]);
+
+    socket.on?.("onMessage", (payload: TMessage) => {
+      console.log({ payload });
+
+      const queryKeyMessages = [
+        queryKeys.GET_LIST_INFINITE_MESSAGES,
+        {
+          page: 1,
+          limit: 10,
+          sort: "DESC",
+          order_by: "created_at",
+        },
+        payload?.conversationId.toString(),
+      ];
+
+      const queryKeyConversations = [
+        queryKeys.GET_LIST_INFINITE_CONVERSATIONS,
+        {
+          page: 1,
+          limit: 10,
+          sort: "DESC",
+          order_by: "updated_at",
+        },
+      ];
+
+      queryClient.setQueryData(queryKeyMessages, (oldData: any) => {
+        // Find the latest page
+        const latestPage = oldData?.pages[oldData?.pages.length - 1];
+
+        // Create a new page object with the updated data
+        const newPage = {
+          ...latestPage,
+          data: [...latestPage?.data, payload],
+        };
+
+        // Create a new array of pages with the updated latest page
+        const newPages = oldData?.pages.map(
+          (page: TResultResponse<TMessage[]>, index: number) =>
+            index === oldData?.pages.length - 1 ? newPage : page
+        );
+
+        // Create a new data object with the updated pages
+        const newData = {
+          ...oldData,
+          pages: newPages,
+        };
+
+        return newData;
+      });
+
+      queryClient.setQueryData(queryKeyConversations, (oldData: any) => {
+        // Find the latest page
+        const latestPage = oldData.pages[oldData.pages.length - 1];
+
+        // Create a new page object with the updated data
+        const conversations = latestPage?.data;
+
+        const index = conversations.findIndex(
+          (c) => c.id === payload.conversationId
+        );
+
+        const messageConversation = conversations[index];
+        messageConversation.lastMessage = payload;
+
+        // Create a copy of the conversations array
+        const updatedConversations = [...conversations];
+
+        // Remove the conversation at the specified index
+        updatedConversations.splice(index, 1);
+
+        // Add the messageConversation at the beginning of the array
+        updatedConversations.unshift(messageConversation);
+
+        const newPage = {
+          ...latestPage,
+          data: updatedConversations,
+        };
+
+        // Create a new array of pages with the updated latest page
+        const newPages = oldData.pages.map(
+          (page: TResultResponse<TMessage[]>, index: number) =>
+            index === oldData.pages.length - 1 ? newPage : page
+        );
+
+        // Create a new data object with the updated pages
+        const newData = {
+          ...oldData,
+          pages: newPages,
+        };
+
+        return newData;
+      });
+    });
+    return () => {
+      socket.off?.("connected");
+      socket.off?.("onMessage");
+    };
+  }, [queryClient, socket]);
+
   const renderLeft = useCallback(() => {
     return (
       <div>
@@ -32,7 +133,7 @@ const ConversationPage = () => {
             <ConversationItem
               username={item?.recipient?.email}
               lastMessage={item?.lastMessage}
-              id={item?.id}
+              id={Math.round(Math.random() * 100000000)}
               value={valueChecked}
               onClick={() => {
                 setValueChecked(item?.id);

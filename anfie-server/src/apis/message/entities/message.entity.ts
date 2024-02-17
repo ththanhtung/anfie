@@ -35,7 +35,7 @@ export class Message extends BaseEntity<Message> {
 	})
 	conversationId?: number;
 
-	@OneToMany(() => MessageMedia, (messageMedia) => messageMedia.message)
+	@OneToMany(() => MessageMedia, (messageMedia) => messageMedia.message, { cascade: true, onDelete: 'CASCADE' })
 	@JoinColumn()
 	medias: MessageMedia[];
 
@@ -51,7 +51,7 @@ export class Message extends BaseEntity<Message> {
 	})
 	group: Group;
 
-	@ManyToOne(() => Conversation, (conversation) => conversation.messages)
+	@ManyToOne(() => Conversation, (conversation) => conversation.messages, { onDelete: 'CASCADE' })
 	@JoinColumn({ name: 'conversation_id' })
 	conversation: Conversation;
 }

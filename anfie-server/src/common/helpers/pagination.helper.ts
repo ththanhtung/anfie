@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { FindManyOptions, Repository } from 'typeorm';
-import { sort } from './sort.helper';
 import { PaginationDto } from '../utils';
 
 export const pagination = async <T>(repo: Repository<T>, query: PaginationDto, options?: FindManyOptions<T>): Promise<[T[], number]> => {
@@ -17,19 +16,17 @@ export const pagination = async <T>(repo: Repository<T>, query: PaginationDto, o
 		};
 	}
 
+	if (query.order_by && query.sort) {
+		order = {
+			...order,
+			[query.order_by]: query.sort
+		};
+	}
+
 	const [entities, count] = await repo.findAndCount({
 		...options,
-		//@ts-ignore
-		order: {
-			...order,
-			//@ts-ignore
-			created_at: 'ASC'
-		}
+		order
 	});
-
-	if (query.order_by && query.sort) {
-		sort(entities, query.order_by, query.sort);
-	}
 
 	const start = (page - 1) * limit;
 	const end = page * limit;

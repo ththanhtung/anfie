@@ -17,7 +17,7 @@ export class ConversationController {
 
 	@Post()
 	async create(@GetCurrentUser() user: TUserJwt, @Body() dto: CreateConversationDto) {
-		const conversation = await this.conversationService.create(user, dto);
+		const conversation = await this.conversationService.create(user.userId, dto);
 		this.events.emit('conversation.created', conversation);
 		return conversation;
 	}
@@ -25,7 +25,7 @@ export class ConversationController {
 	@Get()
 	async findAll(@GetCurrentUser() user: TUserJwt, @Query() query: GetConversationsDto) {
 		return this.conversationService.findAll(user.userId, query);
-	} 
+	}
 
 	@Get(':id')
 	findOne(@Param('id') id: string) {
@@ -38,7 +38,7 @@ export class ConversationController {
 	}
 
 	@Delete(':id')
-	remove(@Param('id') id: string) {
-		return this.conversationService.remove(+id);
+	deleteOneById(@Param('id') id: string) {
+		return this.conversationService.deleteOneById(+id);
 	}
 }

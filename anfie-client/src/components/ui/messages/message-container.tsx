@@ -4,7 +4,7 @@ import { _formatDay } from "@/utils";
 import { UserOutlined } from "@ant-design/icons";
 import { Avatar, Spin } from "antd";
 import { useAtomValue } from "jotai";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useInView } from "react-intersection-observer";
 
 type TProps = {
@@ -20,6 +20,7 @@ const MessageContainer = ({
   fetchNextPage,
 }: TProps) => {
   const { ref, inView } = useInView();
+  const containerRef = useRef<HTMLDivElement | null>();
   useEffect(() => {
     if (inView) {
       fetchNextPage();
@@ -34,10 +35,10 @@ const MessageContainer = ({
     const currentMessage = messages[index];
     const nextMessage = messages[index + 1];
     const showMessageHeader =
-      messages.length === index + 1 ||
-      currentMessage.userId !== nextMessage.userId;
+      messages?.length === index + 1 ||
+      currentMessage?.userId !== nextMessage?.userId;
 
-    const isMessageMine = message.userId === user?.userId;
+    const isMessageMine = message?.userId === user?.userId;
 
     return (
       <div
@@ -58,31 +59,57 @@ const MessageContainer = ({
         {showMessageHeader ? (
           <div className="flex-col message-item-details">
             <div className="p-2 bg-slate-200 w-fit rounded-md message-item-container-body">
-              {message.content}
+              {message?.content}
             </div>
             <div className="flex items-center justify-center gap-2 text-slate-400 mt-1">
               {!isMessageMine ? (
-                <span className="">{message.user.email}</span>
+                <span className="">{message?.user?.email}</span>
               ) : (
                 <></>
               )}
               <span className="text-[.7rem]">
-                {_formatDay.formatDDMMYYYYHH(message.created_at)}
+                {_formatDay.formatDDMMYYYYHH(message?.created_at)}
               </span>
             </div>
           </div>
         ) : (
           <div className="w-fit ml-[52px] bg-slate-200 rounded-md m-0 p-2 message-item-container-body">
-            {message.content}
+            {message?.content}
           </div>
         )}
       </div>
     );
   };
 
+  const autoScroll = () => {
+    if (typeof window !== "undefined") {
+      if (containerRef?.current) {
+        const container = containerRef.current;
+        const newMessage = container?.lastElementChild as HTMLDivElement;
+
+        if (newMessage) {
+          const newMessageStyle = getComputedStyle?.(newMessage);
+          const newMessageMargin = parseInt(newMessageStyle.marginBottom);
+          const newMessageHeight = newMessage.offsetHeight + newMessageMargin;
+
+          const visibleHeight = container.offsetHeight;
+          const containerHeight = container.scrollHeight;
+          const scrollOffset = container.scrollTop + visibleHeight;
+
+          if (containerHeight - newMessageHeight <= scrollOffset) {
+            container.scrollTop = containerHeight;
+          }
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    autoScroll();
+  }, [messages]);
+
   return (
-    <div className="px-6 py-4 h-full overflow-y-scroll">
-      {messages.map(mapMessages)}
+    <div ref={containerRef} className="px-6 py-4 h-full overflow-y-scroll">
       {messages?.length > 9 && messages?.length !== totalMessages && (
         <div ref={ref} />
       )}
@@ -91,6 +118,7 @@ const MessageContainer = ({
           <Spin size="large" />
         </div>
       )}
+      {messages.reverse?.().map(mapMessages)}
     </div>
   );
 };

@@ -10,9 +10,9 @@ export class ConversationRepository extends Repository<Conversation> {
 		super(repository.target, repository.manager, repository.queryRunner);
 	}
 
-	async createOne(user: TUserJwt, createConversationDto: CreateConversationDto) {
+	async createOne(CreatorId: number, createConversationDto: CreateConversationDto) {
 		const conversation = this.create();
-		conversation.creatorId = user.userId;
+		conversation.creatorId = CreatorId;
 		conversation.recipientId = createConversationDto.recipientId;
 		return this.save(conversation);
 	}
@@ -67,5 +67,27 @@ export class ConversationRepository extends Repository<Conversation> {
 
 	async updateLastMessage({ conversationId, messageId }: TUpdateLastMessageParams) {
 		return this.update(conversationId, { lastMessageId: messageId });
+	}
+
+	async deleteOneById(id: number) {
+		return this.delete({ id: id });
+	}
+
+	async findOneByUserIds(creatorId: number, recipientId: number) {
+		const conversation = await this.findOne({
+			where: [
+				{
+					creatorId: creatorId,
+					recipientId: recipientId
+				},
+				{
+					creatorId: recipientId,
+					recipientId: creatorId
+				}
+			]
+		});
+
+		console.log(conversation);
+		return conversation;
 	}
 }

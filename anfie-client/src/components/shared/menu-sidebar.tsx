@@ -1,7 +1,9 @@
+"use client";
+import { useSocketContext } from "@/configs";
 import { images } from "@/constants";
+import { collapsedAtom } from "@/stores/common-store";
 import {
   BellOutlined,
-  HomeOutlined,
   LogoutOutlined,
   MessageOutlined,
   SnippetsOutlined,
@@ -9,8 +11,10 @@ import {
   UsergroupAddOutlined,
 } from "@ant-design/icons";
 import { Button, Menu, MenuProps } from "antd";
+import { useAtomValue } from "jotai";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { FaRegNewspaper } from "react-icons/fa";
 
@@ -18,43 +22,54 @@ type TProps = {
   href: string;
 };
 const MenuSidebar = ({ href }: TProps) => {
+  const socket = useSocketContext();
+  const collapsed = useAtomValue(collapsedAtom);
+  const router = useRouter();
   const items: MenuProps["items"] = [
     {
-      key: "0",
+      key: "diary",
       icon: <FaRegNewspaper />,
-      label: "news feed",
+      label: "Diary",
     },
     {
-      key: "1",
+      key: "conversations",
       icon: <MessageOutlined />,
       label: "conversations",
     },
     {
-      key: "2",
+      key: "groups",
       icon: <UsergroupAddOutlined />,
       label: "groups",
     },
     {
-      key: "3",
+      key: "notifications",
       icon: <BellOutlined />,
       label: "notifications",
     },
     {
-      key: "4",
+      key: "notes",
       icon: <SnippetsOutlined />,
       label: "notes",
     },
     {
-      key: "5",
+      key: "profile",
       icon: <UserOutlined />,
       label: "profile",
     },
     {
-      key: "6",
+      key: "logout",
       icon: <LogoutOutlined style={{ color: "red" }} />,
       label: "logout",
     },
   ];
+  const findNewFriend = () => {
+    socket.emit("onFindNewFriend", {});
+    console.log("findNewFriend", socket);
+  };
+
+  const handleClick: MenuProps["onClick"] = (e) => {
+    router.push(e.key);
+  };
   return (
     <div className="flex flex-col items-center">
       <Link href={`/${href}`} className="flex w-full items-center p-4">
@@ -62,12 +77,19 @@ const MenuSidebar = ({ href }: TProps) => {
         <p className="ml-2 text-lg font-bold">Anfie</p>
       </Link>
       <Menu
+        onClick={handleClick}
         theme="light"
         mode="inline"
         items={items}
         style={{ border: "none", textTransform: "capitalize" }}
       />
-      <Button type="primary" htmlType="submit" shape="round" size="large">
+      <Button
+        type="primary"
+        htmlType="submit"
+        shape="round"
+        size="large"
+        onClick={findNewFriend}
+      >
         NEW FRIEND
       </Button>
     </div>

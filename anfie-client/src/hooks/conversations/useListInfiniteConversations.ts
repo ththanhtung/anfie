@@ -8,24 +8,30 @@ export const useListInfiniteConversations = () => {
   const [params, setParams] = useState<TConversationParams>({
     page: 1,
     limit: 10,
-    sort: "ASC",
+    order_by: "updated_at",
+    sort: "DESC",
   });
-  const { data, fetchNextPage, isFetchingNextPage, hasNextPage, isLoading, error } =
-    useInfiniteQuery({
-      queryKey: [queryKeys.GET_LIST_INFINITE_CONVERSATIONS, params],
-      queryFn: ({ pageParam }) =>
-        conversationService.getListConversations({
-          ...params,
-          page: pageParam,
-        }),
-      getNextPageParam: (lastPage, allPages) => {
-        const { metadata } = lastPage;
-        if (params.page * metadata.limit > metadata.totalItems)
-          return undefined;
-        return allPages.length + 1;
-      },
-      initialPageParam: 1,
-    });
+  const {
+    data,
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage,
+    isLoading,
+    error,
+  } = useInfiniteQuery({
+    queryKey: [queryKeys.GET_LIST_INFINITE_CONVERSATIONS, params],
+    queryFn: ({ pageParam }) =>
+      conversationService.getListConversations({
+        ...params,
+        page: pageParam,
+      }),
+    getNextPageParam: (lastPage, allPages) => {
+      const { metadata } = lastPage;
+      if (params.page * metadata.limit > metadata.totalItems) return undefined;
+      return allPages.length + 1;
+    },
+    initialPageParam: 1,
+  });
   const conversations = useMemo(() => {
     return (
       data?.pages

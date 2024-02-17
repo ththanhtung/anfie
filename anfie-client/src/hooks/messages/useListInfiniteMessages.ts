@@ -9,7 +9,7 @@ export const useListInfiniteMessages = (conversationId?: string) => {
     page: 1,
     limit: 10,
     sort: "DESC",
-    orderBy: "created_at"
+    order_by: "created_at",
   });
   const {
     data,

@@ -8,7 +8,7 @@ const { Sider } = Layout;
 const LayoutMain = ({ children }: PropsWithChildren) => {
   return (
     <Layout className="main-layout">
-      <Sider theme="light" width={250}>
+      <Sider theme="light" width={250} breakpoint="md">
         <MenuSidebar href={routes.HOME} />
       </Sider>
       {children}

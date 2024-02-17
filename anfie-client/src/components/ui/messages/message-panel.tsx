@@ -13,6 +13,9 @@ const MessagePanel = ({ conversation }: TProps) => {
   const { messages, total, isFetchingNextPage, fetchNextPage } = useListInfiniteMessages(
     conversation?.id?.toString()
   );
+
+  console.log({messages});
+  
   const { onCreateMessage } = useMutationMessage();
 
   const sentMessage = async ({ content }: TMessageForm) => {

@@ -1,10 +1,11 @@
-import { mutationKeys } from "@/constants";
+import { mutationKeys, queryKeys } from "@/constants";
 import { messagesService } from "@/services";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { message } from "antd";
 import { useCallback } from "react";
 
 export const useMutationMessage = () => {
+  const queryClient = useQueryClient();
   const { mutate: mutationCreateMessage, isPending: isCreateMessagePending } =
     useMutation<
       any,
@@ -22,7 +23,12 @@ export const useMutationMessage = () => {
         { form, conversationId },
         {
           onSuccess: () => {
-            message.success("Message sent");
+            // queryClient.invalidateQueries({
+            //   queryKey: [queryKeys.GET_LIST_INFINITE_MESSAGES],
+            // });
+            // queryClient.invalidateQueries({
+            //   queryKey: [queryKeys.GET_LIST_INFINITE_CONVERSATIONS],
+            // });
           },
           onError: (error) => {
             message.error(error.message);

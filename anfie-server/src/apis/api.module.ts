@@ -12,8 +12,9 @@ import { FriendModule } from './friend/friend.module';
 import { FriendRequestModule } from './friend-request/friend-request.module';
 import { MediaUploaderModule } from './media-uploader/media-uploader.module';
 import { MessageMediaModule } from './message-media/message-media.module';
+import { MatchmakingModule } from './matchmaking/matchmaking.module';
 
 @Module({
-    imports:[AuthModule, UserModule, EventModule, MessageModule, ConversationModule, PostModule, CommentModule, GroupModule, FriendModule, FriendRequestModule, MediaUploaderModule, MessageMediaModule],
+    imports:[AuthModule, UserModule, EventModule, MessageModule, ConversationModule, PostModule, CommentModule, GroupModule, FriendModule, FriendRequestModule, MediaUploaderModule, MessageMediaModule, MatchmakingModule],
 })
 export class ApiModule {}
