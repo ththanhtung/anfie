@@ -16,7 +16,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { FaRegNewspaper } from "react-icons/fa";
+import { TbMessageCircleUp } from "react-icons/tb";
+import { IoBookOutline } from "react-icons/io5";
+import { TbShieldQuestion } from "react-icons/tb";
+import { AiOutlineComment } from "react-icons/ai";
 
 type TProps = {
   href: string;
@@ -28,7 +31,7 @@ const MenuSidebar = ({ href }: TProps) => {
   const items: MenuProps["items"] = [
     {
       key: "diary",
-      icon: <FaRegNewspaper />,
+      icon: <IoBookOutline />,
       label: "Diary",
     },
     {
@@ -38,8 +41,18 @@ const MenuSidebar = ({ href }: TProps) => {
     },
     {
       key: "groups",
-      icon: <UsergroupAddOutlined />,
+      icon: <AiOutlineComment />,
       label: "groups",
+    },
+    {
+      key: "message-requests",
+      icon: <TbMessageCircleUp />,
+      label: "message requests",
+    },
+    {
+      key: "confestions",
+      icon: <TbShieldQuestion />,
+      label: "confestions",
     },
     {
       key: "notifications",
@@ -71,7 +84,7 @@ const MenuSidebar = ({ href }: TProps) => {
     router.push(e.key);
   };
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center fixed">
       <Link href={`/${href}`} className="flex w-full items-center p-4">
         <Image src={images.LOGO} alt="logo" width={35} height={35} priority />
         <p className="ml-2 text-lg font-bold">Anfie</p>

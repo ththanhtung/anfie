@@ -5,6 +5,7 @@ import { Exclude } from 'class-transformer';
 import { UserProfiles } from './user-profile.entity';
 import { Message } from 'src/apis/message/entities';
 import { Group } from 'src/apis/group/entities';
+import { Post } from 'src/apis/post/entities';
 
 @Entity()
 export class Users extends BaseEntity<Users> {
@@ -37,6 +38,12 @@ export class Users extends BaseEntity<Users> {
 
 	@ManyToMany(() => Group, (group) => group.users)
 	groups: Group[];
+
+	@OneToMany(() => Post, (post) => post.author, {
+		cascade: true,
+		onDelete: 'CASCADE'
+	})
+	posts: Post[];
 
 	@BeforeInsert()
 	@Exclude()

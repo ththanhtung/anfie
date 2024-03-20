@@ -21,7 +21,7 @@ const ConversationItem = ({
     <div
       className={`conversation-item hover: shadow-md hover:scale-[1.02] ${
         id === value && "conversation-item-active"
-      }`}
+      } w-full`}
       onClick={onClick}
     >
       <Avatar icon={<UserOutlined />} size="large" />

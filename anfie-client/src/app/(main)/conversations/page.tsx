@@ -12,8 +12,7 @@ import { List } from "antd";
 import React, { useCallback, useContext, useEffect } from "react";
 
 const ConversationPage = () => {
-  const { conversations, isFetchingNextPage, total, fetchNextPage, isLoading } =
-    useListInfiniteConversations();
+  const { conversations } = useListInfiniteConversations();
   const queryClient = useQueryClient();
   const [valueChecked, setValueChecked] = React.useState<number>();
   const [selectedConversation, setSelectedConversation] =
@@ -128,6 +127,7 @@ const ConversationPage = () => {
       <div>
         <h1 className="text-center text-blue-600 my-4">Conversations</h1>
         <List
+          className="p-8"
           dataSource={conversations}
           renderItem={(item: TConversation) => (
             <ConversationItem
@@ -148,7 +148,9 @@ const ConversationPage = () => {
   return (
     <>
       <LayoutConversation renderLeft={renderLeft()}>
-        <MessagePanel conversation={selectedConversation} />
+        <div className="h-[100vh]">
+          <MessagePanel conversation={selectedConversation} />
+        </div>
       </LayoutConversation>
     </>
   );

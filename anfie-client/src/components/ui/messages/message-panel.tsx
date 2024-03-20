@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useListInfiniteMessages, useMutationMessage } from "@/hooks";
 import React, { useContext, useEffect } from "react";
@@ -10,12 +10,11 @@ type TProps = {
   conversation?: TConversation;
 };
 const MessagePanel = ({ conversation }: TProps) => {
-  const { messages, total, isFetchingNextPage, fetchNextPage } = useListInfiniteMessages(
-    conversation?.id?.toString()
-  );
+  const { messages, total, isFetchingNextPage, fetchNextPage } =
+    useListInfiniteMessages(conversation?.id?.toString());
 
-  console.log({messages});
-  
+  console.log({ messages });
+
   const { onCreateMessage } = useMutationMessage();
 
   const sentMessage = async ({ content }: TMessageForm) => {
@@ -36,7 +35,7 @@ const MessagePanel = ({ conversation }: TProps) => {
   };
 
   return (
-    <div className="w-full h-[100vh] bg-white rounded-md flex flex-col justify-between">
+    <div className="w-full h-full bg-white rounded-md flex flex-col justify-between">
       <MessagePanelHeader recipientName={conversation?.recipient.email || ""} />
       <MessageContainer
         messages={messages}

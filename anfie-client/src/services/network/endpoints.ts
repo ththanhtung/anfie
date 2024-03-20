@@ -7,5 +7,8 @@ export const ENDPOINT_APIS = {
   },
   messages: {
     list: 'api/messages'
+  },
+  posts: {
+    list: 'api/posts'
   }
 };

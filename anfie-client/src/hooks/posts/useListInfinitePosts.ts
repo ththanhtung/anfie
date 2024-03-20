@@ -1,11 +1,11 @@
 "use client";
 import { queryKeys } from "@/constants";
-import { messagesService } from "@/services";
+import { postService } from "@/services";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 
-export const useListInfiniteMessages = (conversationId?: string) => {
-  const [params, setParams] = useState<TConversationParams>({
+export const useListInfinitePosts = () => {
+  const [params, setParams] = useState<TPostParams>({
     page: 1,
     limit: 10,
     sort: "DESC",
@@ -19,16 +19,12 @@ export const useListInfiniteMessages = (conversationId?: string) => {
     isLoading,
     error,
   } = useInfiniteQuery({
-    queryKey: [queryKeys.GET_LIST_INFINITE_MESSAGES, params, conversationId],
+    queryKey: [queryKeys.GET_LIST_INFINITE_POSTS, params],
     queryFn: ({ pageParam }) =>
-      messagesService.getListMessagesByConversationId(
-        {
-          ...params,
-          page: pageParam,
-        },
-        conversationId
-      ),
-    enabled: Boolean(conversationId),
+      postService.getListPosts({
+        ...params,
+        page: pageParam,
+      }),
     getNextPageParam: (lastPage, allPages) => {
       const { metadata } = lastPage;
       if (params.page * metadata.limit > metadata.totalItems) return undefined;
@@ -36,12 +32,12 @@ export const useListInfiniteMessages = (conversationId?: string) => {
     },
     initialPageParam: 1,
   });
-  const messages = useMemo(() => {
-    return data?.pages.flatMap((message) => message.data).filter(Boolean) || [];
+  const posts = useMemo(() => {
+    return data?.pages.flatMap((post) => post.data).filter(Boolean) || [];
   }, [data?.pages]);
 
   return {
-    messages,
+    posts,
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,

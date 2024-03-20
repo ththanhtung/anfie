@@ -55,7 +55,7 @@ export class EventGateway {
 			.filter(([_, socket]) => socket.isFindingNewFriend)
 			.map(([userId]) => userId);
 
-		console.log(usersFindingNewFriendIds);
+		// console.log(usersFindingNewFriendIds);
 
 		if (usersFindingNewFriendIds.length < 4) return;
 		console.log('finding new friends');
