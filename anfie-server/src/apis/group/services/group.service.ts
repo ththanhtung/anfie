@@ -1,26 +1,39 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
 import { CreateGroupDto } from '../dto/create-group.dto';
-import { UpdateGroupDto } from '../dto/update-group.dto';
+import { GroupRepository } from '../repositories';
+import { AddRecipientDto } from '../dto';
+import { UserService } from 'src/apis/user/services';
 
 @Injectable()
 export class GroupService {
-  create(createGroupDto: CreateGroupDto) {
-    return 'This action adds a new group';
-  }
+	constructor(
+		private readonly groupRepository: GroupRepository,
+		private readonly userService: UserService
+	) {}
 
-  findAll() {
-    return `This action returns all group`;
-  }
+	async create(user: TUserJwt, createGroupDto: CreateGroupDto) {
+		const userPromises = createGroupDto.users.map((id) => this.userService.findOneById(+id));
+		const users = (await Promise.all(userPromises)).filter((user) => user);
+		return this.groupRepository.createOne({
+			creatorId: user.userId.toString(),
+			adminId: user.userId.toString(),
+			users: users,
+			title: createGroupDto.title
+		});
+	}
 
-  findOne(id: number) {
-    return `This action returns a #${id} group`;
-  }
+	async addRecipient(user: TUserJwt, groupId: string, addRecipientDto: AddRecipientDto) {
+		const group = await this.groupRepository.findOneById(groupId);
+		if (group.admin.id !== user.userId) {
+			throw new ForbiddenException();
+		}
 
-  update(id: number, updateGroupDto: UpdateGroupDto) {
-    return `This action updates a #${id} group`;
-  }
+		this.userService.findOneById(+addRecipientDto.recipientId);
 
-  remove(id: number) {
-    return `This action removes a #${id} group`;
-  }
+		const inGroup = group.users.find((user) => user.id === +addRecipientDto.recipientId);
+
+		if (inGroup) {
+			throw new BadRequestException();
+		}
+	}
 }

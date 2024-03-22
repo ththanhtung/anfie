@@ -20,20 +20,30 @@ export class Group extends BaseEntity<Group> {
 	})
 	adminId: number;
 
-	@OneToOne(() => Users)
+	@OneToOne(() => Users, { createForeignKeyConstraints: false })
 	@JoinColumn({
 		name: 'group_creator_id'
 	})
 	creator: Users;
 
-	@OneToOne(() => Users)
+	@OneToOne(() => Users, { createForeignKeyConstraints: false })
 	@JoinColumn({
 		name: 'group_admin_id'
 	})
 	admin: Users;
 
 	@ManyToMany(() => Users, (user) => user.groups)
-	@JoinTable()
+	@JoinTable({
+		name: 'user_group',
+		joinColumn: {
+			name: 'group_id',
+			referencedColumnName: 'id'
+		},
+		inverseJoinColumn: {
+			name: 'user_id',
+			referencedColumnName: 'id'
+		}
+	})
 	users: Users[];
 
 	@OneToMany(() => Message, (message) => message.group)

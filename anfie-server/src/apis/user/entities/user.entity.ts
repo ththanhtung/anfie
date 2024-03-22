@@ -1,5 +1,5 @@
 import { BaseEntity } from 'src/database';
-import { BeforeInsert, Column, Entity, JoinColumn, ManyToMany, OneToMany, OneToOne } from 'typeorm';
+import { BeforeInsert, Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne } from 'typeorm';
 import * as argon from 'argon2';
 import { Exclude } from 'class-transformer';
 import { UserProfiles } from './user-profile.entity';
