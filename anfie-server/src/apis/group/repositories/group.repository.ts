@@ -2,7 +2,7 @@ import { Repository } from 'typeorm';
 import { Group } from '../entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
-import { TCreateGroupParams } from 'src/common/@types/groups';
+import { TCreateGroupParams, TLeaveGroupParams } from 'src/common/@types/groups';
 import { UserService } from 'src/apis/user/services';
 import { Users } from 'src/apis/user/entities';
 
@@ -44,16 +44,48 @@ export class GroupRepository extends Repository<Group> {
 	async addRecipient(groupId: string, recipientId: string) {
 		const group = await this.findOneById(groupId);
 
-		const inGroup = group.users.find((user) => user.id === +recipientId);
+		const isUserInGroup = await this.isUserInGroup(groupId, recipientId);
 
-		if (inGroup) {
-			throw new BadRequestException();
-		}
+		if (isUserInGroup)
+			throw new BadRequestException([
+				{
+					field: 'recipientId',
+					message: 'user already in the group'
+				}
+			]);
 
 		const recipient = await this.userService.findOneById(+recipientId);
 
 		group.users.push(recipient);
 
+		return this.save(group);
+	}
+
+	async isUserInGroup(groupId: string, userId: string) {
+		const group = await this.findOneById(groupId);
+
+		const inGroup = group.users.find((user) => user.id === +userId);
+
+		if (inGroup) return true;
+		return false;
+	}
+
+	async leaveGroup({ groupId, userId }: TLeaveGroupParams) {
+		return this.findOneAndRemoveUserById(groupId, userId);
+	}
+
+	async removeRecipient() {}
+
+	async findOneAndRemoveUserById(groupId: string, userId: string) {
+		const group = await this.findOne({ where: { id: +groupId }, relations: ['users'] });
+		if (group.adminId === +userId)
+			throw new BadRequestException([
+				{
+					message: 'admin cannot leave the group'
+				}
+			]);
+
+		group.users = group.users.filter((user) => user.id !== +userId);
 		return this.save(group);
 	}
 }

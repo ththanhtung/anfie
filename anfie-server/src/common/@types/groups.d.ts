@@ -11,3 +11,13 @@ type TAddGroupRecipientParams = {
 	groupId: string;
 	recipientId: string;
 };
+
+type TLeaveGroupParams = {
+	groupId: string;
+	userId: string;
+};
+
+type TRemoveGroupRecipientParams = {
+    groupId: string
+    userId: string
+}

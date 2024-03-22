@@ -13,8 +13,12 @@ export class GroupRecipientController {
 	}
 
 	@Delete('leave')
-	async leaveGroup() {}
+	async leaveGroup(@Param('id') groupId, @GetCurrentUser() user: TUserJwt) {
+		return this.groupService.leaveGroup(groupId, user.userId.toString());
+	}
 
 	@Delete(':userId')
-	async removeRecipient() {}
+	async removeRecipient(@Param('id') groupId: string, @GetCurrentUser() user: TUserJwt, @Param('userId') removeUserId: string) {
+		return this.groupService.removeRecipient(groupId, user.userId.toString(), removeUserId);
+	}
 }

@@ -1,7 +1,7 @@
 import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
 import { CreateGroupDto } from '../dto/create-group.dto';
 import { GroupRepository } from '../repositories';
-import { AddRecipientDto } from '../dto';
+import { AddRecipientDto, removeRecipientDto } from '../dto';
 import { UserService } from 'src/apis/user/services';
 
 @Injectable()
@@ -31,5 +31,29 @@ export class GroupService {
 		}
 
 		return this.groupRepository.addRecipient(groupId, addRecipientDto.recipientId);
+	}
+
+	async leaveGroup(groupId: string, userId: string) {
+		return this.groupRepository.leaveGroup({ groupId, userId });
+	}
+
+	async removeRecipient(groupId: string, userId: string, removeUserId: string) {
+		await this.userService.findOneById(+removeUserId);
+		const group = await this.groupRepository.findOneById(groupId);
+		if (group.adminId !== +userId)
+			throw new BadRequestException([
+				{
+					message: 'only admin can remove other user'
+				}
+			]);
+
+		if (group.adminId === +removeUserId)
+			throw new BadRequestException([
+				{
+					message: 'you cannot remove yourself as an admin'
+				}
+			]);
+
+		return this.groupRepository.findOneAndRemoveUserById(groupId, removeUserId);
 	}
 }
