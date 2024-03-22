@@ -24,16 +24,12 @@ export class GroupService {
 
 	async addRecipient(user: TUserJwt, groupId: string, addRecipientDto: AddRecipientDto) {
 		const group = await this.groupRepository.findOneById(groupId);
-		if (group.admin.id !== user.userId) {
+		console.log(group.admin);
+
+		if (group.adminId !== user.userId) {
 			throw new ForbiddenException();
 		}
 
-		this.userService.findOneById(+addRecipientDto.recipientId);
-
-		const inGroup = group.users.find((user) => user.id === +addRecipientDto.recipientId);
-
-		if (inGroup) {
-			throw new BadRequestException();
-		}
+		return this.groupRepository.addRecipient(groupId, addRecipientDto.recipientId);
 	}
 }
