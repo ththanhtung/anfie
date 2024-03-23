@@ -1,11 +1,12 @@
 import { BaseEntity } from 'src/database';
-import { BeforeInsert, Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne } from 'typeorm';
+import { BeforeInsert, Column, Entity, JoinColumn, ManyToMany, OneToMany, OneToOne } from 'typeorm';
 import * as argon from 'argon2';
 import { Exclude } from 'class-transformer';
 import { UserProfiles } from './user-profile.entity';
 import { Message } from 'src/apis/message/entities';
 import { Group } from 'src/apis/group/entities';
 import { Post } from 'src/apis/post/entities';
+import { Note } from 'src/apis/notes/entities';
 
 @Entity()
 export class Users extends BaseEntity<Users> {
@@ -44,6 +45,12 @@ export class Users extends BaseEntity<Users> {
 		onDelete: 'CASCADE'
 	})
 	posts: Post[];
+
+	@OneToMany(() => Note, (note) => note.user, {
+		cascade: true,
+		onDelete: 'CASCADE'
+	})
+	notes: Note[];
 
 	@BeforeInsert()
 	@Exclude()
