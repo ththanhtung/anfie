@@ -7,6 +7,7 @@ import { Message } from 'src/apis/message/entities';
 import { Group } from 'src/apis/group/entities';
 import { Post } from 'src/apis/post/entities';
 import { Note } from 'src/apis/notes/entities';
+import { Friend } from 'src/apis/friend/entities';
 
 @Entity()
 export class Users extends BaseEntity<Users> {

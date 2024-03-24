@@ -4,7 +4,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 import { TCreateGroupParams, TLeaveGroupParams } from 'src/common/@types/groups';
 import { UserService } from 'src/apis/user/services';
-import { Users } from 'src/apis/user/entities';
 
 @Injectable()
 export class GroupRepository extends Repository<Group> {

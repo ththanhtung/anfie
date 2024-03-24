@@ -14,8 +14,9 @@ import { MediaUploaderModule } from './media-uploader/media-uploader.module';
 import { MessageMediaModule } from './message-media/message-media.module';
 import { MatchmakingModule } from './matchmaking/matchmaking.module';
 import { NotesModule } from './notes/notes.module';
+import { ConfestionsModule } from './confestions/confestions.module';
 
 @Module({
-    imports:[AuthModule, UserModule, EventModule, MessageModule, ConversationModule, PostModule, CommentModule, GroupModule, FriendModule, FriendRequestModule, MediaUploaderModule, MessageMediaModule, MatchmakingModule, NotesModule],
+    imports:[AuthModule, UserModule, EventModule, MessageModule, ConversationModule, PostModule, CommentModule, GroupModule, FriendModule, FriendRequestModule, MediaUploaderModule, MessageMediaModule, MatchmakingModule, NotesModule, ConfestionsModule],
 })
 export class ApiModule {}
