@@ -8,6 +8,7 @@ import { Group } from 'src/apis/group/entities';
 import { Post } from 'src/apis/post/entities';
 import { Note } from 'src/apis/notes/entities';
 import { Friend } from 'src/apis/friend/entities';
+import { Confestion } from 'src/apis/confestions/entities';
 
 @Entity()
 export class Users extends BaseEntity<Users> {
@@ -52,6 +53,12 @@ export class Users extends BaseEntity<Users> {
 		onDelete: 'CASCADE'
 	})
 	notes: Note[];
+
+	@OneToMany(() => Confestion, (confestion) => confestion.owner, {
+		cascade: true,
+		onDelete: 'CASCADE'
+	})
+	confestions: Confestion[];
 
 	@BeforeInsert()
 	@Exclude()

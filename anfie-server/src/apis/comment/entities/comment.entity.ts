@@ -9,15 +9,23 @@ export class Comment extends BaseEntity<Comment> {
 	@Column()
 	userId: number;
 
-	@Column()
+	@Column({
+		name: 'comment_parent_id'
+	})
 	parentId: number;
 
-	@Column()
+	@Column({
+		name: 'comment_content'
+	})
 	content: string;
 
-	@Column()
-	commnentLeft: number;
+	@Column({
+		name: 'comment_left'
+	})
+	commentLeft: number;
 
-	@Column()
+	@Column({
+		name: 'comment_right'
+	})
 	commentRight: number;
 }
