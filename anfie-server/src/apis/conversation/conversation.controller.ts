@@ -32,11 +32,6 @@ export class ConversationController {
 		return this.conversationService.findOneById(+id);
 	}
 
-	@Patch(':id')
-	update(@Param('id') id: string, @Body() updateConversationDto: UpdateConversationDto) {
-		return this.conversationService.update(+id, updateConversationDto);
-	}
-
 	@Delete(':id')
 	deleteOneById(@Param('id') id: string) {
 		return this.conversationService.deleteOneById(+id);

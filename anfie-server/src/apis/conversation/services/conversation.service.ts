@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { CreateConversationDto } from '../dto/create-conversation.dto';
-import { UpdateConversationDto } from '../dto/update-conversation.dto';
 import { UserService } from 'src/apis/user/services';
 import { ConversationRepository } from '../repositories';
 import { GetConversationsDto } from '../dto';
@@ -32,10 +31,6 @@ export class ConversationService {
 
 	findOneById(id: number) {
 		return this.conversationRepository.findOneById(id);
-	}
-
-	update(id: number, updateConversationDto: UpdateConversationDto) {
-		return `This action updates a #${id} conversation`;
 	}
 
 	deleteOneById(id: number) {

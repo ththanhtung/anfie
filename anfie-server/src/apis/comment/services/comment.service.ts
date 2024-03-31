@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCommentDto } from '../dto/create-comment.dto';
-import { UpdateCommentDto } from '../dto/update-comment.dto';
 import { CommentRepository } from '../repositories';
+import { DeleteCommentDto } from '../dto';
 
 @Injectable()
 export class CommentService {
@@ -16,8 +16,8 @@ export class CommentService {
 			if (!parentComment) throw new NotFoundException([{ message: 'parent comment not found' }]);
 			rightValue = parentComment.commentRight;
 
-			await this.commnentRepository.increaseCommentRight(postId, rightValue);
-			await this.commnentRepository.increaseCommentLeft(postId, rightValue);
+			await this.commnentRepository.increaseCommentRightBy2(postId, rightValue);
+			await this.commnentRepository.increaseCommentLeftBy2(postId, rightValue);
 		} else {
 			const maxRightValue = await this.commnentRepository.findMaxRightValue(postId);
 			if (maxRightValue) {
@@ -34,7 +34,28 @@ export class CommentService {
 		return this.commnentRepository.findCommentsByParentId(parentId, 'productId');
 	}
 
-	async deleteComment(id: string) {
-		return this.commnentRepository.delete(id);
+	async deleteComment(id: string, dto: DeleteCommentDto) {
+		const comment = await this.commnentRepository.findOneById(id);
+		if (comment) {
+			throw new NotFoundException([
+				{
+					message: 'comment not found'
+				}
+			]);
+		}
+
+		const leftValue = comment.commentLeft;
+		const rightValue = comment.commentRight;
+
+		const width = rightValue - leftValue + 1;
+
+		await this.commnentRepository.deleteBetween(dto.postId, leftValue, rightValue);
+
+		await this.commnentRepository.increaseCommentLeft(dto.postId, rightValue, -width);
+		await this.commnentRepository.increaseCommentRight(dto.postId, rightValue, -width);
+
+		await this.commnentRepository.delete(id);
+
+		return true;
 	}
 }

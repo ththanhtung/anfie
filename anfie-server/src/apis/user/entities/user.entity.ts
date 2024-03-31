@@ -7,8 +7,7 @@ import { Message } from 'src/apis/message/entities';
 import { Group } from 'src/apis/group/entities';
 import { Post } from 'src/apis/post/entities';
 import { Note } from 'src/apis/notes/entities';
-import { Friend } from 'src/apis/friend/entities';
-import { Confestion } from 'src/apis/confestions/entities';
+import { Confession } from 'src/apis/confessions/entities';
 
 @Entity()
 export class Users extends BaseEntity<Users> {
@@ -54,11 +53,11 @@ export class Users extends BaseEntity<Users> {
 	})
 	notes: Note[];
 
-	@OneToMany(() => Confestion, (confestion) => confestion.owner, {
+	@OneToMany(() => Confession, (confession) => confession.owner, {
 		cascade: true,
 		onDelete: 'CASCADE'
 	})
-	confestions: Confestion[];
+	confessions: Confession[];
 
 	@BeforeInsert()
 	@Exclude()

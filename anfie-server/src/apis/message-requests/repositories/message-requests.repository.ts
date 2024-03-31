@@ -2,6 +2,8 @@ import { Repository } from 'typeorm';
 import { MessageRequest } from '../entities';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { GetMessageRequestsDto } from '../dto';
+import { pagination } from 'src/common';
 
 @Injectable()
 export class MessageRequestRepository extends Repository<MessageRequest> {
@@ -9,9 +11,10 @@ export class MessageRequestRepository extends Repository<MessageRequest> {
 		super(repository.target, repository.manager, repository.queryRunner);
 	}
 
-	async getMessageequests(id: string) {
+	async getMessageRequests(id: string, query: GetMessageRequestsDto) {
 		const status = 'pending';
-		return this.find({
+
+		return pagination(this, query, {
 			where: [
 				{
 					sender: { id: +id },

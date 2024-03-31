@@ -1,14 +1,17 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateFriendRequestDto } from '../dto/create-friend-request.dto';
-import { UpdateFriendRequestDto } from '../dto/update-friend-request.dto';
 import { FriendRequestRepository } from '../repositories';
+import { FriendService } from 'src/apis/friend/services/friend.service';
+import { GetFriendRequestsDto } from '../dto';
 
 @Injectable()
 export class FriendRequestService {
-	constructor(private readonly friendRequestRepository: FriendRequestRepository) {}
+	constructor(
+		private readonly friendRequestRepository: FriendRequestRepository,
+		private readonly friendService: FriendService
+	) {}
 
-	async getFriendRequests(user: TUserJwt) {
-		return this.friendRequestRepository.getFriendRequests(user.userId.toString());
+	async getFriendRequests(user: TUserJwt, query: GetFriendRequestsDto) {
+		return this.friendRequestRepository.getFriendRequests(user.userId.toString(), query);
 	}
 
 	async cancelFriendRequest(requestId: string, userId: string) {
@@ -80,7 +83,13 @@ export class FriendRequestService {
 				}
 			]);
 
-		await this.friendRequestRepository.accepted(requestId);
+		const updatedFriendRequest = await this.friendRequestRepository.accepted(requestId);
+		const friend = await this.friendService.createOne(senderId, request.receiverId);
+
+		return {
+			friend,
+			friendRequest: updatedFriendRequest
+		};
 	}
 
 	async rejectFriendRequest(requestId: string, senderId: string) {

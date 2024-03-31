@@ -42,4 +42,8 @@ export class FriendRepository extends Repository<Friend> {
 	async deleteFriend(id: string) {
 		return this.delete(id);
 	}
+
+	async createOne(followerId: string, followeeId: string) {
+		return this.save({ followerId: +followerId, followeeId: +followeeId });
+	}
 }

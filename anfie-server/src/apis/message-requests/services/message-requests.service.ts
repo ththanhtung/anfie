@@ -1,9 +1,14 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { MessageRequestRepository } from '../repositories';
+import { ConversationService } from 'src/apis/conversation/services';
+import { GetMessageRequestsDto } from '../dto';
 
 @Injectable()
 export class MessageRequestsService {
-	constructor(private readonly messageRequestRepository: MessageRequestRepository) {}
+	constructor(
+		private readonly messageRequestRepository: MessageRequestRepository,
+		private readonly conversationService: ConversationService
+	) {}
 	async createOne(senderId: string, receiverId: string) {
 		const receiver = await this.messageRequestRepository.findOneById(receiverId);
 		if (!receiver)
@@ -30,11 +35,11 @@ export class MessageRequestsService {
 
 		return this.messageRequestRepository.createOne(senderId, receiverId, '', '');
 	}
-	async getFriendRequests(user: TUserJwt) {
-		return this.messageRequestRepository.getMessageequests(user.userId.toString());
+	async getMessageRequests(user: TUserJwt, query: GetMessageRequestsDto) {
+		return this.messageRequestRepository.getMessageRequests(user.userId.toString(), query);
 	}
 
-	async cancelFriendRequest(requestId: string, userId: string) {
+	async cancelMessageRequest(requestId: string, userId: string) {
 		const request = await this.messageRequestRepository.findOneById(userId);
 		if (!request)
 			throw new NotFoundException([
@@ -53,7 +58,7 @@ export class MessageRequestsService {
 		return this.messageRequestRepository.findOneAndDelete(requestId);
 	}
 
-	async acceptFriendRequest(requestId: string, senderId: string) {
+	async acceptMessageRequest(requestId: string, senderId: string) {
 		const request = await this.messageRequestRepository.findOneById(requestId);
 		if (!request)
 			throw new NotFoundException([
@@ -77,6 +82,7 @@ export class MessageRequestsService {
 			]);
 
 		await this.messageRequestRepository.accepted(requestId);
+		return this.conversationService.create(+senderId, { recipientId: +request.receiverId });
 	}
 
 	async rejectFriendRequest(requestId: string, senderId: string) {

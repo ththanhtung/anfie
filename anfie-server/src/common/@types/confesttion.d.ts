@@ -1,4 +1,4 @@
-type TCreateConfestion = {
+type TCreateConfession = {
 	ownerId: string;
 	content: string;
 };

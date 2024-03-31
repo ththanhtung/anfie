@@ -1,11 +1,13 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateFriendDto } from '../dto/create-friend.dto';
-import { UpdateFriendDto } from '../dto/update-friend.dto';
 import { FriendRepository } from '../repositories';
 
 @Injectable()
 export class FriendService {
 	constructor(private readonly friendRepository: FriendRepository) {}
+
+	async createOne(followeeId: string, followerId: string) {
+		return this.friendRepository.createOne(followeeId, followerId);
+	}
 	async getFriends(user: TUserJwt) {
 		return this.friendRepository.getFriends(user.userId.toString());
 	}

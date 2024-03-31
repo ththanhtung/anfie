@@ -2,6 +2,8 @@ import { Repository } from 'typeorm';
 import { FriendRequest } from '../entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
+import { GetFriendRequestsDto } from '../dto';
+import { pagination } from 'src/common';
 
 @Injectable()
 export class FriendRequestRepository extends Repository<FriendRequest> {
@@ -9,9 +11,10 @@ export class FriendRequestRepository extends Repository<FriendRequest> {
 		super(repository.target, repository.manager, repository.queryRunner);
 	}
 
-	async getFriendRequests(id: string) {
+	async getFriendRequests(id: string, query: GetFriendRequestsDto) {
 		const status = 'pending';
-		return this.find({
+
+		return pagination(this, query, {
 			where: [
 				{
 					sender: { id: +id },

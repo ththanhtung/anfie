@@ -8,6 +8,7 @@ import { FriendRepository } from './repositories';
 @Module({
 	controllers: [FriendController],
 	providers: [FriendService, FriendRepository],
-	imports: [TypeOrmModule.forFeature([Friend])]
+	imports: [TypeOrmModule.forFeature([Friend])],
+	exports: [FriendService]
 })
 export class FriendModule {}

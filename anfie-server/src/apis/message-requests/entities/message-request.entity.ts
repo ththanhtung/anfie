@@ -1,6 +1,7 @@
+import { Confession } from 'src/apis/confessions/entities';
 import { Users } from 'src/apis/user/entities';
 import { BaseEntity } from 'src/database';
-import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 
 @Entity()
 export class MessageRequest extends BaseEntity<MessageRequest> {
@@ -15,7 +16,7 @@ export class MessageRequest extends BaseEntity<MessageRequest> {
 	receiverId: string;
 
 	@Column({
-		name: 'confestion_id'
+		name: 'confession_id'
 	})
 	confestionId: string;
 
@@ -31,8 +32,14 @@ export class MessageRequest extends BaseEntity<MessageRequest> {
 	})
 	receiver: Users;
 
+	@ManyToOne(() => Confession, (confession) => confession.messageRequests)
+	@JoinColumn({
+		name: 'confession_id'
+	})
+	confession: Confession;
+
 	@Column({
-		name: 'confestion_content'
+		name: 'message_content'
 	})
 	content: string;
 
