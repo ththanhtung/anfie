@@ -27,7 +27,7 @@ export class AuthService {
 			]);
 		}
 
-		const { accessToken, refreshToken } = await getTokens(user.id, user.email);
+		const { accessToken, refreshToken } = await getTokens({ userId: user.id, email: user.email });
 
 		this.userServices.updateRefreshToken(user.id, refreshToken);
 
@@ -59,7 +59,7 @@ export class AuthService {
 			]);
 		}
 
-		const { accessToken, refreshToken } = await getTokens(user.userId, user.email);
+		const { accessToken, refreshToken } = await getTokens({ userId: user.userId, email: user.email });
 
 		await this.userServices.updateRefreshToken(user.userId, refreshToken);
 

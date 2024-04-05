@@ -2,11 +2,13 @@ import { BadRequestException, ClassSerializerInterceptor, Module, ValidationErro
 import { ApiModule } from './apis/api.module';
 import { ConfigModule } from './configs/config.module';
 import { DatabaseModule } from './database/database.module';
-import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { HttpExceptionFilter } from './common/filters';
 import { ResponseTransformInterceptor } from './common/interceptors';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ScheduleModule } from '@nestjs/schedule';
+import { RoleGuard } from './common';
+import { PassportModule } from './passport/passport.module';
 
 const exceptionFactory = (errors: ValidationError[]) => {
 	throw new BadRequestException(
@@ -28,7 +30,7 @@ const validationErrors = (err: ValidationError) => {
 };
 
 @Module({
-	imports: [ConfigModule, DatabaseModule, ApiModule, EventEmitterModule.forRoot(), ScheduleModule.forRoot()],
+	imports: [ConfigModule, DatabaseModule, ApiModule, PassportModule, EventEmitterModule.forRoot(), ScheduleModule.forRoot()],
 	providers: [
 		{
 			provide: APP_PIPE,

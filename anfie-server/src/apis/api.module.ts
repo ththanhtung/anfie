@@ -16,6 +16,9 @@ import { MatchmakingModule } from './matchmaking/matchmaking.module';
 import { NotesModule } from './notes/notes.module';
 import { ConfestionsModule } from './confessions/confessions.module';
 import { MessageRequestsModule } from './message-requests/message-requests.module';
+import { AdminModule } from './admin/admin.module';
+import { RoleModule } from './role/role.module';
+import { ReportTiketModule } from './report-tiket/report-tiket.module';
 
 @Module({
 	imports: [
@@ -34,7 +37,10 @@ import { MessageRequestsModule } from './message-requests/message-requests.modul
 		MatchmakingModule,
 		NotesModule,
 		ConfestionsModule,
-		MessageRequestsModule
+		MessageRequestsModule,
+		AdminModule,
+		RoleModule,
+		ReportTiketModule
 	]
 })
 export class ApiModule {}

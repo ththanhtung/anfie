@@ -28,9 +28,9 @@ export class ConversationService {
 	async updateLastMessage({ conversationId, messageId }: TUpdateLastMessageParams) {
 		return this.conversationRepository.updateLastMessage({ conversationId, messageId });
 	}
-
+ 
 	findOneById(id: number) {
-		return this.conversationRepository.findOneById(id);
+		return this.conversationRepository.findOneById(id); 
 	}
 
 	deleteOneById(id: number) {

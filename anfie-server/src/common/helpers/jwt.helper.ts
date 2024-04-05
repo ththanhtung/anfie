@@ -19,19 +19,5 @@ export class JwtHelper {
 				}
 			]);
 		}
-		// jwt.verify(token, process.env.SECRET_JWT, (err, decode) => {
-		// 	if (err) {
-		// 		throw new UnauthorizedException([
-		// 			{
-		// 				field: 'jwt',
-		// 				message: err.message
-		// 			}
-		// 		]);
-		// 	}
-
-		// 	if (callback) {
-		// 		callback(decode);
-		// 	}
-		// });
 	}
 }
