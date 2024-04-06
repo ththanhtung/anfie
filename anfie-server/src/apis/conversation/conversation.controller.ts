@@ -1,12 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, UseGuards, Query } from '@nestjs/common';
 import { ConversationService } from './services/conversation.service';
 import { CreateConversationDto } from './dto/create-conversation.dto';
-import { UpdateConversationDto } from './dto/update-conversation.dto';
 import { AtGuard } from 'src/common/guards';
-import { AuthAdmin, GetCurrentUser, UsePermission } from 'src/common/decorators';
+import { GetCurrentUser } from 'src/common/decorators';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { GetConversationsDto } from './dto';
-import { Permission, RoleGuard } from 'src/common';
 
 @UseGuards(AtGuard)
 @Controller('conversations')
@@ -24,7 +22,6 @@ export class ConversationController {
 	}
 
 	@Get()
-	// @AuthAdmin(Permission.CONVERSATION_GET_LIST)
 	async findAll(@GetCurrentUser() user: TUserJwt, @Query() query: GetConversationsDto) {
 		return this.conversationService.findAll(user.userId, query);
 	}

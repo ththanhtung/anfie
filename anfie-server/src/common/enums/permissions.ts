@@ -76,5 +76,11 @@ export enum Permission {
 	POST_GET_DETAIL = 'post.get_detail',
 	POST_CREATE = 'post.create',
 	POST_UPDATE = 'post.update',
-	POST_DELETE = 'post.delete'
+	POST_DELETE = 'post.delete',
+	//REPORT TICKET
+	REPORT_TICKET_GET_LIST = 'report_ticket.get_list',
+	REPORT_TICKET_GET_DETAIL = 'report_ticket.get_detail',
+	REPORT_TICKET_CREATE = 'report_ticket.create',
+	REPORT_TICKET_UPDATE = 'report_ticket.update',
+	REPORT_TICKET_DELETE = 'report_ticket.delete'
 }

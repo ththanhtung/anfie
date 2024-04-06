@@ -18,7 +18,7 @@ import { ConfestionsModule } from './confessions/confessions.module';
 import { MessageRequestsModule } from './message-requests/message-requests.module';
 import { AdminModule } from './admin/admin.module';
 import { RoleModule } from './role/role.module';
-import { ReportTiketModule } from './report-tiket/report-tiket.module';
+import { ReportTiketModule } from './report-ticket/report-ticket.module';
 
 @Module({
 	imports: [
