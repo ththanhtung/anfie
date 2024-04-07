@@ -19,6 +19,7 @@ import { MessageRequestsModule } from './message-requests/message-requests.modul
 import { AdminModule } from './admin/admin.module';
 import { RoleModule } from './role/role.module';
 import { ReportTiketModule } from './report-ticket/report-ticket.module';
+import { OpenAIModule } from './openai/openai.module';
 
 @Module({
 	imports: [
@@ -40,7 +41,8 @@ import { ReportTiketModule } from './report-ticket/report-ticket.module';
 		MessageRequestsModule,
 		AdminModule,
 		RoleModule,
-		ReportTiketModule
+		ReportTiketModule,
+		OpenAIModule
 	]
 })
 export class ApiModule {}
