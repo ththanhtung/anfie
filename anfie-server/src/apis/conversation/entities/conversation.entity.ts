@@ -51,9 +51,7 @@ export class Conversation extends BaseEntity<Conversation> {
 	})
 	lastMessageDate: Date;
 
-	@OneToOne(() => Message, (message) => message.conversation, {
-		cascade: true
-	})
+	@OneToOne(() => Message, (message) => message.conversation, { nullable: true, cascade: true, onDelete: 'CASCADE' })
 	@JoinColumn({
 		name: 'conversation_last_message_id'
 	})

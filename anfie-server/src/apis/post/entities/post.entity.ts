@@ -23,7 +23,10 @@ export class Post extends BaseEntity<Post> {
 	})
 	totalLikes: number;
 
-	@ManyToOne(() => Users, (user) => user.posts)
+	@ManyToOne(() => Users, (user) => user.posts, {
+		cascade: true,
+		onDelete: 'CASCADE'
+	})
 	@JoinColumn({ name: 'author_id' })
 	author: Users;
 }

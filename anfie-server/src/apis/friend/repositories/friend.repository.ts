@@ -15,6 +15,12 @@ export class FriendRepository extends Repository<Friend> {
 		});
 	}
 
+	async getFollowers(id: string) {
+		return this.find({
+			where: { followee: { id: +id } }
+		});
+	}
+
 	async isFriend(firstUserId: string, secondUserId: string) {
 		return this.findOne({
 			where: [

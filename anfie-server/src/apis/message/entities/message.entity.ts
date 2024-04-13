@@ -39,7 +39,10 @@ export class Message extends BaseEntity<Message> {
 	@JoinColumn()
 	medias: MessageMedia[];
 
-	@ManyToOne(() => Users, (user) => user.messages)
+	@ManyToOne(() => Users, (user) => user.messages, {
+		cascade: true,
+		onDelete: 'CASCADE'
+	})
 	@JoinColumn({
 		name: 'user_id'
 	})
@@ -51,7 +54,7 @@ export class Message extends BaseEntity<Message> {
 	})
 	group: Group;
 
-	@ManyToOne(() => Conversation, (conversation) => conversation.messages, { onDelete: 'CASCADE' })
+	@ManyToOne(() => Conversation, (conversation) => conversation.messages)
 	@JoinColumn({ name: 'conversation_id' })
 	conversation: Conversation;
 }

@@ -1,44 +1,61 @@
-import { Injectable, ServiceUnavailableException } from '@nestjs/common';
-import OpenAIApi from 'openai';
-import { ChatCompletion } from 'openai/resources';
+/* eslint-disable prettier/prettier */
+import { Injectable } from '@nestjs/common';
+import { UserProfiles } from '../user/entities';
+import { calculateAge } from 'src/common';
+import OpenAI from 'openai';
 
 @Injectable()
 export class OpenAIService {
-	private readonly openai: OpenAIApi;
+	private readonly openai: OpenAI;
 	constructor() {
-		this.openai = new OpenAIApi({
-			apiKey: process.env.OPENAI_API_KEY || ''
+		this.openai = new OpenAI({
+			baseURL: 'http://localhost:3040/v1',
+			apiKey: ''
 		});
 	}
+	async matchRequest(profiles: UserProfiles[]): Promise<TMatchResult> {
+		if (!profiles) return;
 
-	async chatGptRequest(message: string): Promise<string> {
-		try {
-			// Make a request to the ChatGPT model
-			const completion: ChatCompletion = await this.openai.chat.completions.create({
-				model: 'gpt-4',
-				messages: [
-					{
-						role: 'system',
-						content:
-							'you are a matchmaker. I will tell you something about the person, and give you a list of possible matchs. Your job is to help to find the best match for the person. Do not be too verbose. Refer to the user in the form. format the entire response in the JSON format: {result: name, rating, [positives], [negatives], uid}'
-					},
-					{
-						role: 'user',
-						content: message
-					}
-				],
-				temperature: 0.5,
-				max_tokens: 1000
-			});
+		const userInfos = profiles
+			.map((profile) => {
+				const preferences = profile?.preferences?.map((preference) => preference?.name).join(', ');
+				const locations = profile?.locations?.map((location) => location?.name).join(', ');
+				const age = calculateAge(profile?.dob);
+				const ageRange = `${profile?.maxAge} to ${profile?.minAge}`;
 
-			// Extract the content from the response
-			const [content] = completion.choices.map((choice) => choice.message.content);
+				return (
+					`Name: ${profile?.firstName} ${profile?.lastName}, ` +
+					`Gender: ${profile?.gender}, ` +
+					`Age: ${age}, ` +
+					`Likes: ${preferences}, ` +
+					`ID: ${profile?.user?.id}, ` +
+					`Preferred partner locations: ${locations}, ` +
+					`Preferred partner age range: ${ageRange}, ` +
+					`Preferred partner gender: ${profile?.gender} `
+				);
+			})
+			.join(' - ');
 
-			return content;
-		} catch (e) {
-			// Log and propagate the error
-			console.error(e);
-			throw new ServiceUnavailableException([{ message: 'Failed request to ChatGPT' }]);
-		}
+		const chatCompletion = await this.openai.chat.completions.create({
+			messages: [
+				{
+					role: 'system',
+					content:
+						'you are a matchmaker. I will give you a list of possible matchs. Your job is to help to find the best match. Do not be too verbose. Refer to the user in the form. format the entire response in the JSON format: {"result": {"id1": value, "id2": value, "score": value}}'
+				},
+				{
+					role: 'user',
+					content: userInfos
+				}
+			],
+			model: 'gpt-3.5-turbo'
+		});
+
+		const result = chatCompletion.choices[0].message.content;
+
+		const match = JSON.parse(result);
+		console.log({ match: match.result });
+
+		return match?.result as TMatchResult; 
 	}
 }

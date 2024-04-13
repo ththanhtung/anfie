@@ -1,6 +1,6 @@
 import { Global, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { options } from 'ormconfig';
+import { options } from 'src/database/ormconfig';
 
 @Global()
 @Module({

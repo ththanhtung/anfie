@@ -1,13 +1,32 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { UserRepository } from '../repositories';
 import { CreateUserDto } from '../dto';
+import { UserProfileService } from './user-profile.service';
 
 @Injectable()
 export class UserService {
-	constructor(private readonly userRepository: UserRepository) {}
+	constructor(
+		private readonly userRepository: UserRepository,
+		private readonly userProfileService: UserProfileService
+	) {}
 
 	async createOne(dto: CreateUserDto) {
-		return this.userRepository.createOne(dto);
+		const user = await this.userRepository.createOne(dto);
+
+		if (!user) {
+			throw new InternalServerErrorException([
+				{
+					message: 'fail to create user'
+				}
+			]);
+		}
+
+		const profile = await this.userProfileService.createOne({ userId: user.id.toString(), ...dto });
+
+		return {
+			...user,
+			...profile
+		};
 	}
 
 	async checkExist(email: string) {

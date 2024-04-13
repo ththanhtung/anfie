@@ -1,13 +1,12 @@
-
 version: "3.8"
 services:
-  web: 
+  web:
     depends_on:
       - api
     build: ./anfie-client
-    ports: 
+    ports:
       - "3000:3000"
-    develop: 
+    develop:
       watch:
         - path: ./anfie-client/package.json
           action: rebuild
@@ -23,8 +22,8 @@ services:
     build: ./anfie-server
     ports:
       - "8080:8080"
-    develop: 
-      watch: 
+    develop:
+      watch:
         - path: ./anfie-server/package.json
           action: rebuild
         - path: ./anfie-server/package-lock.json
@@ -32,6 +31,11 @@ services:
         - path: ./anfie-server
           target: /app
           action: sync
+
+  openai-service:
+    image: pawanosman/chatgpt:latest
+    ports:
+      - "3040:3040"
 
   dev-db:
     image: postgres
@@ -46,7 +50,7 @@ services:
     ports:
       - "5432:5432"
     healthcheck:
-      test: [ "CMD", "pg_isready" ]
+      test: ["CMD", "pg_isready"]
       interval: 10s
       timeout: 5s
       retries: 5

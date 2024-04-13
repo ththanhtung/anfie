@@ -37,4 +37,8 @@ export class FriendService {
 	async isFriend(firstUserId: string, secondUserId: string) {
 		return this.friendRepository.isFriend(firstUserId, secondUserId);
 	}
+
+	async getFollowers(id: string) {
+		return this.friendRepository.getFollowers(id);
+	}
 }

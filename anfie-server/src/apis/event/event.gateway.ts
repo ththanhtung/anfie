@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { WebSocketGateway, SubscribeMessage, MessageBody, WebSocketServer, ConnectedSocket } from '@nestjs/websockets';
-import { Server, Socket } from 'socket.io';
+import { Server } from 'socket.io';
 import { socketAuthMiddleware } from 'src/common/middlewares';
 import { AuthenticatedSocket } from 'src/common/interfaces';
 import { EventSessionManager } from './event.sesstion';
