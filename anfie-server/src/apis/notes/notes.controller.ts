@@ -15,8 +15,8 @@ export class NotesController {
 	}
 
 	@Get()
-	findAll(@Query() query: GetNotesDto) {
-		return this.notesService.findAll(query);
+	findAll(@GetCurrentUser('userId') userId: string, @Query() query: GetNotesDto) {
+		return this.notesService.findNotesByUserId(userId, query);
 	}
 
 	@Get(':id')
@@ -29,7 +29,7 @@ export class NotesController {
 		return this.notesService.update(id, updateNoteDto);
 	}
 
-	@Delete(':id')
+	@Delete(':id/delete')
 	remove(@Param('id') id: string) {
 		return this.notesService.remove(+id);
 	}

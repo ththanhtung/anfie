@@ -10,7 +10,12 @@ export class ReportTicketRepository extends Repository<ReportTicket> {
 	}
 
 	async createOne(params: TCreateReportTicketParams) {
-		return this.save(params);
+		return this.save({
+			reporterId: +params.reporterId,
+			reporteeId: +params.reporteeId,
+			content: params.content,
+			type: params.type
+		});
 	}
 
 	async getReportTikets(query: GetReportTicketsDto) {
@@ -30,12 +35,16 @@ export class ReportTicketRepository extends Repository<ReportTicket> {
 				reporter: { id: +userId },
 				status
 			},
-			relations: ['modId', 'reporterId', 'reportedId']
+			relations: ['mod', 'reporter', 'reportee']
 		});
 	}
 
 	async findOneById(id: string) {
-		return this.findOneById(id);
+		return this.findOne({
+			where: {
+				id: +id
+			}
+		});
 	}
 
 	async findOneAndDelete(id: string) {
@@ -53,12 +62,12 @@ export class ReportTicketRepository extends Repository<ReportTicket> {
 			where: [
 				{
 					reporter: { id: +firstUserId },
-					reported: { id: +secondUserId },
+					reportee: { id: +secondUserId },
 					status: 'pending'
 				},
 				{
 					reporter: { id: +secondUserId },
-					reported: { id: +firstUserId },
+					reportee: { id: +firstUserId },
 					status: 'pending'
 				}
 			]
@@ -66,10 +75,10 @@ export class ReportTicketRepository extends Repository<ReportTicket> {
 	}
 
 	async accepted(id: string, modId: string) {
-		return this.save({ id: +id, status: 'accepted', modId });
+		return this.save({ id: +id, status: 'accepted', modId: +modId });
 	}
 
 	async reject(id: string, modId: string) {
-		return this.save({ id: +id, status: 'rejected', modId });
+		return this.save({ id: +id, status: 'rejected', modId: +modId });
 	}
 }

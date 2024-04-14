@@ -4,7 +4,7 @@ import { CreateConfestionDto } from './dto/create-confession.dto';
 import { AtGuard, GetCurrentUser } from 'src/common';
 import { GetConfestionsDto } from './dto';
 
-@Controller('confestions')
+@Controller('confessions')
 @UseGuards(AtGuard)
 export class ConfessionsController {
 	constructor(private readonly confestionsService: ConfessionsService) {}

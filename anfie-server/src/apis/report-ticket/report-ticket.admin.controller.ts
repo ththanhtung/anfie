@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Patch, Param, Query } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Param, Query, UseGuards } from '@nestjs/common';
 import { ReportTicketService } from './services/report-tiket.service';
-import { AuthAdmin, GetCurrentUser } from 'src/common';
+import { AtGuard, AuthAdmin, GetCurrentUser } from 'src/common';
 import { GetReportTicketsDto } from './dto';
 
+@UseGuards(AtGuard)
 @AuthAdmin()
-@Controller('report-tiket/admin')
+@Controller('report-ticket/admin')
 export class ReportTicketController {
 	constructor(private readonly reportTiketService: ReportTicketService) {}
 

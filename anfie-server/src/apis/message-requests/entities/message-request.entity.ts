@@ -8,17 +8,17 @@ export class MessageRequest extends BaseEntity<MessageRequest> {
 	@Column({
 		name: 'sender_id'
 	})
-	senderId: string;
+	senderId: number;
 
 	@Column({
 		name: 'receiver_id'
 	})
-	receiverId: string;
+	receiverId: number;
 
 	@Column({
 		name: 'confession_id'
 	})
-	confestionId: string;
+	confessionId: number;
 
 	@OneToOne(() => Users, { createForeignKeyConstraints: false })
 	@JoinColumn({
@@ -32,7 +32,7 @@ export class MessageRequest extends BaseEntity<MessageRequest> {
 	})
 	receiver: Users;
 
-	@ManyToOne(() => Confession, (confession) => confession.messageRequests)
+	@ManyToOne(() => Confession, (confession) => confession.messageRequests, { createForeignKeyConstraints: false })
 	@JoinColumn({
 		name: 'confession_id'
 	})

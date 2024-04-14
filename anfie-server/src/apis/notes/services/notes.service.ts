@@ -10,12 +10,12 @@ export class NotesService {
 		return this.noteRepository.createOne(user.userId.toString());
 	}
 
-	findAll(query: GetNotesDto) {
-		return this.noteRepository.getNotes(query);
+	findNotesByUserId(userId: string, query: GetNotesDto) {
+		return this.noteRepository.findNotesByUserId(userId, query);
 	}
 
 	findOne(id: number) {
-		return `This action returns a #${id} note`;
+		return this.noteRepository.findOneById(id.toString());
 	}
 
 	update(id: string, updateNoteDto: UpdateNoteDto) {

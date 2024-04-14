@@ -2,12 +2,14 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { FriendRequestRepository } from '../repositories';
 import { FriendService } from 'src/apis/friend/services/friend.service';
 import { GetFriendRequestsDto } from '../dto';
+import { UserService } from 'src/apis/user/services';
 
 @Injectable()
 export class FriendRequestService {
 	constructor(
 		private readonly friendRequestRepository: FriendRequestRepository,
-		private readonly friendService: FriendService
+		private readonly friendService: FriendService,
+		private readonly userService: UserService
 	) {}
 
 	async getFriendRequests(user: TUserJwt, query: GetFriendRequestsDto) {
@@ -15,7 +17,7 @@ export class FriendRequestService {
 	}
 
 	async cancelFriendRequest(requestId: string, userId: string) {
-		const request = await this.friendRequestRepository.findOneById(userId);
+		const request = await this.friendRequestRepository.findOneById(requestId);
 		if (!request)
 			throw new NotFoundException([
 				{
@@ -34,15 +36,15 @@ export class FriendRequestService {
 	}
 
 	async createOne(senderId: string, receiverId: string) {
-		const receiver = await this.friendRequestRepository.findOneById(receiverId);
+		const receiver = await this.userService.findOneById(+receiverId);
 		if (!receiver)
 			throw new NotFoundException([
 				{
 					message: 'receiver not found'
 				}
 			]);
-		const isExisted = this.friendRequestRepository.isPending(senderId, receiverId);
 
+		const isExisted = await this.friendRequestRepository.isPending(senderId, receiverId);
 		if (isExisted)
 			throw new BadRequestException([
 				{

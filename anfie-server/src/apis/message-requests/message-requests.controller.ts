@@ -1,15 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
 import { MessageRequestsService } from './services/message-requests.service';
 import { CreateMessageRequestDto } from './dto/create-message-request.dto';
-import { GetCurrentUser } from 'src/common';
+import { AtGuard, GetCurrentUser } from 'src/common';
 import { GetMessageRequestsDto } from './dto';
 
+@UseGuards(AtGuard)
 @Controller('message-requests')
 export class MessageRequestsController {
 	constructor(private readonly messageRequestsService: MessageRequestsService) {}
 	@Post()
 	async createMessageRequest(@GetCurrentUser() user: TUserJwt, @Body() dto: CreateMessageRequestDto) {
-		return this.messageRequestsService.createOne(user.userId.toString(), dto.receiverId);
+		return this.messageRequestsService.createOne(user.userId.toString(), dto);
 	}
 
 	@Get()

@@ -30,7 +30,11 @@ export class MessageRequestRepository extends Repository<MessageRequest> {
 	}
 
 	async findOneById(id: string) {
-		return this.findOneById(id);
+		return this.findOne({
+			where: {
+				id: +id
+			}
+		});
 	}
 
 	async findOneAndDelete(id: string) {
@@ -60,11 +64,11 @@ export class MessageRequestRepository extends Repository<MessageRequest> {
 		});
 	}
 
-	async createOne(senderId: string, receiverId: string, confestionId: string, content: string) {
+	async createOne(senderId: string, receiverId: string, confessionId: string, content: string) {
 		return this.save({
-			senderId,
-			receiverId,
-			confestionId,
+			senderId: +senderId,
+			receiverId: +receiverId,
+			confessionId: +confessionId,
 			content
 		});
 	}

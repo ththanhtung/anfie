@@ -14,7 +14,7 @@ import { MediaUploaderModule } from './media-uploader/media-uploader.module';
 import { MessageMediaModule } from './message-media/message-media.module';
 import { MatchmakingModule } from './matchmaking/matchmaking.module';
 import { NotesModule } from './notes/notes.module';
-import { ConfestionsModule } from './confessions/confessions.module';
+import { ConfessionsModule } from './confessions/confessions.module';
 import { MessageRequestsModule } from './message-requests/message-requests.module';
 import { AdminModule } from './admin/admin.module';
 import { RoleModule } from './role/role.module';
@@ -39,7 +39,7 @@ import { PreferencesModule } from './preferences/preferences.module';
 		MessageMediaModule,
 		MatchmakingModule,
 		NotesModule,
-		ConfestionsModule,
+		ConfessionsModule,
 		MessageRequestsModule,
 		AdminModule,
 		RoleModule,

@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Body, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Query, UseGuards } from '@nestjs/common';
 import { ReportTicketService } from './services/report-tiket.service';
 import { CreateReportTicketDto } from './dto/create-report-ticket.dto';
-import { GetCurrentUser } from 'src/common';
+import { AtGuard, GetCurrentUser } from 'src/common';
 import { GetReportTicketsDto } from './dto';
 
-@Controller('report-tiket')
+@UseGuards(AtGuard)
+@Controller('report-ticket')
 export class ReportTicketController {
 	constructor(private readonly reportTiketService: ReportTicketService) {}
 
@@ -14,7 +15,7 @@ export class ReportTicketController {
 	}
 
 	@Get()
-	getReportTiketsByUserId(@GetCurrentUser() user: TUserJwt, @Query() query: GetReportTicketsDto) {
+	async getReportTiketsByUserId(@GetCurrentUser() user: TUserJwt, @Query() query: GetReportTicketsDto) {
 		return this.reportTiketService.getReportTiketsByUserId(user, query);
 	}
 

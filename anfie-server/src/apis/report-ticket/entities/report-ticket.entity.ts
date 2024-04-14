@@ -1,23 +1,25 @@
-import { Users } from 'src/apis/user/entities';
+import { Admin } from 'src/apis/admin/entities';
+import { UserProfiles } from 'src/apis/user/entities';
 import { BaseEntity } from 'src/database';
-import { Column, Entity, JoinColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity()
 export class ReportTicket extends BaseEntity<ReportTicket> {
 	@Column({
-		name: 'mod_id'
+		name: 'mod_id',
+		nullable: true
 	})
-	modId: string;
+	modId: number;
 
 	@Column({
 		name: 'reporter_id'
 	})
-	reporterId: string;
+	reporterId: number;
 
 	@Column({
-		name: 'reported_id'
+		name: 'reportee_id'
 	})
-	reportedId: string;
+	reporteeId: number;
 
 	@Column({
 		name: 'report_content'
@@ -35,18 +37,21 @@ export class ReportTicket extends BaseEntity<ReportTicket> {
 	})
 	status: TReportTicketStatus;
 
+	@ManyToOne(() => Admin, { createForeignKeyConstraints: false })
 	@JoinColumn({
 		name: 'mod_id'
 	})
-	mod: Users;
+	mod: Admin;
 
+	@ManyToOne(() => UserProfiles, (user) => user.receivedReportTickets, { createForeignKeyConstraints: false })
 	@JoinColumn({
 		name: 'reporter_id'
 	})
-	reporter: Users;
+	reporter: UserProfiles;
 
+	@ManyToOne(() => UserProfiles, (user) => user.submittedReportTickets, { createForeignKeyConstraints: false })
 	@JoinColumn({
-		name: 'reported_id'
+		name: 'reportee_id'
 	})
-	reported: Users;
+	reportee: UserProfiles;
 }

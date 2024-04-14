@@ -18,4 +18,12 @@ export class ConfessionRepository extends Repository<Confession> {
 	async getConfestions(query: GetConfestionsDto) {
 		return pagination(this, query);
 	}
+
+	async findOneById(id: string) {
+		return this.findOne({
+			where: {
+				id: +id
+			}
+		});
+	}
 }

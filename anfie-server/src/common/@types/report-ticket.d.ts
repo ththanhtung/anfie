@@ -3,7 +3,7 @@ type TReportTicketType = 'conversation' | 'confession' | 'comment' | 'diary';
 
 type TCreateReportTicketParams = {
 	reporterId: string;
-	reportedId: string;
+	reporteeId: string;
 	content: string;
 	type: TReportTicketType;
 	status?: TReportTicketStatus;

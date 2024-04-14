@@ -14,4 +14,8 @@ export class ConfessionsService {
 	async getConfestions(query: GetConfestionsDto) {
 		return this.confestionRepository.getConfestions(query);
 	}
+
+	async findOneById(id: string) {
+		return this.confestionRepository.findOneById(id);
+	}
 }

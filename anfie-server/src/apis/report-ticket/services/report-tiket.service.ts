@@ -19,25 +19,25 @@ export class ReportTicketService {
 					message: 'reported user not found'
 				}
 			]);
-		const isExisted = this.reportTicketRepository.isPending(reporterId, dto.reportedId);
-
+		const isExisted = await this.reportTicketRepository.isPending(reporterId, dto.reportedId);
 		if (isExisted)
 			throw new BadRequestException([
 				{
-					message: 'friend request already exist'
+					message: 'report ticket already exist'
 				}
 			]);
-
 		if (dto.reportedId === reporterId)
 			throw new BadRequestException([
 				{
-					message: 'cannot sent friend request for yourself'
+					message: 'cannot sent report ticket for yourself'
 				}
 			]);
 
 		return this.reportTicketRepository.createOne({
-			reporterId,
-			...dto
+			reporterId: reporterId,
+			reporteeId: dto.reportedId,
+			content: dto.content,
+			type: dto.type
 		});
 	}
 	async getReportTikets(query: GetReportTicketsDto) {
@@ -49,18 +49,18 @@ export class ReportTicketService {
 	}
 
 	async cancelReportTicket(requestId: string, userId: string) {
-		const request = await this.reportTicketRepository.findOneById(userId);
+		const request = await this.reportTicketRepository.findOneById(requestId);
 		if (!request)
 			throw new NotFoundException([
 				{
-					message: 'friend request not found'
+					message: 'report ticket not found'
 				}
 			]);
 
-		if (request.senderId === userId)
+		if (request.reporterId === +userId)
 			throw new BadRequestException([
 				{
-					message: 'cannot sent friend request for yourself'
+					message: 'cannot sent report ticket for yourself'
 				}
 			]);
 
@@ -72,7 +72,7 @@ export class ReportTicketService {
 		if (!request)
 			throw new NotFoundException([
 				{
-					message: 'friend request not found'
+					message: 'report ticket not found'
 				}
 			]);
 
@@ -91,7 +91,7 @@ export class ReportTicketService {
 		if (!request)
 			throw new NotFoundException([
 				{
-					message: 'friend request not found'
+					message: 'report ticket not found'
 				}
 			]);
 

@@ -1,8 +1,9 @@
 import { Location } from 'src/apis/locations/entities';
 import { Preference } from 'src/apis/preferences/entities';
 import { BaseEntity } from 'src/database';
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne } from 'typeorm';
 import { Users } from './user.entity';
+import { ReportTicket } from 'src/apis/report-ticket/entities';
 
 @Entity()
 export class UserProfiles extends BaseEntity<UserProfiles> {
@@ -87,6 +88,12 @@ export class UserProfiles extends BaseEntity<UserProfiles> {
 		name: 'user_id'
 	})
 	user: Users;
+
+	@OneToMany(() => ReportTicket, (reportTicket) => reportTicket.reporter, { nullable: true, cascade: true, onDelete: 'CASCADE' })
+	submittedReportTickets: ReportTicket[];
+
+	@OneToMany(() => ReportTicket, (reportTicket) => reportTicket.reportee, { nullable: true, cascade: true, onDelete: 'CASCADE' })
+	receivedReportTickets: ReportTicket[];
 
 	@ManyToMany(() => Preference, (preference) => preference.userProfiles)
 	@JoinTable({

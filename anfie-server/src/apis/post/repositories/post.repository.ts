@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Post } from '../entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { pagination } from 'src/common';
@@ -19,6 +19,13 @@ export class PostRepository extends Repository<Post> {
 
 	async getAll(query: GetPostsDto) {
 		return pagination(this, query, {
+			relations: ['author']
+		});
+	}
+
+	async getPostsByUserIds(ids: number[], query: GetPostsDto) {
+		return pagination(this, query, {
+			where: { author: { id: In(ids) } },
 			relations: ['author']
 		});
 	}

@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePostDto } from '../dto/create-post.dto';
-import { UpdatePostDto } from '../dto/update-post.dto';
 import { PostRepository } from '../repositories';
 import { GetPostsDto } from '../dto';
 import { FriendService } from 'src/apis/friend/services';
@@ -15,20 +14,11 @@ export class PostService {
 		return this.postRepository.createOne({ authorId, totalLikes: 0, ...createPostDto });
 	}
 
-	async findAll(query: GetPostsDto) {
-		// const follows = await this.friendsService.getFollows();
-		return this.postRepository.getAll(query);
-	}
+	async findAll(userId: string, query: GetPostsDto) {
+		const followers = await this.friendsService.getFollowers(userId);
 
-	findOne(id: number) {
-		return `This action returns a #${id} post`;
-	}
+		const followings = followers.map((item) => item.followee.id);
 
-	update(id: number, updatePostDto: UpdatePostDto) {
-		return `This action updates a #${id} post`;
-	}
-
-	remove(id: number) {
-		return `This action removes a #${id} post`;
+		return this.postRepository.getPostsByUserIds(followings, query);
 	}
 }

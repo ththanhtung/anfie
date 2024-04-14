@@ -2,8 +2,9 @@ import { Exclude } from 'class-transformer';
 import { Role } from 'src/apis/role/entities';
 import { AdminUserType } from 'src/common';
 import { BaseEntity } from 'src/database';
-import { BeforeInsert, Column, Entity, JoinTable, ManyToMany } from 'typeorm';
+import { BeforeInsert, Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
 import * as argon from 'argon2';
+import { ReportTicket } from 'src/apis/report-ticket/entities';
 
 @Entity()
 export class Admin extends BaseEntity<Admin> {
@@ -30,6 +31,9 @@ export class Admin extends BaseEntity<Admin> {
 		nullable: true
 	})
 	accessToken: string;
+
+	@OneToMany(() => ReportTicket, (reportTicket) => reportTicket.mod)
+	processedReportedTickets: ReportTicket[];
 
 	@ManyToMany(() => Role)
 	@JoinTable({

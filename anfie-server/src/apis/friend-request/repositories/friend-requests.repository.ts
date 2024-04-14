@@ -30,7 +30,11 @@ export class FriendRequestRepository extends Repository<FriendRequest> {
 	}
 
 	async findOneById(id: string) {
-		return this.findOneById(id);
+		return this.findOne({
+			where: {
+				id: +id
+			}
+		});
 	}
 
 	async findOneAndDelete(id: string) {

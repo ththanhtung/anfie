@@ -11,7 +11,7 @@ export class NoteRepository extends Repository<Note> {
 
 	async createOne(userId: string) {
 		return this.save({
-			userId
+			userId: +userId
 		});
 	}
 
@@ -30,5 +30,22 @@ export class NoteRepository extends Repository<Note> {
 
 	async findOneAndRemoveById(id: string) {
 		return this.delete({ id: +id });
+	}
+
+	findNotesByUserId(id: string, query: GetNotesDto) {
+		return pagination(this, query, {
+			relations: ['user'],
+			where: {
+				userId: +id
+			}
+		});
+	}
+
+	async findOneById(id: string) {
+		return this.findOne({
+			where: {
+				id: +id
+			}
+		});
 	}
 }

@@ -8,6 +8,7 @@ import { ConfessionRepository } from './repositories';
 @Module({
 	controllers: [ConfessionsController],
 	providers: [ConfessionsService, ConfessionRepository],
-	imports: [TypeOrmModule.forFeature([Confession])]
+	imports: [TypeOrmModule.forFeature([Confession])],
+	exports: [ConfessionsService]
 })
-export class ConfestionsModule {}
+export class ConfessionsModule {}

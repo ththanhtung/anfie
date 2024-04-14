@@ -7,7 +7,7 @@ export class Note extends BaseEntity<Note> {
 	@Column({
 		name: 'user_id'
 	})
-	userId: string;
+	userId: number;
 
 	@Column({
 		name: 'note_title',
