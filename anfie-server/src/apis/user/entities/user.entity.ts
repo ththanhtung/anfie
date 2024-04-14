@@ -7,6 +7,7 @@ import { Group } from 'src/apis/group/entities';
 import { Post } from 'src/apis/post/entities';
 import { Note } from 'src/apis/notes/entities';
 import { Confession } from 'src/apis/confessions/entities';
+import { Comment } from 'src/apis/comment/entities';
 
 @Entity()
 export class Users extends BaseEntity<Users> {
@@ -24,6 +25,10 @@ export class Users extends BaseEntity<Users> {
 	@OneToMany(() => Message, (message) => message.user)
 	@JoinColumn()
 	messages: Message[];
+
+	@OneToMany(() => Comment, (comment) => comment.user)
+	@JoinColumn()
+	comments: Comment[];
 
 	@Exclude()
 	@Column({ name: 'user_refresh_token', nullable: true })

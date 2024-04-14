@@ -29,4 +29,12 @@ export class PostRepository extends Repository<Post> {
 			relations: ['author']
 		});
 	}
+
+	async findOneById(id: string) {
+		return this.findOne({
+			where: {
+				id: +id
+			}
+		});
+	}
 }

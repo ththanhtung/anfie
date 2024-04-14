@@ -10,12 +10,12 @@ export class PostController {
 	constructor(private readonly postService: PostService) {}
 
 	@Post()
-	create(@GetCurrentUser('userId') authorId: number, @Body() createPostDto: CreatePostDto) {
+	async create(@GetCurrentUser('userId') authorId: number, @Body() createPostDto: CreatePostDto) {
 		return this.postService.create(authorId, createPostDto);
 	}
 
 	@Get()
-	findAll(@GetCurrentUser('userId') userId: string, @Query() query: GetPostsDto) {
+	async findAll(@GetCurrentUser('userId') userId: string, @Query() query: GetPostsDto) {
 		return this.postService.findAll(userId, query);
 	}
 }

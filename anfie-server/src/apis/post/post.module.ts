@@ -9,6 +9,7 @@ import { FriendModule } from '../friend/friend.module';
 @Module({
 	imports: [TypeOrmModule.forFeature([Post]), FriendModule],
 	controllers: [PostController],
-	providers: [PostService, PostRepository]
+	providers: [PostService, PostRepository],
+	exports: [PostService]
 })
 export class PostModule {}

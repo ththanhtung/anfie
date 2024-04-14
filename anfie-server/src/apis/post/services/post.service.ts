@@ -21,4 +21,8 @@ export class PostService {
 
 		return this.postRepository.getPostsByUserIds(followings, query);
 	}
+
+	async findOneById(id: string) {
+		return this.postRepository.findOneById(id);
+	}
 }

@@ -2,6 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, LessThanOrEqual, MoreThan, MoreThanOrEqual, Repository } from 'typeorm';
 import { Comment } from '../entities';
+import { GetCommentsDto } from '../dto';
+import { pagination } from 'src/common';
 
 @Injectable()
 export class CommentRepository extends Repository<Comment> {
@@ -32,10 +34,10 @@ export class CommentRepository extends Repository<Comment> {
 		return this.update(
 			{
 				postId: +postId,
-				commentRight: MoreThanOrEqual(rightValue)
+				commentLeft: MoreThan(rightValue)
 			},
 			{
-				commentRight: () => 'comment_left + 2'
+				commentLeft: () => 'comment_left + 2'
 			}
 		);
 	}
@@ -59,10 +61,11 @@ export class CommentRepository extends Repository<Comment> {
 		});
 	}
 
-	async createOne(content: string, parentId: string, left: number, right: number, userId: string, postId: string) {
-		this.save({
+	async createOne({ content, parentId, left, right, userId, postId }: TCreateCommentParams) {
+		console.log({ content, parentId, left, right, userId, postId });
+		return this.save({
 			content,
-			parentId: +parentId,
+			parentId: parentId ? +parentId : null,
 			commentLeft: left,
 			commentRight: right,
 			userId: +userId,
@@ -70,24 +73,24 @@ export class CommentRepository extends Repository<Comment> {
 		});
 	}
 
-	async findCommentsByParentId(parentId: string, postId: string) {
+	async findCommentsByParentId(parentId: string, query: GetCommentsDto) {
 		if (parentId) {
 			const parent = await this.findOneById(parentId);
 			if (!parent) throw new NotFoundException([{ message: 'parent comment not found' }]);
-			return this.find({
+			return pagination(this, query, {
 				where: {
-					postId: +postId,
-					commentLeft: MoreThan(parent.commentRight),
-					commentRight: LessThanOrEqual(parent.commentRight + 1)
+					postId: +query.postId,
+					commentLeft: MoreThan(parent.commentLeft),
+					commentRight: LessThanOrEqual(parent.commentRight)
 				},
 				order: {
 					commentLeft: 'ASC'
 				}
 			});
 		}
-		return this.find({
+		return pagination(this, query, {
 			where: {
-				postId: +postId
+				postId: +query.postId
 			},
 			order: {
 				commentLeft: 'ASC'
@@ -106,26 +109,26 @@ export class CommentRepository extends Repository<Comment> {
 		});
 	}
 
-	async increaseCommentLeft(postId: string, rightValue: number, amount: number) {
+	async decreaseCommentLeft(postId: string, leftValue: number, amount: number) {
 		return this.update(
 			{
 				postId: +postId,
-				commentRight: MoreThanOrEqual(rightValue)
+				commentLeft: MoreThanOrEqual(leftValue)
 			},
 			{
-				commentRight: () => 'comment_left + ' + amount
+				commentLeft: () => `comment_left - ${amount}`
 			}
 		);
 	}
 
-	async increaseCommentRight(postId: string, rightValue: number, amount: number) {
+	async decreaseCommentRight(postId: string, rightValue: number, amount: number) {
 		return this.update(
 			{
 				postId: +postId,
 				commentRight: MoreThanOrEqual(rightValue)
 			},
 			{
-				commentRight: () => 'comment_right + ' + amount
+				commentRight: () => `comment_right - ${amount}`
 			}
 		);
 	}

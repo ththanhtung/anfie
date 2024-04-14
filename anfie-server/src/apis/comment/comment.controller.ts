@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Body, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, UseGuards, Query } from '@nestjs/common';
 import { CommentService } from './services/comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { AtGuard, GetCurrentUser } from 'src/common';
-import { DeleteCommentDto } from './dto';
+import { DeleteCommentDto, GetCommentsDto } from './dto';
 
 @UseGuards(AtGuard)
 @Controller('comments')
@@ -13,9 +13,9 @@ export class CommentController {
 		return this.commentService.createComment(user, dto);
 	}
 
-	@Get()
-	async getCommentByParentId(@Param('parentId') parentId: string) {
-		return this.commentService.getCommentByParentId(parentId);
+	@Get('/:id/children')
+	async getCommentByParentId(@Param('id') parentId: string, @Query() query: GetCommentsDto) {
+		return this.commentService.getCommentByParentId(parentId, query);
 	}
 
 	@Delete(':id')
