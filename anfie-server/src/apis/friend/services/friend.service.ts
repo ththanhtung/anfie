@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { FriendRepository } from '../repositories';
+import { GetFriendsDto } from '../dto';
 
 @Injectable()
 export class FriendService {
@@ -8,30 +9,26 @@ export class FriendService {
 	async createOne(followeeId: string, followerId: string) {
 		return this.friendRepository.createOne(followeeId, followerId);
 	}
-	async getFriends(user: TUserJwt) {
-		return this.friendRepository.getFriends(user.userId.toString());
+	async getFriends(userId: string, query: GetFriendsDto) {
+		console.log({ userId });
+
+		return this.friendRepository.getFriends(userId, query);
 	}
 
 	async findFriendById(id: string) {
 		return this.friendRepository.findFriendById(id);
 	}
 
-	async deleteFriend(id: string, friendId: string) {
-		const friend = await this.findFriendById(id);
-		if (!friend)
+	async deleteFriend(userId: string, friendId: string) {
+		const isFriend = await this.friendRepository.isFriend(userId, friendId);
+		if (!isFriend)
 			throw new NotFoundException([
-				{
-					message: 'friend not found'
-				}
-			]);
-		if (friend.followerId.toString() !== friendId && friend.followeeId.toString() !== friendId)
-			throw new BadRequestException([
 				{
 					message: 'you are not friend with this user'
 				}
 			]);
 
-		return this.friendRepository.deleteFriend(id);
+		return this.friendRepository.deleteFriend(friendId);
 	}
 
 	async isFriend(firstUserId: string, secondUserId: string) {

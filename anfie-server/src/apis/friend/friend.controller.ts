@@ -1,18 +1,20 @@
-import { Controller, Get, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Param, Delete, Query, UseGuards } from '@nestjs/common';
 import { FriendService } from './services/friend.service';
-import { GetCurrentUser } from 'src/common';
+import { AtGuard, GetCurrentUser } from 'src/common';
+import { GetFriendsDto } from './dto';
 
+@UseGuards(AtGuard)
 @Controller('friends')
 export class FriendController {
 	constructor(private readonly friendService: FriendService) {}
 
 	@Get()
-	async getFriends(@GetCurrentUser() user: TUserJwt) {
-		return this.friendService.getFriends(user);
+	async getFriends(@GetCurrentUser('userId') userId: string, @Query() query: GetFriendsDto) {
+		return this.friendService.getFriends(userId, query);
 	}
 
 	@Delete(':id/delete')
-	async deleteFriend(@GetCurrentUser() user: TUserJwt, @Param('id') id: string) {
-		return this.friendService.deleteFriend(id, user.userId.toString());
+	async deleteFriend(@GetCurrentUser('userId') userId: string, @Param('id') id: string) {
+		return this.friendService.deleteFriend(userId, id);
 	}
 }

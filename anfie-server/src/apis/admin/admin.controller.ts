@@ -4,6 +4,7 @@ import { CreateAdminDto, LoginAdminDto } from './dto';
 import { Response, Request } from 'express';
 import { CookieJwtGuard, GetCurrentUser } from 'src/common';
 import { TAdminJwt } from 'src/common/@types/admin';
+import { Admin } from './entities';
 
 @Controller('admin')
 export class AdminController {
@@ -19,6 +20,12 @@ export class AdminController {
 	@HttpCode(HttpStatus.OK)
 	async login(@Body() dto: LoginAdminDto, @Res({ passthrough: true }) res: Response) {
 		return this.adminService.login(dto, res);
+	}
+
+	@Get('me')
+	@HttpCode(HttpStatus.OK)
+	profileAdmin(@GetCurrentUser() admin: Admin) {
+		return admin;
 	}
 
 	@UseGuards(CookieJwtGuard)

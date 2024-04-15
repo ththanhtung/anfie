@@ -2,6 +2,8 @@ import { Repository } from 'typeorm';
 import { Friend } from '../entities';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { pagination } from 'src/common';
+import { GetFriendsDto } from '../dto';
 
 @Injectable()
 export class FriendRepository extends Repository<Friend> {
@@ -9,8 +11,8 @@ export class FriendRepository extends Repository<Friend> {
 		super(repository.target, repository.manager, repository.queryRunner);
 	}
 
-	async getFriends(id: string): Promise<Friend[]> {
-		return this.find({
+	async getFriends(id: string, query: GetFriendsDto) {
+		return pagination(this, query, {
 			where: [{ followee: { id: +id } }, { follower: { id: +id } }]
 		});
 	}
@@ -46,7 +48,9 @@ export class FriendRepository extends Repository<Friend> {
 	}
 
 	async deleteFriend(id: string) {
-		return this.delete(id);
+		return this.delete({
+			followee: { id: +id }
+		});
 	}
 
 	async createOne(followerId: string, followeeId: string) {
