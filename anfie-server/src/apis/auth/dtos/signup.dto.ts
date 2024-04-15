@@ -1,12 +1,12 @@
 import { IsDateString, IsEnum, IsString } from 'class-validator';
 import { Genders } from 'src/common';
 
-export class CreateUserDto {
+export class SignupDto {
 	@IsString()
-	email!: string;
+	email: string;
 
 	@IsString()
-	hash!: string;
+	hash: string;
 
 	@IsString()
 	firstName: string;

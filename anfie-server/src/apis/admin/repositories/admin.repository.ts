@@ -29,7 +29,7 @@ export class AdminRepository extends Repository<Admin> {
 			throw new ConflictException([
 				{
 					field: 'username',
-					message: 'Tài khoản này đã tồn tại'
+					message: 'user already exist'
 				}
 			]);
 		}
@@ -47,7 +47,7 @@ export class AdminRepository extends Repository<Admin> {
 			throw new ForbiddenException([
 				{
 					field: 'username',
-					message: 'Tài khoản không tồn tại'
+					message: 'user not found'
 				}
 			]);
 		}
@@ -74,7 +74,7 @@ export class AdminRepository extends Repository<Admin> {
 			throw new ForbiddenException([
 				{
 					field: 'user_admin',
-					message: 'Tài khoản admin không tồn tại'
+					message: 'user not found'
 				}
 			]);
 		}

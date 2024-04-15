@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { FriendRepository } from '../repositories';
 import { GetFriendsDto } from '../dto';
 

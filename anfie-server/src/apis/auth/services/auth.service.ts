@@ -4,13 +4,14 @@ import { UserService } from 'src/apis/user/services';
 import * as argon from 'argon2';
 import { getTokens } from 'src/common/helpers';
 import { Request, Response } from 'express';
+import { SignupDto } from '../dtos/signup.dto';
 
 @Injectable()
 export class AuthService {
 	constructor(private readonly userServices: UserService) {}
 
-	async register() {
-		return true;
+	async register(dto: SignupDto) {
+		return this.userServices.createOne(dto);
 	}
 
 	async login(dto: LoginDto, res: Response) {

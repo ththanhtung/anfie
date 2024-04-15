@@ -11,8 +11,8 @@ export class ConfessionsService {
 		return this.confestionRepository.createOne({ ownerId: user.userId.toString(), content });
 	}
 
-	async getConfestions(query: GetConfestionsDto) {
-		return this.confestionRepository.getConfestions(query);
+	async getConfestionsRandom(query: GetConfestionsDto) {
+		return this.confestionRepository.getConfestionsRandom(query);
 	}
 
 	async findOneById(id: string) {

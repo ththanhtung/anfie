@@ -22,6 +22,7 @@ import { ReportTiketModule } from './report-ticket/report-ticket.module';
 import { OpenAIModule } from './openai/openai.module';
 import { LocationsModule } from './locations/locations.module';
 import { PreferencesModule } from './preferences/preferences.module';
+import { TagModule } from './tag/tag.module';
 
 @Module({
 	imports: [
@@ -46,7 +47,8 @@ import { PreferencesModule } from './preferences/preferences.module';
 		ReportTiketModule,
 		OpenAIModule,
 		LocationsModule,
-		PreferencesModule
+		PreferencesModule,
+		TagModule
 	]
 })
 export class ApiModule {}

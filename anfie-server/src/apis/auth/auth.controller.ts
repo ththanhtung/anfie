@@ -4,10 +4,18 @@ import { LoginDto } from './dtos';
 import { CookieJwtGuard } from 'src/common/guards';
 import { GetCurrentUser } from 'src/common/decorators';
 import { Request, Response } from 'express';
+import { SignupDto } from './dtos/signup.dto';
 
 @Controller('auth')
 export class AuthController {
 	constructor(private readonly authService: AuthService) {}
+
+	@Post('signup')
+	@HttpCode(HttpStatus.CREATED)
+	async signup(@Body() dto: SignupDto) {
+		return this.authService.register(dto);
+	}
+
 	@Post('login')
 	@HttpCode(HttpStatus.OK)
 	async login(@Body() dto: LoginDto, @Res({ passthrough: true }) res: Response) {

@@ -15,7 +15,7 @@ export class ConfessionsController {
 	}
 
 	@Get()
-	async getConfestions(@Query() query: GetConfestionsDto) {
-		return this.confestionsService.getConfestions(query);
+	async getConfestionsRandom(@Query() query: GetConfestionsDto) {
+		return this.confestionsService.getConfestionsRandom(query);
 	}
 }

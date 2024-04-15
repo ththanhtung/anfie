@@ -15,8 +15,9 @@ export class ConfessionRepository extends Repository<Confession> {
 		return this.save({ ownerId: +ownerId, content });
 	}
 
-	async getConfestions(query: GetConfestionsDto) {
-		return pagination(this, query);
+	async getConfestionsRandom(query: GetConfestionsDto) {
+		const limit = query.limit ? +query.limit : 10;
+		return this.createQueryBuilder('confession').select().orderBy('RANDOM()').take(limit).getMany();
 	}
 
 	async findOneById(id: string) {
