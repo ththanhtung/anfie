@@ -5,9 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Confession } from './entities';
 import { ConfessionRepository } from './repositories';
 import { TagModule } from '../tag/tag.module';
+import { ConfessionsAdminController } from './confessions.admin.controller';
 
 @Module({
-	controllers: [ConfessionsController],
+	controllers: [ConfessionsController, ConfessionsAdminController],
 	providers: [ConfessionsService, ConfessionRepository],
 	imports: [TypeOrmModule.forFeature([Confession]), TagModule],
 	exports: [ConfessionsService]

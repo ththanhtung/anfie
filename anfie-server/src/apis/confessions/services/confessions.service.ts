@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateConfestionDto } from '../dto/create-confession.dto';
 import { ConfessionRepository } from '../repositories';
-import { GetConfestionsDto } from '../dto';
+import { GetConfessionsAdminDto, GetConfestionsDto } from '../dto';
 import { TagService } from 'src/apis/tag/services';
 
 @Injectable()
@@ -22,5 +22,9 @@ export class ConfessionsService {
 
 	async findOneById(id: string) {
 		return this.confestionRepository.findOneById(id);
+	}
+
+	async getConfessions(query: GetConfessionsAdminDto) {
+		return this.confestionRepository.getConfessions(query);
 	}
 }

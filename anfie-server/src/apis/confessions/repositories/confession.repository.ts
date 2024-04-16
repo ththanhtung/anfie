@@ -2,8 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Confession } from '../entities';
-import { GetConfestionsDto } from '../dto';
+import { GetConfessionsAdminDto, GetConfestionsDto } from '../dto';
 import { TCreateConfession } from 'src/common/@types/confession';
+import { pagination } from 'src/common';
 
 @Injectable()
 export class ConfessionRepository extends Repository<Confession> {
@@ -38,6 +39,17 @@ export class ConfessionRepository extends Repository<Confession> {
 		return this.findOne({
 			where: {
 				id: +id
+			}
+		});
+	}
+
+	async getConfessions(query: GetConfessionsAdminDto) {
+		return pagination(this, query, {
+			where: {
+				ownerId: +query.userId || null,
+				tags: {
+					name: query.tag
+				}
 			}
 		});
 	}
