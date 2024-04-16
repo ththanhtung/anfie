@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { FriendRequestRepository } from '../repositories';
 import { FriendService } from 'src/apis/friend/services/friend.service';
-import { GetFriendRequestsDto } from '../dto';
+import { GetFriendRequestsAdminDto, GetFriendRequestsDto } from '../dto';
 import { UserService } from 'src/apis/user/services';
 
 @Injectable()
@@ -118,5 +118,9 @@ export class FriendRequestService {
 			]);
 
 		return this.friendRequestRepository.reject(requestId);
+	}
+
+	async getFriendRequestsAdmin(query: GetFriendRequestsAdminDto) {
+		return this.friendRequestRepository.getFriendRequestsAdmin(query);
 	}
 }

@@ -2,7 +2,7 @@ import { Repository } from 'typeorm';
 import { FriendRequest } from '../entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
-import { GetFriendRequestsDto } from '../dto';
+import { GetFriendRequestsAdminDto, GetFriendRequestsDto } from '../dto';
 import { pagination } from 'src/common';
 
 @Injectable()
@@ -77,5 +77,22 @@ export class FriendRequestRepository extends Repository<FriendRequest> {
 
 	async reject(id: string) {
 		return this.save({ id: +id, status: 'rejected' });
+	}
+
+	async getFriendRequestsAdmin(query: GetFriendRequestsAdminDto) {
+		const userId = query.userId ? +query.userId : null;
+
+		if (!userId) return pagination(this, query);
+
+		return pagination(this, query, {
+			where: [
+				{
+					sender: { id: userId }
+				},
+				{
+					receiver: { id: userId }
+				}
+			]
+		});
 	}
 }

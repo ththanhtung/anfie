@@ -6,10 +6,12 @@ import { FriendRequest } from './entities';
 import { FriendRequestRepository } from './repositories';
 import { FriendModule } from '../friend/friend.module';
 import { UserModule } from '../user/user.module';
+import { FriendRequestAdminController } from './friend-request.admin.controller';
+import { FriendRequestAdminService } from './services';
 
 @Module({
-	controllers: [FriendRequestController],
-	providers: [FriendRequestService, FriendRequestRepository],
+	controllers: [FriendRequestController, FriendRequestAdminController],
+	providers: [FriendRequestService, FriendRequestAdminService, FriendRequestRepository],
 	imports: [TypeOrmModule.forFeature([FriendRequest]), FriendModule, UserModule]
 })
 export class FriendRequestModule {}
