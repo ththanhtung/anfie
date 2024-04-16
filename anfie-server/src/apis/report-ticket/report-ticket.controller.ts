@@ -20,7 +20,7 @@ export class ReportTicketController {
 	}
 
 	@Delete(':id/cancel')
-	async cancelReportTicket(@Param('id') id: string, @GetCurrentUser() user: TUserJwt) {
-		return this.reportTiketService.cancelReportTicket(id, user.userId.toString());
+	async cancelReportTicket(@Param('id') id: string, @GetCurrentUser('userId') userId: string) {
+		return this.reportTiketService.cancelReportTicket(id, userId);
 	}
 }

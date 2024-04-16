@@ -66,42 +66,4 @@ export class ReportTicketService {
 
 		return this.reportTicketRepository.findOneAndDelete(requestId);
 	}
-
-	async acceptReportTicket(requestId: string, modId: string) {
-		const request = await this.reportTicketRepository.findOneById(requestId);
-		if (!request)
-			throw new NotFoundException([
-				{
-					message: 'report ticket not found'
-				}
-			]);
-
-		if (request.status === 'accepted')
-			throw new BadRequestException([
-				{
-					message: 'request already accepted'
-				}
-			]);
-
-		await this.reportTicketRepository.accepted(requestId, modId);
-	}
-
-	async rejectReportTicket(requestId: string, modId: string) {
-		const request = await this.reportTicketRepository.findOneById(requestId);
-		if (!request)
-			throw new NotFoundException([
-				{
-					message: 'report ticket not found'
-				}
-			]);
-
-		if (request.status === 'accepted')
-			throw new BadRequestException([
-				{
-					message: 'request already accepted'
-				}
-			]);
-
-		return this.reportTicketRepository.reject(requestId, modId);
-	}
 }

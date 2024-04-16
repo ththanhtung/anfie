@@ -2,7 +2,7 @@ import { Repository } from 'typeorm';
 import { ReportTicket } from '../entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { pagination } from 'src/common';
-import { GetReportTicketsDto } from '../dto';
+import { GetReportTicketsAdminDto, GetReportTicketsDto } from '../dto';
 
 export class ReportTicketRepository extends Repository<ReportTicket> {
 	constructor(@InjectRepository(ReportTicket) repository: Repository<ReportTicket>) {
@@ -28,12 +28,16 @@ export class ReportTicketRepository extends Repository<ReportTicket> {
 	}
 
 	async getReportTiketsByUserId(userId: string, query: GetReportTicketsDto) {
-		const status = 'pending';
+		const options = {};
+
+		if (query.status) {
+			options['status'] = query.status;
+		}
 
 		return pagination(this, query, {
 			where: {
 				reporter: { id: +userId },
-				status
+				...options
 			},
 			relations: ['mod', 'reporter', 'reportee']
 		});
@@ -80,5 +84,15 @@ export class ReportTicketRepository extends Repository<ReportTicket> {
 
 	async reject(id: string, modId: string) {
 		return this.save({ id: +id, status: 'rejected', modId: +modId });
+	}
+
+	async getReportTicketsAdmin(query: GetReportTicketsAdminDto) {
+		const options = {};
+		if (query.status) {
+			options['status'] = query.status;
+		}
+		return pagination(this, query, {
+			where: options
+		});
 	}
 }
