@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateConversationDto } from '../dto/create-conversation.dto';
 import { UserService } from 'src/apis/user/services';
 import { ConversationRepository } from '../repositories';
 import { GetConversationsDto } from '../dto';
+import { FIFTEEN_MINUTES } from 'src/common';
 
 @Injectable()
 export class ConversationService {
@@ -28,12 +29,23 @@ export class ConversationService {
 	async updateLastMessage({ conversationId, messageId }: TUpdateLastMessageParams) {
 		return this.conversationRepository.updateLastMessage({ conversationId, messageId });
 	}
- 
+
 	findOneById(id: number) {
-		return this.conversationRepository.findOneById(id); 
+		return this.conversationRepository.findOneById(id);
 	}
 
-	deleteOneById(id: number) {
+	async deleteOneById(id: number) {
+		const conversation = await this.conversationRepository.findOneById(id);
+		const conversationDuration = Date.now() - conversation.created_at.getTime();
+
+		if (conversationDuration <= FIFTEEN_MINUTES) {
+			throw new BadRequestException([
+				{
+					message: 'conversation must be at least 15 minutes'
+				}
+			]);
+		}
+
 		return this.conversationRepository.deleteOneById(id);
 	}
 }

@@ -9,13 +9,19 @@ export class BaseEntity<T> {
 	@PrimaryGeneratedColumn()
 	id: number;
 
-	@CreateDateColumn()
+	@CreateDateColumn({
+		type: 'timestamp with time zone'
+	})
 	created_at!: Date;
 
-	@UpdateDateColumn()
+	@UpdateDateColumn({
+		type: 'timestamp with time zone'
+	})
 	updated_at!: Date;
 
-	@DeleteDateColumn()
+	@DeleteDateColumn({
+		type: 'timestamp with time zone'
+	})
 	@Exclude()
 	deleted_at!: Date;
 }
