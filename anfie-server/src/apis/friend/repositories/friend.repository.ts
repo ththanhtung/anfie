@@ -56,4 +56,20 @@ export class FriendRepository extends Repository<Friend> {
 	async createOne(followerId: string, followeeId: string) {
 		return this.save({ followerId: +followerId, followeeId: +followeeId });
 	}
+
+	async areAllFriends(userIds: string[]) {
+		for (let i = 0; i < userIds.length; i++) {
+			for (let j = i + 1; j < userIds.length; j++) {
+				const user1 = userIds[i];
+				const user2 = userIds[j];
+				const areTheyFriends = await this.isFriend(user1, user2);
+
+				if (!areTheyFriends) {
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
 }

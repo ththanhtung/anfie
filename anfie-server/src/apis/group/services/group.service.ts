@@ -1,19 +1,28 @@
 import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
 import { CreateGroupDto } from '../dto/create-group.dto';
 import { GroupRepository } from '../repositories';
-import { AddRecipientDto, removeRecipientDto } from '../dto';
+import { AddRecipientDto } from '../dto';
 import { UserService } from 'src/apis/user/services';
+import { FriendService } from 'src/apis/friend/services';
 
 @Injectable()
 export class GroupService {
 	constructor(
 		private readonly groupRepository: GroupRepository,
-		private readonly userService: UserService
+		private readonly userService: UserService,
+		private readonly friendService: FriendService
 	) {}
 
 	async create(user: TUserJwt, createGroupDto: CreateGroupDto) {
-		const userPromises = createGroupDto.users.map((id) => this.userService.findOneById(+id));
-		const users = (await Promise.all(userPromises)).filter((user) => user);
+		const users = await this.userService.findUsersByIds(createGroupDto.users);
+		const isAllFriends = this.friendService.isAllFriends(createGroupDto.users);
+		if (isAllFriends) {
+			throw new BadRequestException([
+				{
+					message: 'some users are not friends'
+				}
+			]);
+		}
 		return this.groupRepository.createOne({
 			creatorId: user.userId.toString(),
 			adminId: user.userId.toString(),

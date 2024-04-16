@@ -38,4 +38,8 @@ export class FriendService {
 	async getFollowers(id: string) {
 		return this.friendRepository.getFollowers(id);
 	}
+
+	async isAllFriends(userIds: string[]) {
+		return this.friendRepository.areAllFriends(userIds);
+	}
 }

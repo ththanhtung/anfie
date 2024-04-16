@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Users } from '../entities';
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -72,5 +72,10 @@ export class UserRepository extends Repository<Users> {
 			]);
 		}
 		return user;
+	}
+
+	async findUsersByIds(ids: string[]) {
+		const idsInt = ids.map((id) => +id);
+		return this.find({ where: { id: In(idsInt) } });
 	}
 }

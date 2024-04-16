@@ -48,4 +48,8 @@ export class UserService {
 	async findOneByRefreshToken(refreshToken: string) {
 		return this.userRepository.findOneByRefreshToken(refreshToken);
 	}
+
+	async findUsersByIds(ids: string[]) {
+		return this.userRepository.findUsersByIds(ids);
+	}
 }

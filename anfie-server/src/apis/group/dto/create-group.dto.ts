@@ -8,3 +8,18 @@ export class CreateGroupDto {
 	@IsString()
 	title: string;
 }
+
+export class CreateGroupAdminDto {
+	@IsString({ each: true })
+	@ArrayNotEmpty()
+	users: string[];
+
+	@IsString()
+	title: string;
+
+	@IsString()
+	creatorId: string;
+
+	@IsString()
+	adminId: string;
+}
