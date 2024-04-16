@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { MessageRequestRepository } from '../repositories';
-import { ConversationService } from 'src/apis/conversation/services';
+import { ConversationAdminService } from 'src/apis/conversation/services';
 import { CreateMessageRequestDto, GetMessageRequestsDto } from '../dto';
 import { ConfessionsService } from 'src/apis/confessions/services';
 import { UserService } from 'src/apis/user/services';
@@ -9,7 +9,7 @@ import { UserService } from 'src/apis/user/services';
 export class MessageRequestsService {
 	constructor(
 		private readonly messageRequestRepository: MessageRequestRepository,
-		private readonly conversationService: ConversationService,
+		private readonly conversationAdminService: ConversationAdminService,
 		private readonly confessionService: ConfessionsService,
 		private readonly userService: UserService
 	) {}
@@ -89,7 +89,7 @@ export class MessageRequestsService {
 			]);
 
 		await this.messageRequestRepository.accepted(requestId);
-		return this.conversationService.create(+senderId, { recipientId: +request.receiverId });
+		return this.conversationAdminService.create({ user1: senderId, user2: request.receiverId.toString() });
 	}
 
 	async rejectFriendRequest(requestId: string, senderId: string) {

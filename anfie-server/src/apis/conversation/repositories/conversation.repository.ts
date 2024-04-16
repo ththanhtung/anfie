@@ -10,10 +10,10 @@ export class ConversationRepository extends Repository<Conversation> {
 		super(repository.target, repository.manager, repository.queryRunner);
 	}
 
-	async createOne(CreatorId: number, createConversationDto: CreateConversationDto) {
+	async createOne(createConversationDto: CreateConversationDto) {
 		const conversation = this.create();
-		conversation.creatorId = CreatorId;
-		conversation.recipientId = createConversationDto.recipientId;
+		conversation.creatorId = +createConversationDto.user1;
+		conversation.recipientId = +createConversationDto.user2;
 		return this.save(conversation);
 	}
 

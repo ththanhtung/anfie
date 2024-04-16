@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { CreateMatchmakingDto } from '../dto';
-import { ConversationService } from 'src/apis/conversation/services';
+import { ConversationAdminService, ConversationService } from 'src/apis/conversation/services';
 import { OpenAIService } from 'src/apis/openai/openai.service';
 import { UserProfileService } from 'src/apis/user/services';
 
 @Injectable()
 export class MatchmakingService {
 	constructor(
+		private readonly conversationAdminService: ConversationAdminService,
 		private readonly conversationService: ConversationService,
 		private readonly openAIService: OpenAIService,
 		private readonly userProfileService: UserProfileService
@@ -24,8 +25,6 @@ export class MatchmakingService {
 			console.log('conversation existed');
 			return;
 		}
-		return this.conversationService.create(match.id1, {
-			recipientId: match.id2
-		});
+		return this.conversationAdminService.create({ user1: match.id1.toString(), user2: match.id2.toString() });
 	}
 }
