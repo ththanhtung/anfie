@@ -39,4 +39,8 @@ export class UserProfileService {
 	async getProfilesByUserIds(ids: string[]) {
 		return this.userProfileRepository.getProfilesByUserIds(ids);
 	}
+
+	async reduceStrangerConversationSlotByOne(userId: string) {
+		return this.userProfileRepository.reduceStrangerConversationSlotByOne(userId);
+	}
 }

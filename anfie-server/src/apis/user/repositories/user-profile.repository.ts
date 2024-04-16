@@ -40,4 +40,21 @@ export class UserProfileRepository extends Repository<UserProfiles> {
 		const idsInt = ids.map((id) => +id);
 		return this.find({ where: { user: { id: In(idsInt) } }, relations: ['locations', 'preferences', 'user'] });
 	}
+
+	async banUser(userId: string) {
+		await this.update({ user: { id: +userId } }, { isBanned: true });
+	}
+
+	async reduceStrangerConversationSlotByOne(userId: string) {
+		await this.update({ user: { id: +userId } }, { strangerConversationSlots: () => 'user_stranger_conversation_slots - 1' });
+		const profile = await this.findOne({
+			where: {
+				user: { id: +userId }
+			}
+		});
+
+		if (profile.strangerConversationSlots < 0) {
+			await this.banUser(userId);
+		}
+	}
 }

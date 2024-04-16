@@ -79,6 +79,12 @@ export class UserProfiles extends BaseEntity<UserProfiles> {
 	bio: string;
 
 	@Column({
+		name: 'user_stranger_conversation_slots',
+		default: 3
+	})
+	strangerConversationSlots: number;
+
+	@Column({
 		name: 'user_id'
 	})
 	userId: string;
