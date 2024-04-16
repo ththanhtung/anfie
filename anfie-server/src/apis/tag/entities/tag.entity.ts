@@ -1,5 +1,6 @@
+import { Confession } from 'src/apis/confessions/entities';
 import { BaseEntity } from 'src/database';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, ManyToMany } from 'typeorm';
 
 @Entity()
 export class Tag extends BaseEntity<Tag> {
@@ -7,4 +8,7 @@ export class Tag extends BaseEntity<Tag> {
 		name: 'tag_name'
 	})
 	name: string;
+
+	@ManyToMany(() => Confession, (confession) => confession.tags)
+	confessions: Confession[];
 }

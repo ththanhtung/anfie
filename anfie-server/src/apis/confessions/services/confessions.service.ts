@@ -2,13 +2,18 @@ import { Injectable } from '@nestjs/common';
 import { CreateConfestionDto } from '../dto/create-confession.dto';
 import { ConfessionRepository } from '../repositories';
 import { GetConfestionsDto } from '../dto';
+import { TagService } from 'src/apis/tag/services';
 
 @Injectable()
 export class ConfessionsService {
-	constructor(private readonly confestionRepository: ConfessionRepository) {}
+	constructor(
+		private readonly confestionRepository: ConfessionRepository,
+		private readonly tagService: TagService
+	) {}
 
-	async createOne(user: TUserJwt, { content }: CreateConfestionDto) {
-		return this.confestionRepository.createOne({ ownerId: user.userId.toString(), content });
+	async createOne(user: TUserJwt, dto: CreateConfestionDto) {
+		const tags = await this.tagService.findByNames(dto.tags);
+		return this.confestionRepository.createOne({ ownerId: user.userId.toString(), content: dto.content, tags });
 	}
 
 	async getConfestionsRandom(query: GetConfestionsDto) {

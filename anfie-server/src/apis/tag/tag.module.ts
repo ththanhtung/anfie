@@ -8,6 +8,7 @@ import { TagRepository } from './repositories';
 @Module({
 	controllers: [TagController],
 	providers: [TagService, TagRepository],
-	imports: [TypeOrmModule.forFeature([Tag])]
+	imports: [TypeOrmModule.forFeature([Tag])],
+	exports: [TagService]
 })
 export class TagModule {}

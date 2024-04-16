@@ -1,5 +1,5 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Tag } from '../entities';
 import { CreateTagDto, GetTagsDto } from '../dto';
 import { pagination } from 'src/common';
@@ -27,5 +27,11 @@ export class TagRepository extends Repository<Tag> {
 
 	async removeOneById(id: string) {
 		return this.delete({ id: +id });
+	}
+
+	async findByNames(names: string[]) {
+		return this.find({
+			where: { name: In(names) }
+		});
 	}
 }

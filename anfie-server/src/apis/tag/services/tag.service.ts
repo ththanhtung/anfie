@@ -20,4 +20,9 @@ export class TagService {
 	remove(id: string) {
 		return this.tagRepository.removeOneById(id);
 	}
+
+	async findByNames(names: string[]) {
+		if (!names) return [];
+		return this.tagRepository.findByNames(names);
+	}
 }

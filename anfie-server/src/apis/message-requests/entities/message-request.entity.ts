@@ -1,5 +1,6 @@
 import { Confession } from 'src/apis/confessions/entities';
 import { Users } from 'src/apis/user/entities';
+import { TMessageRequestStatus } from 'src/common/@types/confession';
 import { BaseEntity } from 'src/database';
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 

@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Confession } from '../entities';
-import { pagination } from 'src/common';
 import { GetConfestionsDto } from '../dto';
+import { TCreateConfession } from 'src/common/@types/confession';
 
 @Injectable()
 export class ConfessionRepository extends Repository<Confession> {
@@ -11,13 +11,27 @@ export class ConfessionRepository extends Repository<Confession> {
 		super(repository.target, repository.manager, repository.queryRunner);
 	}
 
-	async createOne({ ownerId, content }: TCreateConfession) {
-		return this.save({ ownerId: +ownerId, content });
+	async createOne({ ownerId, content, tags }: TCreateConfession) {
+		return this.save({ ownerId: +ownerId, content, tags });
 	}
 
 	async getConfestionsRandom(query: GetConfestionsDto) {
 		const limit = query.limit ? +query.limit : 10;
-		return this.createQueryBuilder('confession').select().orderBy('RANDOM()').take(limit).getMany();
+
+		if (!query.tagIds) {
+			return await this.createQueryBuilder('confession').select().orderBy('RANDOM()').take(limit).getManyAndCount();
+		}
+
+		const ids = JSON.parse(query.tagIds);
+		const tagIds = ids.map((item) => +item);
+		return await this.createQueryBuilder('confession')
+			.innerJoinAndSelect('confession.tags', 'tag')
+			.where('tag.id IN (:...tagIds)', {
+				tagIds
+			})
+			.limit(limit)
+			.orderBy('RANDOM()')
+			.getManyAndCount();
 	}
 
 	async findOneById(id: string) {

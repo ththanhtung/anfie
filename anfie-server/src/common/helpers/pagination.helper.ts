@@ -25,11 +25,10 @@ export const pagination = async <T>(repo: Repository<T>, query: PaginationDto, o
 
 	const [entities, count] = await repo.findAndCount({
 		...options,
+		skip: (page - 1) * limit,
+		take: limit,
 		order
 	});
 
-	const start = (page - 1) * limit;
-	const end = page * limit;
-
-	return [entities.slice(start, end), count];
+	return [entities, count];
 };
