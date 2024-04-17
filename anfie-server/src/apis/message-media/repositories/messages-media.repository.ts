@@ -8,7 +8,7 @@ export class MessageMediaRepository extends Repository<MessageMedia> {
 	}
 
 	async createOne(messageId: number) {
-		const user = await this.create({ messageId });
-		return this.save(user);
+		const messageMedia = await this.create({ messageId });
+		return this.save(messageMedia);
 	}
 }
