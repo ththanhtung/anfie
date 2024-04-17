@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreatePostDto } from '../dto/create-post.dto';
 import { PostRepository } from '../repositories';
 import { GetPostsDto } from '../dto';
@@ -26,7 +26,19 @@ export class PostService {
 		return this.postRepository.getPostsByUserIds(followings, query);
 	}
 
-	async findOneById(id: string) {
-		return this.postRepository.findOneById(id);
+	async findOneById(userId: string, id: string) {
+		const post = await this.postRepository.findOneById(id);
+		if (this.friendsService.isFriend(post.authorId.toString(), userId))
+			throw new BadRequestException([
+				{
+					message: 'you are not friend with the author of this post'
+				}
+			]);
+
+		return post;
+	}
+
+	async GetPostsByUserId(userId: string, query: GetPostsDto) {
+		return this.postRepository.getPostsByUserId(userId, query);
 	}
 }

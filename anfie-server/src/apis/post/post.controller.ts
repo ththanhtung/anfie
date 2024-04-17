@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, UseGuards, Query, UseInterceptors, UploadedFiles } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Query, UseInterceptors, UploadedFiles, Param } from '@nestjs/common';
 import { PostService } from './services/post.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { AtGuard, GetCurrentUser } from 'src/common';
@@ -23,5 +23,15 @@ export class PostController {
 	@Get()
 	async findAll(@GetCurrentUser('userId') userId: string, @Query() query: GetPostsDto) {
 		return this.postService.findAll(userId, query);
+	}
+
+	@Get('me')
+	async getMyPosts(@GetCurrentUser('userId') userId: string, @Query() query: GetPostsDto) {
+		return this.postService.GetPostsByUserId(userId, query);
+	}
+
+	@Get(':id')
+	async findOneById(@GetCurrentUser('userId') userId: string, @Param('id') id: string) {
+		return this.postService.findOneById(userId, id);
 	}
 }

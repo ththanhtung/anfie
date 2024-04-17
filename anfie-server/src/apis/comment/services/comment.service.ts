@@ -12,10 +12,8 @@ export class CommentService {
 	) {}
 	async createComment(user: TUserJwt, dto: CreateCommentDto) {
 		const { postId, content, parentId } = dto;
-		const post = await this.postService.findOneById(postId);
+		const post = await this.postService.findOneById(user.userId.toString(), postId);
 		if (!post) throw new NotFoundException([{ message: 'post not found' }]);
-
-		// return
 
 		let rightValue = 0;
 		if (parentId) {
