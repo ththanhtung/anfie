@@ -2,8 +2,8 @@ import { Controller, Get, Param, Query } from '@nestjs/common';
 import { GetPostsAdminDto } from './dto';
 import { PostAdminService } from './services';
 
-@Controller('posts')
-export class PostController {
+@Controller('posts/admin')
+export class PostAdminController {
 	constructor(private readonly postAdminService: PostAdminService) {}
 
 	@Get()
