@@ -24,6 +24,7 @@ import { LocationsModule } from './locations/locations.module';
 import { PreferencesModule } from './preferences/preferences.module';
 import { TagModule } from './tag/tag.module';
 import { UtilsModule } from './utils/utils.module';
+import { PostMediaModule } from './post-media/post-media.module';
 
 @Module({
 	imports: [
@@ -50,7 +51,8 @@ import { UtilsModule } from './utils/utils.module';
 		LocationsModule,
 		PreferencesModule,
 		TagModule,
-		UtilsModule
+		UtilsModule,
+		PostMediaModule
 	]
 })
 export class ApiModule {}

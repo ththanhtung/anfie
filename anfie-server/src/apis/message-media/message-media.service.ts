@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { MessageMediaRepository } from './repositories';
 import { MediaUploaderService } from '../media-uploader/media-uploader.service';
+import { extname } from 'path';
 
 @Injectable()
 export class MessageMediaService {
@@ -12,9 +13,9 @@ export class MessageMediaService {
 		if (!medias || medias === undefined) {
 			return;
 		}
-		const promise = medias.map((media) => {
-			const newMedia = this.messageMediaRepository.createOne(messageId);
-			this.mediaUploaderService.uploadMedia({
+		const promise = medias.map(async (media) => {
+			const newMedia = await this.messageMediaRepository.createOne(messageId);
+			await this.mediaUploaderService.uploadMedia({
 				file: media,
 				messageMedia: newMedia
 			});

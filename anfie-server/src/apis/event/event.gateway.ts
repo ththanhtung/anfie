@@ -80,14 +80,12 @@ export class EventGateway {
 	@OnEvent('conversation.created')
 	handleConversationCreated(conversation: any) {
 		this.server.emit('conversation.created', conversation);
-		// console.log(conversation);
 		this.server.emit('onConversationCreated', conversation);
 	}
 
 	@OnEvent('messages.created')
 	handleMessageCreated(payload: TCreateMessageResponse) {
 		this.server.emit('messages.created', payload);
-		console.log(payload);
 		const { recipientId, creatorId } = payload.conversation;
 		const creatorSocket = this.sessionManager.getUserSocket(creatorId);
 		const recipientSocket =

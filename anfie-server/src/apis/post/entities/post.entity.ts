@@ -1,4 +1,5 @@
 import { Comment } from 'src/apis/comment/entities';
+import { PostMedia } from 'src/apis/post-media/entities';
 import { Users } from 'src/apis/user/entities';
 import { BaseEntity } from 'src/database';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
@@ -39,4 +40,8 @@ export class Post extends BaseEntity<Post> {
 	})
 	@JoinColumn({ name: 'author_id' })
 	author: Users;
+
+	@OneToMany(() => PostMedia, (postMedia) => postMedia.post, { cascade: true, onDelete: 'CASCADE' })
+	@JoinColumn()
+	medias: PostMedia[];
 }

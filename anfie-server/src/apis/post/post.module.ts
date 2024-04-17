@@ -5,9 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Post } from './entities';
 import { PostRepository } from './repositories';
 import { FriendModule } from '../friend/friend.module';
+import { PostMediaModule } from '../post-media/post-media.module';
 
 @Module({
-	imports: [TypeOrmModule.forFeature([Post]), FriendModule],
+	imports: [TypeOrmModule.forFeature([Post]), FriendModule, PostMediaModule],
 	controllers: [PostController],
 	providers: [PostService, PostRepository],
 	exports: [PostService]
