@@ -44,10 +44,6 @@ export class CommentService {
 	}
 
 	async getCommentByParentId(parentId: string, query: GetCommentsDto) {
-		console.log({ query });
-		console.log({ parentId });
-
-		// return;
 		return this.commnentRepository.findCommentsByParentId(parentId, query);
 	}
 

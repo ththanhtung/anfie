@@ -10,8 +10,6 @@ export class FriendService {
 		return this.friendRepository.createOne(followeeId, followerId);
 	}
 	async getFriends(userId: string, query: GetFriendsDto) {
-		console.log({ userId });
-
 		return this.friendRepository.getFriends(userId, query);
 	}
 

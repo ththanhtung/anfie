@@ -22,7 +22,6 @@ export class MatchmakingService {
 		const conversation = await this.conversationService.findOneByUserIds(match.id1, match.id2);
 
 		if (Boolean(conversation)) {
-			console.log('conversation existed');
 			return;
 		}
 		return this.conversationAdminService.create({ user1: match.id1.toString(), user2: match.id2.toString() });

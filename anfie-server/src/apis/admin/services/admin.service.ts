@@ -42,8 +42,6 @@ export class AdminService {
 			]);
 		}
 
-		console.log({ admin });
-
 		const { accessToken, refreshToken } = await getTokens({
 			adminId: admin.id,
 			username: admin.username,

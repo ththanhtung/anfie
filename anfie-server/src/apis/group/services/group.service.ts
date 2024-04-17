@@ -33,8 +33,6 @@ export class GroupService {
 
 	async addRecipient(user: TUserJwt, groupId: string, addRecipientDto: AddRecipientDto) {
 		const group = await this.groupRepository.findOneById(groupId);
-		console.log(group.admin);
-
 		if (group.adminId !== user.userId) {
 			throw new ForbiddenException();
 		}

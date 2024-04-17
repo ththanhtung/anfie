@@ -22,7 +22,6 @@ export class AdminJwtStrategy extends PassportStrategy(Strategy, 'admin-jwt') {
 		if (!admin) {
 			throw new UnauthorizedException();
 		}
-		console.log({ adminPermissions: admin?.roles });
 		return admin;
 	}
 }

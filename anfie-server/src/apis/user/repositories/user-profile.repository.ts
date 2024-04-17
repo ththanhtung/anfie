@@ -27,8 +27,6 @@ export class UserProfileRepository extends Repository<UserProfiles> {
 	}
 
 	async getProfileByUserId(id: string) {
-		console.log({ id });
-
 		return this.findOne({
 			where: {
 				user: { id: +id }
@@ -42,7 +40,20 @@ export class UserProfileRepository extends Repository<UserProfiles> {
 	}
 
 	async banUser(userId: string) {
-		await this.update({ user: { id: +userId } }, { isBanned: true });
+		await this.update({ user: { id: +userId } }, { isBanned: true, isActive: false });
+	}
+
+	async increaseReportedCountByOne(userId: string) {
+		await this.update({ user: { id: +userId } }, { reportedCount: () => 'user_reported_count + 1' });
+		const profile = await this.findOne({
+			where: {
+				user: { id: +userId }
+			}
+		});
+
+		if (profile.reportedCount % 3 === 0) {
+			await this.reduceStrangerConversationSlotByOne(userId);
+		}
 	}
 
 	async reduceStrangerConversationSlotByOne(userId: string) {
@@ -53,7 +64,7 @@ export class UserProfileRepository extends Repository<UserProfiles> {
 			}
 		});
 
-		if (profile.strangerConversationSlots < 0) {
+		if (profile.reportedCount > 9) {
 			await this.banUser(userId);
 		}
 	}

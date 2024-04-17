@@ -38,8 +38,6 @@ export class AuthService {
 			secure: true
 		});
 
-		console.log({ user });
-
 		return {
 			user,
 			tokens: { accessToken }

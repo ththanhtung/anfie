@@ -32,7 +32,6 @@ export class RoleGuard implements CanActivate {
 
 		const validPermission = user_permissions.some((permission) => requiredPermission.includes(permission as Permission));
 
-		console.log({ validPermission });
 		if (!validPermission) {
 			throw new ForbiddenException([
 				{

@@ -35,7 +35,7 @@ export class ReportTicketAdminService {
 			]);
 
 		const ticket = await this.reportTicketRepository.accepted(requestId, modId);
-		await this.userProfileService.reduceStrangerConversationSlotByOne(request.reporteeId.toString());
+		await this.userProfileService.increaseReportedCountByOne(request.reporteeId.toString());
 		return ticket;
 	}
 
