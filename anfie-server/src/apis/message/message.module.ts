@@ -11,6 +11,7 @@ import { UserModule } from '../user/user.module';
 @Module({
 	imports: [TypeOrmModule.forFeature([Message]), ConversationModule, MessageMediaModule, UserModule],
 	controllers: [MessageController],
-	providers: [MessageService, MessageRepository]
+	providers: [MessageService, MessageRepository],
+	exports: [MessageService]
 })
 export class MessageModule {}

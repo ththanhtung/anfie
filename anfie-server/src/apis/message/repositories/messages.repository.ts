@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Message } from '../entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { pagination } from 'src/common';
@@ -24,5 +24,10 @@ export class MessageRepository extends Repository<Message> {
 			},
 			relations: ['user']
 		});
+	}
+
+	async getMessagesByIds(ids: string[]) {
+		const idsInt = ids.map((id) => +id);
+		return this.find({ where: { id: In(idsInt) } });
 	}
 }

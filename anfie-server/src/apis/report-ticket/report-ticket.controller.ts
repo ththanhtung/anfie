@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Param, Delete, Query, UseGuards } from '@nestjs/common';
-import { ReportTicketService } from './services/report-tiket.service';
+import { ReportTicketService } from './services/report-ticket.service';
 import { CreateReportTicketDto } from './dto/create-report-ticket.dto';
 import { AtGuard, GetCurrentUser } from 'src/common';
 import { GetReportTicketsDto } from './dto';

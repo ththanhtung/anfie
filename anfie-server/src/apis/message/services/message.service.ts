@@ -32,4 +32,8 @@ export class MessageService {
 	async getMessagesFromConversation(conversationId: number, query: GetMessagesDto) {
 		return this.messageRepository.getMessagesFromConversation(conversationId, query);
 	}
+
+	async getMessagesByIds(ids: string[]) {
+		return this.messageRepository.getMessagesByIds(ids);
+	}
 }

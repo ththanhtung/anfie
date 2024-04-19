@@ -1,14 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCommentDto } from '../dto/create-comment.dto';
 import { CommentRepository } from '../repositories';
 import { DeleteCommentDto, GetCommentsDto } from '../dto';
 import { PostService } from 'src/apis/post/services';
+import { FriendService } from 'src/apis/friend/services';
 
 @Injectable()
 export class CommentService {
 	constructor(
 		private readonly commnentRepository: CommentRepository,
-		private readonly postService: PostService
+		private readonly postService: PostService,
+		private readonly friendService: FriendService
 	) {}
 	async createComment(user: TUserJwt, dto: CreateCommentDto) {
 		const { postId, content, parentId } = dto;
@@ -68,5 +70,17 @@ export class CommentService {
 		await this.commnentRepository.delete(id);
 
 		return true;
+	}
+
+	async findOneById(userId: string, id: string) {
+		const comment = await this.commnentRepository.findOneById(id);
+		if (this.friendService.isFriend(comment.userId.toString(), userId))
+			throw new BadRequestException([
+				{
+					message: 'you are not friend with the author of this post'
+				}
+			]);
+
+		return comment;
 	}
 }

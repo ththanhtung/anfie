@@ -40,9 +40,6 @@ class EnvironmentVariables {
 
 	@IsString()
 	CLD_API_SECRET;
-
-	@IsString()
-	OPEN_AI_KEY;
 }
 
 export function validate(config: Record<string, unknown>) {

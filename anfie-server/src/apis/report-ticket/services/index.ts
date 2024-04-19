@@ -1,2 +1,2 @@
-export * from './report-tiket.service';
-export * from './report-tiket.admin.service';
+export * from './report-ticket.service';
+export * from './report-ticket.admin.service';

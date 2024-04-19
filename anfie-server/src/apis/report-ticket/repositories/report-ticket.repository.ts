@@ -3,6 +3,7 @@ import { ReportTicket } from '../entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { pagination } from 'src/common';
 import { GetReportTicketsAdminDto, GetReportTicketsDto } from '../dto';
+import { TCreateReportTicketParams } from 'src/common/@types/report-ticket';
 
 export class ReportTicketRepository extends Repository<ReportTicket> {
 	constructor(@InjectRepository(ReportTicket) repository: Repository<ReportTicket>) {
@@ -11,8 +12,12 @@ export class ReportTicketRepository extends Repository<ReportTicket> {
 
 	async createOne(params: TCreateReportTicketParams) {
 		return this.save({
-			reporterId: +params.reporterId,
-			reporteeId: +params.reporteeId,
+			postId: params.postId ? +params.postId : null,
+			confessionId: params.confessionId ? +params.confessionId : null,
+			commentId: params.commentId ? +params.commentId : null,
+			messages: params.messages,
+			reporterId: params.reporterId ? +params.reporterId : null,
+			reporteeId: params.reporteeId ? +params.reporteeId : null,
 			content: params.content,
 			type: params.type
 		});
