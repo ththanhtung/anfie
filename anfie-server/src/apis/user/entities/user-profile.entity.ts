@@ -4,6 +4,7 @@ import { BaseEntity } from 'src/database';
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne } from 'typeorm';
 import { Users } from './user.entity';
 import { ReportTicket } from 'src/apis/report-ticket/entities';
+import { PreferGender } from 'src/apis/prefer-gender/entities';
 
 @Entity()
 export class UserProfiles extends BaseEntity<UserProfiles> {
@@ -100,6 +101,20 @@ export class UserProfiles extends BaseEntity<UserProfiles> {
 
 	@OneToMany(() => ReportTicket, (reportTicket) => reportTicket.reportee, { nullable: true, cascade: true, onDelete: 'CASCADE' })
 	receivedReportTickets: ReportTicket[];
+
+	@ManyToMany(() => PreferGender, (preferGender) => preferGender.userProfiles)
+	@JoinTable({
+		name: 'user_prefer_genders',
+		joinColumn: {
+			name: 'user_profile_id',
+			referencedColumnName: 'id'
+		},
+		inverseJoinColumn: {
+			name: 'prefer_gender_id',
+			referencedColumnName: 'id'
+		}
+	})
+	preferGenders: PreferGender[];
 
 	@ManyToMany(() => Preference, (preference) => preference.userProfiles)
 	@JoinTable({
