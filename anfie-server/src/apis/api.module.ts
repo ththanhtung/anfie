@@ -25,6 +25,7 @@ import { PreferencesModule } from './preferences/preferences.module';
 import { TagModule } from './tag/tag.module';
 import { UtilsModule } from './utils/utils.module';
 import { PostMediaModule } from './post-media/post-media.module';
+import { ConversationRequestModule } from './conversation-request/conversation-request.module';
 
 @Module({
 	imports: [
@@ -52,7 +53,8 @@ import { PostMediaModule } from './post-media/post-media.module';
 		PreferencesModule,
 		TagModule,
 		UtilsModule,
-		PostMediaModule
+		PostMediaModule,
+		ConversationRequestModule
 	]
 })
 export class ApiModule {}

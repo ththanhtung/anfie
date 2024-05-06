@@ -7,7 +7,9 @@ import { EventSessionManager } from './event.sesstion';
 import { OnEvent } from '@nestjs/event-emitter';
 import { MatchmakingService } from '../matchmaking/services';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { ConversationService } from '../conversation/services';
+import { ConversationAdminService } from '../conversation/services';
+import { ConversationRequestService } from '../conversation-request/services';
+import { ConversationRequest } from '../conversation-request/entities';
 
 @WebSocketGateway({
 	cors: {
@@ -20,7 +22,8 @@ export class EventGateway {
 	constructor(
 		private readonly sessionManager: EventSessionManager,
 		private readonly matchmakingService: MatchmakingService,
-		private readonly conversationService: ConversationService
+		private readonly conversationAdminService: ConversationAdminService,
+		private readonly conversationRequestService: ConversationRequestService
 	) {}
 
 	@WebSocketServer()
@@ -33,6 +36,8 @@ export class EventGateway {
 
 	handleConnection(socket: AuthenticatedSocket, ...args: any[]) {
 		console.log('Incoming Connection');
+		console.log({ userSoket: socket.user });
+
 		this.sessionManager.setUserSocket(socket.user.userId, socket);
 		socket.emit('connected', {
 			status: 'connected'
@@ -55,31 +60,32 @@ export class EventGateway {
 			.filter(([_, socket]) => socket.isFindingNewFriend)
 			.map(([userId]) => userId);
 
-		// console.log(usersFindingNewFriendIds);
-
 		if (usersFindingNewFriendIds.length < 4) return;
 		console.log('finding new friends');
 
-		const conversation = await this.matchmakingService.matchmaking({
+		const match = await this.matchmakingService.matchmaking({
 			userIds: usersFindingNewFriendIds
 		});
 
-		if (!conversation) return;
+		const conversationRequest = await this.conversationRequestService.createOne(
+			match.id1.toString(),
+			match.id2.toString(),
+			match.reason
+		);
 
-		const creatorSocket = this.sessionManager.getUserSocket(conversation.creatorId);
-		const recipientSocket =
-			conversation.recipientId === conversation.creatorId
-				? this.sessionManager.getUserSocket(conversation.creatorId)
-				: this.sessionManager.getUserSocket(conversation.recipientId);
-		creatorSocket.isFindingNewFriend = false;
-		recipientSocket.isFindingNewFriend = false;
-		if (creatorSocket) creatorSocket.emit('onConversationCreated', conversation);
-		if (recipientSocket) recipientSocket.emit('onConversationCreated', conversation);
+		const firstUserSocket = this.sessionManager.getUserSocket(conversationRequest.firstUserId);
+		const secondUserSocket =
+			conversationRequest.secondUserId === conversationRequest.firstUserId
+				? this.sessionManager.getUserSocket(conversationRequest.firstUserId)
+				: this.sessionManager.getUserSocket(conversationRequest.secondUserId);
+		firstUserSocket.isFindingNewFriend = false;
+		secondUserSocket.isFindingNewFriend = false;
+		if (firstUserSocket) firstUserSocket.emit('onConversationRequestCreated', conversationRequest);
+		if (secondUserSocket) secondUserSocket.emit('onConversationRequestCreated', conversationRequest);
 	}
 
 	@OnEvent('conversation.created')
 	handleConversationCreated(conversation: any) {
-		this.server.emit('conversation.created', conversation);
 		this.server.emit('onConversationCreated', conversation);
 	}
 
@@ -93,5 +99,40 @@ export class EventGateway {
 
 		if (creatorSocket) creatorSocket.emit('onMessage', payload);
 		if (recipientSocket) recipientSocket.emit('onMessage', payload);
+	}
+
+	@OnEvent('conversation-request.accepted')
+	async handleConversationRequestCreated(conversationRequest: ConversationRequest) {
+		if (conversationRequest.isFirstUserAccepted !== null && conversationRequest.isSecondUserAccepted !== null) {
+			if (conversationRequest.isFirstUserAccepted && conversationRequest.isSecondUserAccepted) {
+				const conversation = await this.conversationAdminService.create({
+					user1: conversationRequest.firstUserId.toString(),
+					user2: conversationRequest.secondUserId.toString()
+				});
+
+				console.log({ conversation });
+
+				const firstUserSocket = this.sessionManager.getUserSocket(conversationRequest.firstUserId);
+				const secondUserSocket =
+					conversationRequest.secondUserId === conversationRequest.firstUserId
+						? this.sessionManager.getUserSocket(conversationRequest.firstUserId)
+						: this.sessionManager.getUserSocket(conversationRequest.secondUserId);
+
+				if (firstUserSocket) firstUserSocket.emit('onConversationCreated', conversation);
+				if (secondUserSocket) secondUserSocket.emit('onConversationCreated', conversation);
+			}
+		}
+	}
+
+	@OnEvent('conversation-request.rejected')
+	handleConversationRequestRejected(conversationRequest: ConversationRequest) {
+		const firstUserSocket = this.sessionManager.getUserSocket(conversationRequest.firstUserId);
+		const secondUserSocket =
+			conversationRequest.secondUserId === conversationRequest.firstUserId
+				? this.sessionManager.getUserSocket(conversationRequest.firstUserId)
+				: this.sessionManager.getUserSocket(conversationRequest.secondUserId);
+
+		if (firstUserSocket) firstUserSocket.emit('onConversationRequestRejected', conversationRequest);
+		if (secondUserSocket) secondUserSocket.emit('onConversationRequestRejected', conversationRequest);
 	}
 }

@@ -3,12 +3,15 @@ export const ENDPOINT_APIS = {
     login: "api/auth/login",
   },
   conversation: {
-    list: 'api/conversations'
+    list: "api/conversations",
+  },
+  conversationRequest: {
+    list: "api/conversation-request",
   },
   messages: {
-    list: 'api/messages'
+    list: "api/messages",
   },
   posts: {
-    list: 'api/posts'
-  }
+    list: "api/posts",
+  },
 };

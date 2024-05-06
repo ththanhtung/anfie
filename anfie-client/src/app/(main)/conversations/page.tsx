@@ -9,7 +9,7 @@ import { queryKeys } from "@/constants";
 import { useListInfiniteConversations } from "@/hooks";
 import { useQueryClient } from "@tanstack/react-query";
 import { List } from "antd";
-import React, { useCallback, useContext, useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 
 const ConversationPage = () => {
   const { conversations } = useListInfiniteConversations();

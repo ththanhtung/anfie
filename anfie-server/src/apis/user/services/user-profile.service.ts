@@ -20,10 +20,6 @@ export class UserProfileService {
 		return this.userProfileRepository.updateOne(user);
 	}
 
-	async findOneById(id: number) {
-		return this.userProfileRepository.findOneById(id);
-	}
-
 	async updateUserPreferences(userId: string, dto: UpdateUserPreferencesDto) {
 		const preferences = await this.preferencesService.findByNames(dto.preferences);
 		const locations = await this.locationService.findByNames(dto.locations);

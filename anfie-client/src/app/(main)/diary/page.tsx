@@ -24,6 +24,10 @@ const DiaryPage = () => {
     ref.current?.showModal();
   }, []);
 
+  const onCreatePost = useCallback(() => {
+    
+  }, []);
+
   const recentConversations = useCallback(() => {
     return (
       <div className="h-[100vh] flex flex-col justify-between">
@@ -58,7 +62,7 @@ const DiaryPage = () => {
         <h1 className="text-center text-blue-600 my-4">Diary</h1>
         <PostForm onAddPost={onAddPost} />
         <List dataSource={posts} renderItem={(item: TPost) => <PostItem />} />
-        <PostModal ref={ref} />
+        <PostModal ref={ref} onCreatePost={onCreatePost} />
       </div>
     );
   }, [onAddPost, posts]);

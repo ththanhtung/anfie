@@ -14,7 +14,10 @@ import React, {
 } from "react";
 import AddPostInteractionBar from "./add-post-interaction-bar";
 
-const PostModal = (props, ref: Ref<TModalRef>) => {
+type TProps = {
+  onCreatePost: () => void;
+};
+const PostModal = ({ onCreatePost }: TProps, ref: Ref<TModalRef>) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useImperativeHandle(
@@ -49,7 +52,6 @@ const PostModal = (props, ref: Ref<TModalRef>) => {
         },
       }}
       closeIcon={false}
-      {...props}
     >
       <Form>
         <Form.Item>
@@ -65,7 +67,7 @@ const PostModal = (props, ref: Ref<TModalRef>) => {
         <div className="flex justify-between items-center">
           <AddPostInteractionBar />
           <div className="flex items-center">
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" onClick={onCreatePost}>
               Post
             </Button>
           </div>

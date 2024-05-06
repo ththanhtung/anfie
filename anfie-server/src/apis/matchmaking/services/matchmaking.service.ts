@@ -19,11 +19,6 @@ export class MatchmakingService {
 
 		console.log({ match });
 
-		const conversation = await this.conversationService.findOneByUserIds(match.id1, match.id2);
-
-		if (Boolean(conversation)) {
-			return;
-		}
-		return this.conversationAdminService.create({ user1: match.id1.toString(), user2: match.id2.toString() });
+		return match;
 	}
 }

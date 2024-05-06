@@ -112,7 +112,7 @@ export class UserProfiles extends BaseEntity<UserProfiles> {
 		inverseJoinColumn: {
 			name: 'prefer_gender_id',
 			referencedColumnName: 'id'
-		}
+		} 
 	})
 	preferGenders: PreferGender[];
 

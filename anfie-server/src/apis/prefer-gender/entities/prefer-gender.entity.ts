@@ -10,3 +10,4 @@ export class PreferGender extends BaseEntity<PreferGender> {
 	@ManyToMany(() => UserProfiles, (userProfiles) => userProfiles.preferGenders)
 	userProfiles: UserProfiles[];
 }
+ 
