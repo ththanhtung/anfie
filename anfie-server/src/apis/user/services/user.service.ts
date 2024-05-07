@@ -48,6 +48,13 @@ export class UserService {
 	async findOneByRefreshToken(refreshToken: string) {
 		return this.userRepository.findOneByRefreshToken(refreshToken);
 	}
+	async updateAccessToken(userId: number, refreshToken: string | null) {
+		return this.userRepository.updateAccessToken(userId, refreshToken);
+	}
+
+	async findOneByAccessToken(refreshToken: string) {
+		return this.userRepository.findOneByAccessToken(refreshToken);
+	}
 
 	async findUsersByIds(ids: string[]) {
 		return this.userRepository.findUsersByIds(ids);

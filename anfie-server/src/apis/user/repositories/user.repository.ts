@@ -73,6 +73,24 @@ export class UserRepository extends Repository<Users> {
 		}
 		return user;
 	}
+	async updateAccessToken(userId: number, accessToken: string | null) {
+		const user = await this.findOne({ where: { id: userId } });
+		user.accessToken = accessToken;
+		return this.save(user);
+	}
+
+	async findOneByAccessToken(accessToken: string) {
+		const user = await this.findOne({ where: { accessToken: accessToken } });
+		if (!user) {
+			throw new ConflictException([
+				{
+					field: 'accessToken',
+					message: 'user not found'
+				}
+			]);
+		}
+		return user;
+	}
 
 	async findUsersByIds(ids: string[]) {
 		const idsInt = ids.map((id) => +id);

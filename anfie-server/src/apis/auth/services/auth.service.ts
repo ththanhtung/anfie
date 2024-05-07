@@ -30,7 +30,7 @@ export class AuthService {
 
 		const { accessToken, refreshToken } = await getTokens({ userId: user.id, email: user.email });
 
-		this.userServices.updateRefreshToken(user.id, refreshToken);
+		this.userServices.updateAccessToken(user.id, refreshToken);
 
 		res.cookie('jwt', refreshToken, {
 			maxAge: 24 * 3 * 60 * 60 * 1000,
@@ -50,8 +50,9 @@ export class AuthService {
 
 	async refreshToken(user: TUserJwt, req: Request) {
 		const refreshTokenFromCoookie = req.cookies?.jwt;
+		console.log({ refreshTokenFromCoookie });
 
-		const foundUser = await this.userServices.findOneByRefreshToken(refreshTokenFromCoookie);
+		const foundUser = await this.userServices.findOneByAccessToken(refreshTokenFromCoookie);
 		if (foundUser.id !== user.userId) {
 			throw new ForbiddenException([
 				{
@@ -62,7 +63,7 @@ export class AuthService {
 
 		const { accessToken, refreshToken } = await getTokens({ userId: user.userId, email: user.email });
 
-		await this.userServices.updateRefreshToken(user.userId, refreshToken);
+		await this.userServices.updateAccessToken(user.userId, refreshToken);
 
 		return { accessToken, refreshToken };
 	}

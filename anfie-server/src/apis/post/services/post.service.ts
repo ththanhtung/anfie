@@ -21,7 +21,7 @@ export class PostService {
 	async findAll(userId: string, query: GetPostsDto) {
 		const followers = await this.friendsService.getFollowers(userId);
 
-		const followings = followers.map((item) => item.followee.id);
+		const followings = followers.map((item) => item.followee?.id);
 
 		return this.postRepository.getPostsByUserIds(followings, query);
 	}

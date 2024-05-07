@@ -1,10 +1,5 @@
 "use client";
-import {
-  CalendarOutlined,
-  CameraOutlined,
-  SmileOutlined,
-} from "@ant-design/icons";
-import { Button, Card, Form, Input, Modal } from "antd";
+import { Button, Form, Input, Modal } from "antd";
 import React, {
   Ref,
   forwardRef,
@@ -12,13 +7,12 @@ import React, {
   useImperativeHandle,
   useState,
 } from "react";
-import AddPostInteractionBar from "./add-post-interaction-bar";
+import UploadImage from "@/components/upload/upload-image";
+import { useMutationPost } from "@/hooks";
 
-type TProps = {
-  onCreatePost: () => void;
-};
-const PostModal = ({ onCreatePost }: TProps, ref: Ref<TModalRef>) => {
+const PostModal = (props: any, ref: Ref<TModalRef>) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { onCreatePost, isCreatePostPending } = useMutationPost();
 
   useImperativeHandle(
     ref,
@@ -37,6 +31,19 @@ const PostModal = ({ onCreatePost }: TProps, ref: Ref<TModalRef>) => {
     setIsModalOpen(false);
   };
 
+  const onFinish = (value: any) => {
+    console.log({ value });
+    const { medias, content } = value;
+    const formData = new FormData();
+    formData.append("content", content);
+    if (medias && medias?.length > 0) {
+      medias?.forEach((media: any) => {
+        formData.append("medias", media?.originFileObj);
+      });
+    }
+    onCreatePost({ form: formData, cb: closeModal });
+  };
+
   return (
     <Modal
       onCancel={closeModal}
@@ -53,21 +60,24 @@ const PostModal = ({ onCreatePost }: TProps, ref: Ref<TModalRef>) => {
       }}
       closeIcon={false}
     >
-      <Form>
-        <Form.Item>
+      <Form onFinish={onFinish}>
+        <Form.Item name="content">
           <Input.TextArea
             autoSize={{ minRows: 2, maxRows: 12 }}
             placeholder="What’s happening?"
             className="mb-2"
           />
         </Form.Item>
-        <div className="text-blue-500 flex items-center mb-2">
-          Everyone can reply
-        </div>
         <div className="flex justify-between items-center">
-          <AddPostInteractionBar />
+          <Form.Item name="medias">
+            <UploadImage />
+          </Form.Item>
           <div className="flex items-center">
-            <Button type="primary" htmlType="submit" onClick={onCreatePost}>
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={isCreatePostPending}
+            >
               Post
             </Button>
           </div>

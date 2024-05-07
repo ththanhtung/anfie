@@ -1,5 +1,9 @@
 import { LocalKey } from "@/constants";
-import { deleteCookieValue, getCookieValue, localStorageService } from "@/utils";
+import {
+  deleteCookieValue,
+  getCookieValue,
+  localStorageService,
+} from "@/utils";
 import axios, {
   AxiosError,
   AxiosInstance,
@@ -87,7 +91,9 @@ export default abstract class HttpClient {
   private _handleRequest(
     config: InternalAxiosRequestConfig<AxiosRequestConfig>
   ) {
-    let accessToken = localStorageService.getLocalStorage(LocalKey.ACCESS_TOKEN_LOCALKEY)
+    let accessToken = localStorageService.getLocalStorage(
+      LocalKey.ACCESS_TOKEN_LOCALKEY
+    );
 
     if (accessToken) {
       (
@@ -98,7 +104,6 @@ export default abstract class HttpClient {
   }
 
   _handleRefreshToken = async () => {
-    const refreshUrl = process.env.REACT_APP_API_AUTH_ENDPOINT;
     const refreshToken = getCookieValue({
       name: LocalKey.JWT_AUTHORIZATION,
     });

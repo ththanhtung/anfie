@@ -14,6 +14,11 @@ export class PostServiceApis extends HttpClient {
     );
     return data;
   }
+
+  public async postCreatePost(form: TPostForm) {
+    const { data } = await this.instance.postForm(ENDPOINT_APIS.posts.list, form);
+    return data;
+  }
 }
 
 export const postService = new PostServiceApis();

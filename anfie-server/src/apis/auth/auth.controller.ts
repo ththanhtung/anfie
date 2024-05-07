@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './services';
 import { LoginDto } from './dtos';
 import { CookieJwtGuard } from 'src/common/guards';
@@ -23,7 +23,7 @@ export class AuthController {
 	}
 
 	@UseGuards(CookieJwtGuard)
-	@Get('refresh_token')
+	@Post('refresh-token')
 	@HttpCode(HttpStatus.OK)
 	async refreshToken(@GetCurrentUser() user: TUserJwt, @Req() res: Request) {
 		return this.authService.refreshToken(user, res);

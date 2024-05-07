@@ -13,4 +13,13 @@ type TPost = {
   id: number;
   created_at: string;
   updated_at: string;
-}
+};
+
+type TPostForm = {
+  content: string;
+};
+
+type TCreatePostParams = {
+  form: any;
+  cb?: () => void;
+};
