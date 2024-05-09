@@ -50,9 +50,9 @@ const MenuSidebar = ({ href }: TProps) => {
       label: "message requests",
     },
     {
-      key: "confestions",
+      key: "confessions",
       icon: <TbShieldQuestion />,
-      label: "confestions",
+      label: "confessions",
     },
     {
       key: "notifications",

@@ -14,4 +14,13 @@ export const ENDPOINT_APIS = {
   posts: {
     list: "api/posts",
   },
+  confessions: {
+    list: "api/confessions",
+  },
+  tags: {
+    list: "api/tags",
+  },
+  messageRequests: {
+    list: "api/message-requests",
+  },
 };

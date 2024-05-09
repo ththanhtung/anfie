@@ -52,15 +52,6 @@ export class AuthService {
 		const refreshTokenFromCoookie = req.cookies?.jwt;
 		console.log({ refreshTokenFromCoookie });
 
-		const foundUser = await this.userServices.findOneByAccessToken(refreshTokenFromCoookie);
-		if (foundUser.id !== user.userId) {
-			throw new ForbiddenException([
-				{
-					message: 'forbidden error'
-				}
-			]);
-		}
-
 		const { accessToken, refreshToken } = await getTokens({ userId: user.userId, email: user.email });
 
 		await this.userServices.updateAccessToken(user.userId, refreshToken);

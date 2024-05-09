@@ -24,9 +24,11 @@ export class MessageRequestsService {
 					message: 'receiver not found'
 				}
 			]);
-		const isExisted = await this.messageRequestRepository.isPending(senderId, receiverId);
+		const messageRequest = await this.messageRequestRepository.isPending(senderId, receiverId);
 
-		if (isExisted)
+		console.log({ messageRequest });
+
+		if (messageRequest !== null)
 			throw new BadRequestException([
 				{
 					message: 'message request already exist'
@@ -36,7 +38,7 @@ export class MessageRequestsService {
 		if (senderId === receiverId)
 			throw new BadRequestException([
 				{
-					message: 'cannot sent friend request for yourself'
+					message: 'cannot sent message request for yourself'
 				}
 			]);
 

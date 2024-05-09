@@ -19,8 +19,13 @@ export class ConfessionRepository extends Repository<Confession> {
 	async getConfestionsRandom(query: GetConfestionsDto) {
 		const limit = query.limit ? +query.limit : 10;
 
-		if (!query.tagIds) {
-			return await this.createQueryBuilder('confession').select().orderBy('RANDOM()').take(limit).getManyAndCount();
+		if (!query.tagIds ) {
+			return await this.createQueryBuilder('confession')
+				.select()
+				.leftJoinAndSelect('confession.tags', 'tag')
+				.orderBy('RANDOM()')
+				.limit(limit)
+				.getManyAndCount();
 		}
 
 		const ids = JSON.parse(query.tagIds);

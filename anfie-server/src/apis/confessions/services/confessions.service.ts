@@ -17,6 +17,8 @@ export class ConfessionsService {
 	}
 
 	async getConfestionsRandom(query: GetConfestionsDto) {
+		console.log({ query });
+
 		return this.confestionRepository.getConfestionsRandom(query);
 	}
 

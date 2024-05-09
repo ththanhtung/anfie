@@ -62,12 +62,15 @@ export default abstract class HttpClient {
       if (!this.isRefreshing) {
         this.isRefreshing = true;
         const newToken = await this._handleRefreshToken();
+        console.log({ newToken });
+
         if (newToken) {
           this.isRefreshing = false;
           const accessToken = newToken?.accessToken;
-          if (!!accessToken) {
+          console.log({ accessToken });
+          if (accessToken) {
             localStorage.setItem(
-              LocalKey.ACCESS_TOKEN_LOCALKEY,
+              LocalKey.ACCESS_TOKEN_LOCALKEY,   
               JSON.stringify(accessToken)
             );
           }
@@ -75,6 +78,8 @@ export default abstract class HttpClient {
       }
       const retryOrigReq = new Promise((resolve, reject) => {
         const newToken = localStorage.getItem(LocalKey.ACCESS_TOKEN_LOCALKEY);
+        console.log({ newToken });
+        
         if (originalRequest?.headers) {
           originalRequest.headers["Authorization"] = "Bearer " + newToken;
           resolve(axios(originalRequest));
@@ -113,7 +118,9 @@ export default abstract class HttpClient {
         { token: refreshToken },
         { headers: { Authorization: "" } }
       );
-      const data = response?.data?.data?.result[0];
+      console.log({ response });
+
+      const data = response?.data?.data;
       return data;
     } catch (e) {
       localStorage.removeItem(LocalKey.ACCESS_TOKEN_LOCALKEY);
