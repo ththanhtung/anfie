@@ -25,7 +25,7 @@ export class MessageRequestRepository extends Repository<MessageRequest> {
 					status
 				}
 			],
-			relations: ['sender', 'receiver']
+			relations: ['sender', 'receiver', 'confession', 'confession.tags']
 		});
 	}
 
@@ -45,6 +45,16 @@ export class MessageRequestRepository extends Repository<MessageRequest> {
 		});
 		this.delete({ id: +id });
 		return request;
+	}
+
+	async checkIfMessageRequestExists(senderId: string, receiverId: string, confessionId: string) {
+		return this.findOne({
+			where: {
+				senderId: +senderId,
+				receiverId: +receiverId,
+				confessionId: +confessionId
+			}
+		});
 	}
 
 	async isPending(firstUserId: string, secondUserId: string) {

@@ -24,7 +24,12 @@ export class MessageRequestsService {
 					message: 'receiver not found'
 				}
 			]);
-		const messageRequest = await this.messageRequestRepository.isPending(senderId, receiverId);
+
+		const messageRequest = await this.messageRequestRepository.checkIfMessageRequestExists(
+			senderId,
+			receiverId,
+			confession.id.toString()
+		);
 
 		console.log({ messageRequest });
 

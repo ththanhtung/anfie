@@ -2,7 +2,7 @@
 import FilterConfession from "@/components/shared/filters/filter-confession";
 import ConfessionInput from "@/components/ui/confessions/confession-input";
 import CreateConfessionModal from "@/components/ui/confessions/create-confession-modal";
-import MessageRequestModal from "@/components/ui/confessions/message-request-modal";
+import CreateMessageRequestModal from "@/components/ui/confessions/create-message-request-modal";
 import { useListInfiniteConfessions } from "@/hooks/confessions";
 import { Button, Carousel, Empty } from "antd";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -91,7 +91,7 @@ const ConfessionPage = () => {
         </Button>
       </div>
       <CreateConfessionModal ref={ref} />
-      <MessageRequestModal
+      <CreateMessageRequestModal
         confession={currentItem!}
         ref={messageRequestModalRef}
       />

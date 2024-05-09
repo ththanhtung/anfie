@@ -13,6 +13,19 @@ export const useMutationMessageRequest = () => {
     mutationFn: ({ form }) =>
       messageRequestsService.postCreateMessageRequest(form),
   });
+  const { mutate: mutationAcceptMessageRequest, isPending: isAcceptPending } =
+    useMutation<any, TResponseError, { requestId: string }>({
+      mutationKey: [mutationKeys.MUTATION_ACCEPT_CONVERSATION_REQUEST],
+      mutationFn: ({ requestId }) =>
+        messageRequestsService.acceptRequest(requestId),
+    });
+
+  const { mutate: mutationRejectMessageRequest, isPending: isRejectPending } =
+    useMutation<any, TResponseError, { requestId: string }>({
+      mutationKey: [mutationKeys.MUTATION_ACCEPT_CONVERSATION_REQUEST],
+      mutationFn: ({ requestId }) =>
+        messageRequestsService.rejectRequest(requestId),
+    });
 
   const onCreateMessageRequest = useCallback(
     ({ form, cb }: TCreateMessageRequestParams) => {
@@ -31,8 +44,46 @@ export const useMutationMessageRequest = () => {
     [mutationCreateMessageRequest]
   );
 
+  const onAcceptMessageRequest = useCallback(
+    ({ requestId, cb }: TAcceptMessageRequest) => {
+      mutationAcceptMessageRequest(
+        { requestId },
+        {
+          onSuccess: () => {
+            cb?.();
+          },
+          onError: (error) => {
+            message.error(error.message);
+          },
+        }
+      );
+    },
+    [mutationAcceptMessageRequest]
+  );
+
+  const onRejectMessageRequest = useCallback(
+    ({ requestId, cb }: TAcceptMessageRequest) => {
+      mutationRejectMessageRequest(
+        { requestId },
+        {
+          onSuccess: () => {
+            cb?.();
+          },
+          onError: (error) => {
+            message.error(error.message);
+          },
+        }
+      );
+    },
+    [mutationRejectMessageRequest]
+  );
+
   return {
     onCreateMessageRequest,
+    onAcceptMessageRequest,
+    onRejectMessageRequest,
     isCreateMessageRequestPending,
+    isAcceptPending,
+    isRejectPending,
   };
 };

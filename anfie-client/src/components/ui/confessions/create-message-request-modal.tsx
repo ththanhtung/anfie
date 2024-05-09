@@ -13,7 +13,7 @@ type TProps = {
   confession: TConfession;
 };
 
-const MessageRequestModal = ({ confession }: TProps, ref: Ref<TModalRef>) => {
+const CreateMessageRequestModal = ({ confession }: TProps, ref: Ref<TModalRef>) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useImperativeHandle(
@@ -80,4 +80,4 @@ const MessageRequestModal = ({ confession }: TProps, ref: Ref<TModalRef>) => {
   );
 };
 
-export default memo(forwardRef(MessageRequestModal));
+export default memo(forwardRef(CreateMessageRequestModal));

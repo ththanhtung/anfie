@@ -10,6 +10,7 @@ type TMessageRequest = {
   receiverId: number;
   confessionId: number;
   content: string;
+  confession: TConfession;
   id: number;
   created_at: string;
   updated_at: string;
@@ -24,5 +25,10 @@ type TMessageRequestForm = {
 
 type TCreateMessageRequestParams = {
   form: TMessageRequestForm;
+  cb?: () => void;
+};
+
+type TAcceptMessageRequest = {
+  requestId: string;
   cb?: () => void;
 };

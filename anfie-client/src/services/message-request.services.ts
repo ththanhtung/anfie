@@ -5,7 +5,7 @@ export class MessageRequestServiceApis extends HttpClient {
     super();
   }
 
-  public async getListMessageRequest(
+  public async getListMessageRequests(
     params: TMessageRequestParams,
     MessageRequestId: string = ""
   ) {
@@ -19,6 +19,20 @@ export class MessageRequestServiceApis extends HttpClient {
     const { data } = await this.instance.post(
       `${ENDPOINT_APIS.messageRequests.list}`,
       form
+    );
+    return data;
+  }
+
+  public async acceptRequest(requestId: string) {
+    const { data } = await this.instance.post(
+      `${ENDPOINT_APIS.messageRequests.list}/${requestId}/accept`
+    );
+    return data;
+  }
+
+  public async rejectRequest(requestId: string) {
+    const { data } = await this.instance.patch(
+      `${ENDPOINT_APIS.messageRequests.list}/${requestId}/reject` 
     );
     return data;
   }
