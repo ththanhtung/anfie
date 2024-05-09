@@ -81,6 +81,10 @@ const MenuSidebar = ({ href }: TProps) => {
   };
 
   const handleClick: MenuProps["onClick"] = (e) => {
+    if (e.key === "logout") {
+      localStorage.removeItem("access_token");
+      router.push("/login");
+    }
     router.push(e.key);
   };
   return (

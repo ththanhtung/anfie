@@ -1,17 +1,35 @@
 import { ENDPOINT_APIS, HttpClient } from "./network";
 
-export class GroupServiceApis extends HttpClient {
+export class GroupsServiceApis extends HttpClient {
   constructor() {
     super();
   }
 
-  public async getListGroups(params: TConversationParams) {
-    const { data } = await this.instance.get<TResultResponse<TConversation[]>>(
-      ENDPOINT_APIS.conversation.list,
+  public async getListGroups(params: TGroupParams) {
+    const { data } = await this.instance.get<TResultResponse<TGroup[]>>(
+      `${ENDPOINT_APIS.groups.list}`,
       { params }
+    );
+    return data;
+  }
+
+  public async postCreateGroup(form: TGroupForm) {
+    const { data } = await this.instance.post(
+      `${ENDPOINT_APIS.groups.list}`,
+      form
+    );
+    return data;
+  }
+
+  public async patchUpdateGroup(noteId: string, form: any) {
+    const { data } = await this.instance.patch(
+      ENDPOINT_APIS.groups.list + "/" + noteId,
+      {
+        ...form,
+      }
     );
     return data;
   }
 }
 
-export const conversationService = new GroupServiceApis();
+export const groupsService = new GroupsServiceApis();

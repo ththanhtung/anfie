@@ -26,4 +26,7 @@ export const ENDPOINT_APIS = {
   notes: {
     list: "api/notes",
   },
+  groups: {
+    list: "api/groups",
+  },
 };
