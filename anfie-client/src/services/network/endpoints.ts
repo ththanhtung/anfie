@@ -23,4 +23,7 @@ export const ENDPOINT_APIS = {
   messageRequests: {
     list: "api/message-requests",
   },
+  notes: {
+    list: "api/notes",
+  },
 };
