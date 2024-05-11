@@ -29,11 +29,11 @@ export const useMutationNote = () => {
               message.error(error.message);
             },
             onSuccess: () => {
-              cb?.();
+              message.success("Updated note successfully");
               queryClient.invalidateQueries({
                 queryKey: [queryKeys.GET_LIST_INFINITY_NOTES],
               });
-              message.success("Updated note successfully");
+              cb?.();
             },
           }
         );

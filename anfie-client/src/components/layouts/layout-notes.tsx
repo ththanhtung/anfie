@@ -12,10 +12,10 @@ type TProps = PropsWithChildren & {
 const LayoutNote = ({ renderLeft, children }: TProps) => {
   return (
     <Row className="w-full bg-slate-100">
-      <Col xs={4} md={5} lg={8} className="h-full">
+      <Col xs={4} md={5} lg={12} className="h-full">
         {renderLeft}
       </Col>
-      <Col xs={20} md={12} lg={16}>
+      <Col xs={20} md={12} lg={12}>
         {children}
       </Col>
     </Row>

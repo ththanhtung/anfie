@@ -17,9 +17,9 @@ type TNoteParams = {
 };
 
 type TNoteForm = {
-  title: string;
-  content: string;
-  isPin: boolean;
+  title?: string;
+  content?: string;
+  isPin?: boolean;
 };
 
 type TCreateOrUpdateNoteParams = {

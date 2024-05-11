@@ -16,12 +16,15 @@ export class NoteRepository extends Repository<Note> {
 	}
 
 	async updateNote({ id, title, content, isPin }: TUpdateNodeParams) {
-		return this.save({
+		await this.save({
 			id: +id,
 			title,
 			content,
 			isPin
 		});
+
+		const note = this.findOneById(id);
+		return note;
 	}
 
 	async getNotes(query: GetNotesDto) {

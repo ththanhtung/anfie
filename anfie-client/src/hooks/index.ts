@@ -8,3 +8,5 @@ export * from "./useDebounce";
 export * from "./message-request";
 export * from "./confessions";
 export * from "./tags";
+export * from "./notes";
+export * from "./groups";

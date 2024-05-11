@@ -19,6 +19,8 @@ export class NotesService {
 	}
 
 	update(id: string, updateNoteDto: UpdateNoteDto) {
+		console.log({ updateNoteDto });
+
 		return this.noteRepository.updateNote({
 			id: id.toString(),
 			...updateNoteDto

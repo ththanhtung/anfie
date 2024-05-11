@@ -12,7 +12,7 @@ export const useListInfiniteNotes = () => {
   });
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage, isLoading } =
     useInfiniteQuery({
-      queryKey: [queryKeys.GET_LIST_INFINITE_NOTES, params],
+      queryKey: [queryKeys.GET_LIST_INFINITY_NOTES, params],
       queryFn: ({ pageParam }) =>
         notesService.getListNotes({
           ...params,

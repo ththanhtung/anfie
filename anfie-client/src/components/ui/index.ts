@@ -4,3 +4,4 @@ export * from "./messages";
 export * from "./diaries";
 export * from "./confessions";
 export * from "./message-request";
+export * from "./notes";

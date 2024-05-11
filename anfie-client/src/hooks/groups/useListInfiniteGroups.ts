@@ -1,11 +1,11 @@
 "use client";
 import { queryKeys } from "@/constants";
-import { notesService } from "@/services";
+import { groupsService } from "@/services";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 
-export const useListInfiniteNotes = () => {
-  const [params, setParams] = useState<TNoteParams>({
+export const useListInfiniteGroups = () => {
+  const [params, setParams] = useState<TGroupParams>({
     page: 1,
     limit: 10,
     sort: "DESC",
@@ -14,7 +14,7 @@ export const useListInfiniteNotes = () => {
     useInfiniteQuery({
       queryKey: [queryKeys.GET_LIST_INFINITE_NOTES, params],
       queryFn: ({ pageParam }) =>
-        notesService.getListNotes({
+        groupsService.getListGroups({
           ...params,
           page: pageParam,
         }),
@@ -26,12 +26,12 @@ export const useListInfiniteNotes = () => {
       },
       initialPageParam: 1,
     });
-  const notes = useMemo(() => {
+  const groups = useMemo(() => {
     return data?.pages.flatMap((message) => message.data).filter(Boolean) || [];
   }, [data?.pages]);
 
   return {
-    notes,
+    groups,
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
