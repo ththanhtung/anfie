@@ -1,0 +1,1 @@
+export {default as FilterConfession} from "./filter-confession";

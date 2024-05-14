@@ -29,4 +29,16 @@ export const ENDPOINT_APIS = {
   groups: {
     list: "api/groups",
   },
+  preferGenders: {
+    list: "api/prefer-genders",
+  },
+  locations: {
+    list: "api/locations",
+  },
+  userProfiles: {
+    list: "api/user-profiles",
+  },
+  preferences: {
+    list: "api/preferences",
+  },
 };

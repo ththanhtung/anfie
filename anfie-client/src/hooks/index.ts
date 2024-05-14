@@ -10,3 +10,7 @@ export * from "./confessions";
 export * from "./tags";
 export * from "./notes";
 export * from "./groups";
+export * from "./locations";
+export * from "./prefer-genders";
+export * from "./preferences";
+export * from "./user-profiles";

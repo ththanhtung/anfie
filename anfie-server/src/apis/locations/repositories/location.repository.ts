@@ -1,6 +1,8 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { Location } from '../entities';
+import { GetLocationsDto } from '../dto';
+import { pagination } from 'src/common';
 
 export class LocationRepository extends Repository<Location> {
 	constructor(@InjectRepository(Location) repository: Repository<Location>) {
@@ -11,5 +13,9 @@ export class LocationRepository extends Repository<Location> {
 		return this.find({
 			where: { name: In(names) }
 		});
+	}
+
+	async getLocations(query: GetLocationsDto) {
+		return pagination(this, query);
 	}
 }

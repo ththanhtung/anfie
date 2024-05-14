@@ -7,3 +7,7 @@ export * from "./tags.service";
 export * from "./message-request.service";
 export * from "./notes.service";
 export * from "./groups.service";
+export * from "./locations.service";
+export * from "./prefer-genders.service";
+export * from "./user-profile.service";
+export * from "./preferences.service";

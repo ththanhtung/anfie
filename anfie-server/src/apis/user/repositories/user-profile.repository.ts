@@ -22,15 +22,16 @@ export class UserProfileRepository extends Repository<UserProfiles> {
 		return pagination(this, query);
 	}
 
-	async updateUserPreferences(userId: string, preferences: TUpdateUserPreferencesParams) {
-		return this.save({ id: +userId, ...preferences });
+	async updateUserPreferences(profile: UserProfiles) {
+		return this.save(profile);
 	}
 
 	async getProfileByUserId(id: string) {
 		return this.findOne({
 			where: {
 				user: { id: +id }
-			}
+			},
+			relations: ['locations', 'preferences', 'preferGenders', 'user']
 		});
 	}
 

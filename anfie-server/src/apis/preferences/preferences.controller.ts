@@ -1,7 +1,7 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { PreferencesService } from './services/preferences.service';
 
-import { GetPreferencesDto } from './dto';
+import { CreatePreferenceDto, GetPreferencesDto } from './dto';
 
 @Controller('preferences')
 export class PreferencesController {
@@ -10,5 +10,10 @@ export class PreferencesController {
 	@Get()
 	findAll(@Query() query: GetPreferencesDto) {
 		return this.preferencesService.findAll(query);
+	}
+
+	@Post()
+	create(@Body() createPreferenceDto: CreatePreferenceDto) {
+		return this.preferencesService.create(createPreferenceDto);
 	}
 }

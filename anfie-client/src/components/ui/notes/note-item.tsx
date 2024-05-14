@@ -1,3 +1,5 @@
+"use client";
+
 import { useDebounce } from "@/hooks";
 import { Button, Form, Input, Checkbox } from "antd";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
