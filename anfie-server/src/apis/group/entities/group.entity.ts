@@ -20,6 +20,12 @@ export class Group extends BaseEntity<Group> {
 	})
 	adminId: number;
 
+	@Column({
+		name: 'group_last_message_id',
+		nullable: true
+	})
+	lastMessageId: number;
+
 	@OneToOne(() => Users, { createForeignKeyConstraints: false })
 	@JoinColumn({
 		name: 'group_creator_id'
@@ -31,6 +37,9 @@ export class Group extends BaseEntity<Group> {
 		name: 'group_admin_id'
 	})
 	admin: Users;
+
+	@Column({ nullable: true, name: 'group_avatar_url' })
+	avatar?: string;
 
 	@ManyToMany(() => Users, (user) => user.groups)
 	@JoinTable({
@@ -49,4 +58,16 @@ export class Group extends BaseEntity<Group> {
 	@OneToMany(() => Message, (message) => message.group)
 	@JoinColumn()
 	messages: Message[];
+
+	@Column({
+		name: 'group_last_message_date',
+		nullable: true
+	})
+	lastMessageDate: Date;
+
+	@OneToOne(() => Message, { createForeignKeyConstraints: false })
+	@JoinColumn({
+		name: 'group_last_message_id'
+	})
+	lastMessage: Message;
 }

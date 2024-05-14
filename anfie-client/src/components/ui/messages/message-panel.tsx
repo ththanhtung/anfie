@@ -5,6 +5,7 @@ import React, { useContext, useEffect } from "react";
 import MessagePanelHeader from "./message-panel-header";
 import MessagePanelFooter from "./message-panel-footer";
 import MessageContainer from "./message-container";
+import { _common } from "@/utils";
 
 type TProps = {
   conversation?: TConversation;
@@ -36,10 +37,12 @@ const MessagePanel = ({ conversation }: TProps) => {
 
   return (
     <div className="w-full h-full bg-white rounded-md flex flex-col justify-between">
-      <MessagePanelHeader recipientName={conversation?.recipient.email || ""} />
+      <MessagePanelHeader
+        recipientName={_common.getUserFullName(conversation?.recipient!)}
+      />
       <MessageContainer
         messages={messages}
-        totalMessages={total}
+        totalMessages={total ?? 0}
         isFetchingNextPage={isFetchingNextPage}
         fetchNextPage={fetchNextPage}
       />

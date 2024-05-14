@@ -2,16 +2,17 @@ import { Module } from '@nestjs/common';
 import { GroupService } from './services/group.service';
 import { GroupController } from './controllers/group.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Group } from './entities';
-import { GroupAdminController, GroupRecipientController } from './controllers';
+import { Group, GroupMessage } from './entities';
+import { GroupAdminController, GroupMessagesController, GroupRecipientController } from './controllers';
 import { UserModule } from '../user/user.module';
-import { GroupRepository } from './repositories';
+import { GroupMessageRepository, GroupRepository } from './repositories';
 import { FriendModule } from '../friend/friend.module';
-import { GroupAdminService } from './services';
+import { GroupAdminService, GroupMessageService } from './services';
+import { MessageMediaModule } from '../message-media/message-media.module';
 
 @Module({
-	imports: [TypeOrmModule.forFeature([Group]), UserModule, FriendModule],
-	controllers: [GroupController, GroupRecipientController, GroupAdminController],
-	providers: [GroupService, GroupRepository, GroupAdminService]
+	imports: [TypeOrmModule.forFeature([Group, GroupMessage]), UserModule, FriendModule, MessageMediaModule],
+	controllers: [GroupController, GroupRecipientController, GroupAdminController, GroupMessagesController],
+	providers: [GroupService, GroupRepository, GroupAdminService, GroupMessageRepository, GroupMessageService]
 })
 export class GroupModule {}

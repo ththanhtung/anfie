@@ -15,7 +15,7 @@ const MessagePanelHeader = ({ recipientName }: TProps) => {
     <div className="flex justify-between p-6 bg-sky-200">
       <div className="flex justify-center items-center gap-4">
         <Avatar icon={<UserOutlined />} size="large" />
-        <p className="font-semibold text-blue-500 text-xl">{recipientName}</p>
+        <p className="font-semibold text-blue-500 text-xl capitalize">{recipientName}</p>
       </div>
       <div className="flex justify-center items-center gap-4">
         <Button

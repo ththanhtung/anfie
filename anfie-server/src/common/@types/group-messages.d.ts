@@ -1,17 +1,16 @@
-type TCreateMessageParams = {
+type TCreateGroupMessageParams = {
 	userId: number;
-	conversationId?: number;
-	groupId?: number;
+	groupId: number;
 	content: string;
 	medias?: Express.Multer.File[];
 };
 
-type TUpdateMessageMediaParams = {
+type TUpdateGroupMessageMediaParams = {
 	file: Express.Multer.File;
-	messageMedia: MessageMedia;
+	messageMedia: GroupMessageMedia;
 };
 
-type TMessage = {
+type TGroupMessage = {
 	id: number;
 	content: string;
 	userId: number;
@@ -21,10 +20,10 @@ type TMessage = {
 	updated_at: string;
 	deleted_at: any;
 	isSeen: boolean;
-	medias: MessageMedia[];
+	medias: GroupMessageMedia[];
 };
 
-type TCreateMessageResponse = {
+type TCreateGroupMessageResponse = {
 	content: string;
 	userId: number;
 	conversationId: number;

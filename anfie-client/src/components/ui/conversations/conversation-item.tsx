@@ -26,7 +26,7 @@ const ConversationItem = ({
     >
       <Avatar icon={<UserOutlined />} size="large" />
       <div className="item-body">
-        <h3 className="font-semibold">{username}</h3>
+        <h3 className="font-semibold capitalize">{username}</h3>
         <p className="text-slate-500">{lastMessage?.content}</p>
       </div>
       <Button

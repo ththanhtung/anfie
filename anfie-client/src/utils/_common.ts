@@ -8,5 +8,12 @@ class Common {
       )
     );
   };
+
+  getUserFullName = (user: TUser) => {
+    if (!user) {
+      return "";
+    }
+    return `${user.firstName} ${user.lastName}`;
+  };
 }
 export const _common = new Common();

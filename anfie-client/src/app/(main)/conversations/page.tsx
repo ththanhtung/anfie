@@ -7,6 +7,7 @@ import {
 import { useSocketContext } from "@/configs";
 import { queryKeys } from "@/constants";
 import { useListInfiniteConversations } from "@/hooks";
+import { _common } from "@/utils";
 import { useQueryClient } from "@tanstack/react-query";
 import { List } from "antd";
 import React, { useCallback, useEffect } from "react";
@@ -131,7 +132,7 @@ const ConversationPage = () => {
           dataSource={conversations}
           renderItem={(item: TConversation) => (
             <ConversationItem
-              username={item?.recipient?.email}
+              username={_common.getUserFullName(item?.recipient)}
               lastMessage={item?.lastMessage}
               id={Math.round(Math.random() * 100000000)}
               value={valueChecked}

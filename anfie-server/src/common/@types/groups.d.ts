@@ -18,6 +18,11 @@ type TLeaveGroupParams = {
 };
 
 type TRemoveGroupRecipientParams = {
-    groupId: string
-    userId: string
-}
+	groupId: string;
+	userId: string;
+};
+
+type TUpdateLastGroupMessageParams = {
+	groupId: number;
+	messageId: number;
+};

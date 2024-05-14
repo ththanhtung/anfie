@@ -1,9 +1,10 @@
 import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
 import { CreateGroupDto } from '../dto/create-group.dto';
 import { GroupRepository } from '../repositories';
-import { AddRecipientDto } from '../dto';
+import { AddRecipientDto, GetGroupsDto } from '../dto';
 import { UserService } from 'src/apis/user/services';
 import { FriendService } from 'src/apis/friend/services';
+import { TUpdateLastGroupMessageParams } from 'src/common/@types/groups';
 
 @Injectable()
 export class GroupService {
@@ -62,5 +63,17 @@ export class GroupService {
 			]);
 
 		return this.groupRepository.findOneAndRemoveUserById(groupId, removeUserId);
+	}
+
+	async getMyGroups(userId: string, query: GetGroupsDto) {
+		return this.groupRepository.getMyGroups(userId, query);
+	}
+
+	async findOneById(id: string) {
+		return this.groupRepository.findOne({ where: { id: +id } });
+	}
+
+	async updateLastGroupMessage({ groupId, messageId }: TUpdateLastGroupMessageParams) {
+		return this.groupRepository.updateLastGroupMessage({ groupId, messageId });
 	}
 }

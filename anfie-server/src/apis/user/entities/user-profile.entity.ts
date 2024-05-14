@@ -5,21 +5,25 @@ import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne 
 import { Users } from './user.entity';
 import { ReportTicket } from 'src/apis/report-ticket/entities';
 import { PreferGender } from 'src/apis/prefer-gender/entities';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class UserProfiles extends BaseEntity<UserProfiles> {
+	@Exclude()
 	@Column({
 		name: 'user_first_name',
 		nullable: true
 	})
 	firstName: string;
 
+	@Exclude()
 	@Column({
 		name: 'user_last_name',
 		nullable: true
 	})
 	lastName: string;
 
+	@Exclude()
 	@Column({
 		name: 'user_dob',
 		nullable: true
@@ -67,6 +71,7 @@ export class UserProfiles extends BaseEntity<UserProfiles> {
 	})
 	reportedCount: number;
 
+	@Exclude()
 	@Column({
 		name: 'user_profile_picture_url',
 		nullable: true
@@ -112,7 +117,7 @@ export class UserProfiles extends BaseEntity<UserProfiles> {
 		inverseJoinColumn: {
 			name: 'prefer_gender_id',
 			referencedColumnName: 'id'
-		} 
+		}
 	})
 	preferGenders: PreferGender[];
 

@@ -39,9 +39,9 @@ const MenuSidebar = ({ href }: TProps) => {
       label: "conversations",
     },
     {
-      key: "groups",
+      key: "group-conversations",
       icon: <AiOutlineComment />,
-      label: "groups",
+      label: "group conversations",
     },
     {
       key: "message-requests",

@@ -2,8 +2,10 @@ import { Repository } from 'typeorm';
 import { Group } from '../entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
-import { TCreateGroupParams, TLeaveGroupParams } from 'src/common/@types/groups';
+import { TCreateGroupParams, TLeaveGroupParams, TUpdateLastGroupMessageParams } from 'src/common/@types/groups';
 import { UserService } from 'src/apis/user/services';
+import { pagination } from 'src/common';
+import { GetGroupsDto } from '../dto';
 
 @Injectable()
 export class GroupRepository extends Repository<Group> {
@@ -86,5 +88,15 @@ export class GroupRepository extends Repository<Group> {
 
 		group.users = group.users.filter((user) => user.id !== +userId);
 		return this.save(group);
+	}
+
+	async getMyGroups(userId: string, query: GetGroupsDto) {
+		return pagination(this, query, {
+			where: { users: { id: +userId } }
+		});
+	}
+
+	async updateLastGroupMessage({ groupId, messageId }: TUpdateLastGroupMessageParams) {
+		return this.update(groupId, { lastMessageId: messageId });
 	}
 }

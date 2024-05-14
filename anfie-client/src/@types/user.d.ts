@@ -6,6 +6,10 @@ type TUser = {
   email: string;
   refreshToken: string;
   accessToken?: any;
+  firstName: string;
+  lastName: string;
+  dob?: string;
+  profilePictureUrl?: string;
 };
 
 type TUserProfile = {
@@ -13,9 +17,6 @@ type TUserProfile = {
   created_at: string;
   updated_at: string;
   deleted_at: any;
-  firstName: string;
-  lastName: string;
-  dob: string;
   gender: string;
   phone: string;
   maxAge: any;

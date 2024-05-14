@@ -12,21 +12,7 @@ type TConversation = {
   creatorId: number;
   recipientId: number;
   lastMessageDate: any;
-  creator: TCreator;
-  recipient: TRecipient;
+  creator: TUser;
+  recipient: TUser;
   lastMessage: TMessage;
 };
-
-type TCreator = {
-  id: string
-  created_at: string
-  updated_at: string
-  email: string
-}
-
-type TRecipient = {
-  id: string
-  created_at: string
-  updated_at: string
-  email: string
-}

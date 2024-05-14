@@ -1,6 +1,6 @@
 "use client";
 import { userInfoStoreAtom } from "@/stores";
-import { _formatDay } from "@/utils";
+import { _common, _formatDay } from "@/utils";
 import { UserOutlined } from "@ant-design/icons";
 import { Avatar, Spin } from "antd";
 import { useAtomValue } from "jotai";
@@ -63,7 +63,9 @@ const MessageContainer = ({
             </div>
             <div className="flex items-center justify-center gap-2 text-slate-400 mt-1">
               {!isMessageMine ? (
-                <span className="">{message?.user?.email}</span>
+                <span className="capitalize">
+                  {_common.getUserFullName(message?.user)}
+                </span>
               ) : (
                 <></>
               )}
