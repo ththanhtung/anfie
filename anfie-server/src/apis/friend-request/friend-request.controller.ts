@@ -5,7 +5,7 @@ import { AtGuard, GetCurrentUser } from 'src/common';
 import { GetFriendRequestsDto } from './dto';
 
 @UseGuards(AtGuard)
-@Controller('friend-request')
+@Controller('friend-requests')
 export class FriendRequestController {
 	constructor(private readonly friendRequestService: FriendRequestService) {}
 	@Post()

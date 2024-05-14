@@ -22,6 +22,30 @@ export class Users extends BaseEntity<Users> {
 	})
 	hash: string;
 
+	@Column({
+		name: 'user_first_name',
+		nullable: true
+	})
+	firstName: string;
+
+	@Column({
+		name: 'user_last_name',
+		nullable: true
+	})
+	lastName: string;
+
+	@Column({
+		name: 'user_dob',
+		nullable: true
+	})
+	dob: Date;
+
+	@Column({
+		name: 'user_profile_picture_url',
+		nullable: true
+	})
+	profilePictureUrl: string;
+
 	@OneToMany(() => Message, (message) => message.user)
 	@JoinColumn()
 	messages: Message[];

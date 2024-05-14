@@ -8,7 +8,6 @@ import {
   MessageOutlined,
   SnippetsOutlined,
   UserOutlined,
-  UsergroupAddOutlined,
 } from "@ant-design/icons";
 import { Button, Menu, MenuProps } from "antd";
 import { useAtomValue } from "jotai";
@@ -17,7 +16,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { TbMessageCircleUp } from "react-icons/tb";
-import { IoBookOutline } from "react-icons/io5";
+import { IoBookOutline, IoPersonAddOutline, IoPersonAddSharp } from "react-icons/io5";
 import { TbShieldQuestion } from "react-icons/tb";
 import { AiOutlineComment } from "react-icons/ai";
 
@@ -48,6 +47,11 @@ const MenuSidebar = ({ href }: TProps) => {
       key: "message-requests",
       icon: <TbMessageCircleUp />,
       label: "message requests",
+    },
+    {
+      key: "friend-requests",
+      icon: <IoPersonAddOutline />,
+      label: "friend requests",
     },
     {
       key: "confessions",

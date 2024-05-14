@@ -14,3 +14,4 @@ export * from "./locations";
 export * from "./prefer-genders";
 export * from "./preferences";
 export * from "./user-profiles";
+export * from "./friend-requests";

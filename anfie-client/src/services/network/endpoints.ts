@@ -41,4 +41,7 @@ export const ENDPOINT_APIS = {
   preferences: {
     list: "api/preferences",
   },
+  friendRequests: {
+    list: "api/friend-requests",
+  },
 };

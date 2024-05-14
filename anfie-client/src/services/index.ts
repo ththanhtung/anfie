@@ -11,3 +11,4 @@ export * from "./locations.service";
 export * from "./prefer-genders.service";
 export * from "./user-profile.service";
 export * from "./preferences.service";
+export * from "./friend-request.service";
