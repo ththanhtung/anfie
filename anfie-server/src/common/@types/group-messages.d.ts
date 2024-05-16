@@ -34,4 +34,5 @@ type TCreateGroupMessageResponse = {
 	updated_at: string;
 	deleted_at: any;
 	isSeen: boolean;
+	group: TGroup;
 };

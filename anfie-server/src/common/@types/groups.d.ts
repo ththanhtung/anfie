@@ -26,3 +26,16 @@ type TUpdateLastGroupMessageParams = {
 	groupId: number;
 	messageId: number;
 };
+
+type TGroup = {
+	id: number;
+	created_at: string;
+	updated_at: string;
+	title: string;
+	creatorId: number;
+	adminId: number;
+	lastMessageId: number;
+	avatar: any;
+	lastMessageDate: any;
+	users: TUser[];
+};

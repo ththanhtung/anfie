@@ -1,4 +1,9 @@
 export enum EActionTabs {
-    LOGIN = 'login',
-    SIGNUP = 'signup'
+  LOGIN = "login",
+  SIGNUP = "signup",
+}
+
+export enum EConversationTypes {
+  PRIVATE = "private",
+  GROUP = "group",
 }

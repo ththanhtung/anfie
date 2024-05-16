@@ -5,7 +5,7 @@ import {
   MessagePanel,
 } from "@/components";
 import { useSocketContext } from "@/configs";
-import { queryKeys } from "@/constants";
+import { EConversationTypes, queryKeys } from "@/constants";
 import { useListInfiniteConversations } from "@/hooks";
 import { _common } from "@/utils";
 import { useQueryClient } from "@tanstack/react-query";
@@ -146,11 +146,15 @@ const ConversationPage = () => {
       </div>
     );
   }, [conversations, valueChecked]);
+
   return (
     <>
       <LayoutConversation renderLeft={renderLeft()}>
         <div className="h-[100vh]">
-          <MessagePanel conversation={selectedConversation} />
+          <MessagePanel
+            conversation={selectedConversation}
+            type={EConversationTypes.PRIVATE}
+          />
         </div>
       </LayoutConversation>
     </>

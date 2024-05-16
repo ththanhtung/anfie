@@ -14,7 +14,15 @@ export class GroupMessageRepository extends Repository<GroupMessage> {
 		message.content = createGroupMessageParams.content;
 		message.userId = createGroupMessageParams.userId;
 		message.groupId = createGroupMessageParams.groupId;
-		return this.save(message);
+		const savedMessage = await this.save(message);
+		const newMessage = await this.findOne({
+			where: {
+				id: savedMessage.id
+			},
+			relations: ['user']
+		});
+
+		return newMessage;
 	}
 
 	async getGroupMessagesFromGroupConversation(groupId: number, query: GetGroupMessagesDto) {
@@ -22,7 +30,7 @@ export class GroupMessageRepository extends Repository<GroupMessage> {
 			where: {
 				groupId: groupId
 			},
-			relations: ['user']
+			relations: ['user', 'group', 'group.users']
 		});
 	}
 

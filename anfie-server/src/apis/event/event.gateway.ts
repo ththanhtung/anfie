@@ -10,6 +10,7 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 import { ConversationAdminService } from '../conversation/services';
 import { ConversationRequestService } from '../conversation-request/services';
 import { ConversationRequest } from '../conversation-request/entities';
+import { group } from 'console';
 
 @WebSocketGateway({
 	cors: {
@@ -99,6 +100,23 @@ export class EventGateway {
 
 		if (creatorSocket) creatorSocket.emit('onMessage', payload);
 		if (recipientSocket) recipientSocket.emit('onMessage', payload);
+	}
+
+	@OnEvent('group-messages.created')
+	handleGroupMessageCreated(payload: TCreateGroupMessageResponse) {
+		this.server.emit('group-messages.created', payload);
+		const { users } = payload.group;
+		users.forEach((user) => {
+			const userSocket = this.sessionManager.getUserSocket(user.id);
+			if (userSocket)
+				userSocket.emit('onGroupMessage', {
+					...payload,
+					group: {
+						...payload.group,
+						users: []
+					}
+				});
+		});
 	}
 
 	@OnEvent('conversation-request.accepted')

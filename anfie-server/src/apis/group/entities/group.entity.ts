@@ -1,7 +1,7 @@
-import { Message } from 'src/apis/message/entities';
 import { Users } from 'src/apis/user/entities';
 import { BaseEntity } from 'src/database';
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne } from 'typeorm';
+import { GroupMessage } from './group-message.entity';
 
 @Entity()
 export class Group extends BaseEntity<Group> {
@@ -55,9 +55,9 @@ export class Group extends BaseEntity<Group> {
 	})
 	users: Users[];
 
-	@OneToMany(() => Message, (message) => message.group)
+	@OneToMany(() => GroupMessage, (message) => message.group)
 	@JoinColumn()
-	messages: Message[];
+	messages: GroupMessage[];
 
 	@Column({
 		name: 'group_last_message_date',
@@ -65,9 +65,9 @@ export class Group extends BaseEntity<Group> {
 	})
 	lastMessageDate: Date;
 
-	@OneToOne(() => Message, { createForeignKeyConstraints: false })
+	@OneToOne(() => GroupMessage, { createForeignKeyConstraints: false })
 	@JoinColumn({
 		name: 'group_last_message_id'
 	})
-	lastMessage: Message;
+	lastMessage: GroupMessage;
 }

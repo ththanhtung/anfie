@@ -12,3 +12,5 @@ export * from "./prefer-genders.service";
 export * from "./user-profile.service";
 export * from "./preferences.service";
 export * from "./friend-request.service";
+export * from "./group-conversations.service";
+export * from "./group-messages.service";

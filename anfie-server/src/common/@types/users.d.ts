@@ -9,11 +9,15 @@ type TUser = {
 	id: number;
 	created_at: string;
 	updated_at: string;
-	deleted_at?: any;
+	deleted_at?: string;
 	email: string;
 	hash: string;
 	refreshToken: string;
-	accessToken?: any;
+	accessToken?: string;
+	firstName?: string;
+	lastName?: string;
+	dob: any;
+	profilePictureUrl: string;
 };
 
 type TUserProfile = {

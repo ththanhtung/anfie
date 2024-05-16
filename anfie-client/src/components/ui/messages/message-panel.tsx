@@ -1,22 +1,42 @@
 "use client";
 
-import { useListInfiniteMessages, useMutationMessage } from "@/hooks";
-import React, { useContext, useEffect } from "react";
+import {
+  useListInfiniteGroupMessages,
+  useListInfiniteMessages,
+  useMutationGroupMessage,
+  useMutationMessage,
+} from "@/hooks";
+import React from "react";
 import MessagePanelHeader from "./message-panel-header";
 import MessagePanelFooter from "./message-panel-footer";
 import MessageContainer from "./message-container";
 import { _common } from "@/utils";
+import { EConversationTypes } from "@/constants";
 
 type TProps = {
+  type: EConversationTypes;
   conversation?: TConversation;
+  group?: TGroupConversation;
 };
-const MessagePanel = ({ conversation }: TProps) => {
-  const { messages, total, isFetchingNextPage, fetchNextPage } =
-    useListInfiniteMessages(conversation?.id?.toString());
+const MessagePanel = ({ conversation, group, type }: TProps) => {
+  console.log({ conversation, group, type });
 
-  console.log({ messages });
+  const {
+    messages: conversationMessages,
+    total,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useListInfiniteMessages(conversation?.id?.toString());
+
+  const {
+    groupMessages,
+    total: totalGroupMessages,
+    isFetchingNextPage: isFetchingNextPageGroupMessages,
+    fetchNextPage: fetchNextPageGroupMessages,
+  } = useListInfiniteGroupMessages(group?.id?.toString());
 
   const { onCreateMessage } = useMutationMessage();
+  const { onCreateGroupMessage } = useMutationGroupMessage();
 
   const sentMessage = async ({ content }: TMessageForm) => {
     if (!content) return;
@@ -29,22 +49,49 @@ const MessagePanel = ({ conversation }: TProps) => {
     // TODO
     // attach media to form
     // sent message
-    onCreateMessage({
-      conversationId: conversation?.id?.toString() || "",
-      form,
-    });
+    if (type === EConversationTypes.PRIVATE) {
+      onCreateMessage({
+        conversationId: conversation?.id?.toString() || "",
+        form,
+      });
+    } else {
+      onCreateGroupMessage({
+        groupId: group?.id?.toString() || "",
+        form,
+      });
+    }
   };
 
   return (
     <div className="w-full h-full bg-white rounded-md flex flex-col justify-between">
       <MessagePanelHeader
-        recipientName={_common.getUserFullName(conversation?.recipient!)}
+        recipientName={
+          type === EConversationTypes.PRIVATE
+            ? _common.getUserFullName(conversation?.recipient!)
+            : group?.title || ""
+        }
       />
       <MessageContainer
-        messages={messages}
-        totalMessages={total ?? 0}
-        isFetchingNextPage={isFetchingNextPage}
-        fetchNextPage={fetchNextPage}
+        messages={
+          type === EConversationTypes.PRIVATE
+            ? conversationMessages
+            : groupMessages
+        }
+        totalMessages={
+          type === EConversationTypes.PRIVATE
+            ? total || 0
+            : totalGroupMessages || 0
+        }
+        isFetchingNextPage={
+          type === EConversationTypes.PRIVATE
+            ? isFetchingNextPage
+            : isFetchingNextPageGroupMessages
+        }
+        fetchNextPage={
+          type === EConversationTypes.PRIVATE
+            ? fetchNextPage
+            : fetchNextPageGroupMessages
+        }
       />
       <div className="px-6">
         <MessagePanelFooter sendMessage={sentMessage} />

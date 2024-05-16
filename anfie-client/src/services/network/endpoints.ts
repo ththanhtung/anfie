@@ -44,4 +44,7 @@ export const ENDPOINT_APIS = {
   friendRequests: {
     list: "api/friend-requests",
   },
+  groupConversations: {
+    list: "api/groups",
+  },
 };

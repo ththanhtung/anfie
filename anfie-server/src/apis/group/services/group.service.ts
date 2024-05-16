@@ -70,7 +70,7 @@ export class GroupService {
 	}
 
 	async findOneById(id: string) {
-		return this.groupRepository.findOne({ where: { id: +id } });
+		return this.groupRepository.findOne({ where: { id: +id }, relations: ['users'] });
 	}
 
 	async updateLastGroupMessage({ groupId, messageId }: TUpdateLastGroupMessageParams) {

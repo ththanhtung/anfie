@@ -4,7 +4,7 @@ import React from "react";
 type TProps = {
   avatar?: string;
   username: string;
-  lastMessage: TMessage;
+  lastMessage: TMessage | TGroupMessage;
   id: number;
   value?: number;
   onClick: () => void;
@@ -17,6 +17,7 @@ const ConversationItem = ({
   value,
   onClick,
 }: TProps) => {
+
   return (
     <div
       className={`conversation-item hover: shadow-md hover:scale-[1.02] ${

@@ -92,7 +92,8 @@ export class GroupRepository extends Repository<Group> {
 
 	async getMyGroups(userId: string, query: GetGroupsDto) {
 		return pagination(this, query, {
-			where: { users: { id: +userId } }
+			where: { users: { id: +userId } },
+			relations: ['creator', 'admin', 'lastMessage']
 		});
 	}
 

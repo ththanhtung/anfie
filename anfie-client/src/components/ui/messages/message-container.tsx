@@ -8,7 +8,7 @@ import React, { useEffect, useRef } from "react";
 import { useInView } from "react-intersection-observer";
 
 type TProps = {
-  messages: TMessage[];
+  messages: TMessage[] | TGroupMessage[];
   totalMessages: number;
   isFetchingNextPage: boolean;
   fetchNextPage: any;
@@ -28,9 +28,9 @@ const MessageContainer = ({
   }, [fetchNextPage, inView]);
   const user = useAtomValue(userInfoStoreAtom);
   const mapMessages = (
-    message: TMessage,
+    message: TMessage | TGroupMessage,
     index: number,
-    messages: TMessage[]
+    messages: TMessage[] | TGroupMessage[]
   ) => {
     const currentMessage = messages[index];
     const nextMessage = messages[index + 1];
