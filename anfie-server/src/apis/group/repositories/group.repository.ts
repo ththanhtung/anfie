@@ -42,22 +42,24 @@ export class GroupRepository extends Repository<Group> {
 		return group;
 	}
 
-	async addRecipient(groupId: string, recipientId: string) {
+	async addRecipient(groupId: string, recipientIds: string[]) {
 		const group = await this.findOneById(groupId);
 
-		const isUserInGroup = await this.isUserInGroup(groupId, recipientId);
+		const recipients = await this.userService.findUsersByIds(recipientIds);
 
-		if (isUserInGroup)
-			throw new BadRequestException([
-				{
-					field: 'recipientId',
-					message: 'user already in the group'
-				}
-			]);
+		for (const recipient of recipients) {
+			const isUserInGroup = await this.isUserInGroup(groupId, recipient.id.toString());
 
-		const recipient = await this.userService.findOneById(+recipientId);
+			if (isUserInGroup)
+				throw new BadRequestException([
+					{
+						field: 'recipientId',
+						message: `user's id: ${recipient.id} is already in the group`
+					}
+				]);
+		}
 
-		group.users.push(recipient);
+		group.users.push(...recipients);
 
 		return this.save(group);
 	}

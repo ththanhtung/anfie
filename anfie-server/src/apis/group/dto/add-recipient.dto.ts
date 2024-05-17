@@ -1,7 +1,9 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
 export class AddRecipientDto {
-	@IsString()
+	@IsString({
+		each: true
+	})
 	@IsNotEmpty()
-	recipientId: string;
+	recipientId: string[];
 }

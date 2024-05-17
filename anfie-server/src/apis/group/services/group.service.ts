@@ -39,7 +39,11 @@ export class GroupService {
 	async addRecipient(user: TUserJwt, groupId: string, addRecipientDto: AddRecipientDto) {
 		const group = await this.groupRepository.findOneById(groupId);
 		if (group.adminId !== user.userId) {
-			throw new ForbiddenException();
+			throw new ForbiddenException([
+				{
+					message: 'only admin can add other user'
+				}
+			]);
 		}
 
 		return this.groupRepository.addRecipient(groupId, addRecipientDto.recipientId);
