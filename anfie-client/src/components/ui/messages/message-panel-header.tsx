@@ -1,21 +1,77 @@
+import { EConversationTypes, EDropdownAction } from "@/constants";
 import {
   MenuOutlined,
   PhoneOutlined,
   UserOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
-import { Avatar, Button } from "antd";
-import React from "react";
+import { Avatar, Button, Dropdown, MenuProps } from "antd";
+import React, { useMemo } from "react";
 
 type TProps = {
   recipientName: string;
+  onCreate: () => void;
+  onLeave: () => void;
+  type: EConversationTypes;
 };
-const MessagePanelHeader = ({ recipientName }: TProps) => {
+
+const MessagePanelHeader = ({
+  recipientName,
+  type,
+  onCreate,
+  onLeave,
+}: TProps) => {
+  const dropdownItems: MenuProps["items"] = useMemo(() => {
+    return type === EConversationTypes.PRIVATE
+      ? [
+          {
+            key: EDropdownAction.CREATE_GROUP,
+            label: (
+              <span className="text-neutral_800 text-sm ml-2 capitalize">
+                create group
+              </span>
+            ),
+            icon: <span className="!text-base text-neutral_700 icon-undo" />,
+          },
+          {
+            key: EDropdownAction.END_CONVERSATION,
+            label: (
+              <span className="text-red_400 text-sm ml-2 capitalize text-red-500">
+                end conversation
+              </span>
+            ),
+            icon: <span className="!text-base text-red_400 icon-trash" />,
+          },
+        ]
+      : [
+          {
+            key: EDropdownAction.ADD_RECIPIENT,
+            label: (
+              <span className="text-neutral_800 text-sm ml-2 capitalize">
+                Add recipient
+              </span>
+            ),
+            icon: <span className="!text-base text-neutral_700 icon-edit" />,
+          },
+          {
+            key: EDropdownAction.LEAVE_GROUP,
+            label: (
+              <span className="text-neutral_800 text-sm ml-2 capitalize text-red-500">
+                Leave group
+              </span>
+            ),
+            icon: <span className="!text-base text-neutral_700 icon-archive" />,
+          },
+        ];
+  }, [type]);
+
   return (
     <div className="flex justify-between p-6 bg-sky-200">
       <div className="flex justify-center items-center gap-4">
         <Avatar icon={<UserOutlined />} size="large" />
-        <p className="font-semibold text-blue-500 text-xl capitalize">{recipientName}</p>
+        <p className="font-semibold text-blue-500 text-xl capitalize">
+          {recipientName}
+        </p>
       </div>
       <div className="flex justify-center items-center gap-4">
         <Button
@@ -32,15 +88,44 @@ const MessagePanelHeader = ({ recipientName }: TProps) => {
           icon={<VideoCameraOutlined />}
           size="large"
         />
-        <Button
-          style={{
-            backgroundColor: "transparent",
-            border: "none",
-            boxShadow: "none",
+
+        <Dropdown
+          menu={{
+            items: dropdownItems,
+            onClick: (e) => {
+              switch (e.key) {
+                case EDropdownAction.CREATE_GROUP:
+                  onCreate();
+                  break;
+                case EDropdownAction.END_CONVERSATION:
+                  // onArchive();
+                  break;
+                case EDropdownAction.ADD_RECIPIENT:
+                  break;
+                case EDropdownAction.LEAVE_GROUP:
+                  onLeave();
+                  break;
+                default:
+                  // onUpdate();
+                  break;
+              }
+            },
           }}
-          icon={<MenuOutlined />}
-          size="large"
-        />
+          className="cirle-header group"
+          overlayStyle={{
+            width: 200,
+          }}
+        >
+          <Button
+            style={{
+              backgroundColor: "transparent",
+              border: "none",
+              boxShadow: "none",
+            }}
+            icon={<MenuOutlined />}
+            size="large"
+          />
+        </Dropdown>
       </div>
     </div>
   );

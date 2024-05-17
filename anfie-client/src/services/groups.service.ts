@@ -30,6 +30,13 @@ export class GroupsServiceApis extends HttpClient {
     );
     return data;
   }
+
+  public async deleteLeaveGroup(groupId: string) {
+    const { data } = await this.instance.delete(
+      `${ENDPOINT_APIS.groups.list}/${groupId}/recipient/leave`
+    );
+    return data;
+  }
 }
 
 export const groupsService = new GroupsServiceApis();

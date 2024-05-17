@@ -7,9 +7,10 @@ import { UserModule } from '../user/user.module';
 import { ConversationRepository } from './repositories';
 import { ConversationAdminService } from './services';
 import { ConversationAdminController } from './conversation.admin.controller';
+import { FriendModule } from '../friend/friend.module';
 
 @Module({
-	imports: [TypeOrmModule.forFeature([Conversation]), UserModule],
+	imports: [TypeOrmModule.forFeature([Conversation]), UserModule, FriendModule],
 	providers: [ConversationService, ConversationRepository, ConversationAdminService],
 	controllers: [ConversationController, ConversationAdminController],
 	exports: [ConversationService, ConversationAdminService]

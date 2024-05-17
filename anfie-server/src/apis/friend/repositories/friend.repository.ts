@@ -13,7 +13,8 @@ export class FriendRepository extends Repository<Friend> {
 
 	async getFriends(id: string, query: GetFriendsDto) {
 		return pagination(this, query, {
-			where: [{ followee: { id: +id } }, { follower: { id: +id } }]
+			where: [{ followee: { id: +id } }, { follower: { id: +id } }],
+			relations: ['followee', 'follower']
 		});
 	}
 

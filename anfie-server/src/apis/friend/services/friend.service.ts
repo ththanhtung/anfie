@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { FriendRepository } from '../repositories';
 import { GetFriendsDto } from '../dto';
+import { Users } from 'src/apis/user/entities';
 
 @Injectable()
 export class FriendService {
@@ -10,7 +11,13 @@ export class FriendService {
 		return this.friendRepository.createOne(followeeId, followerId);
 	}
 	async getFriends(userId: string, query: GetFriendsDto) {
-		return this.friendRepository.getFriends(userId, query);
+		const [friends, total] = await this.friendRepository.getFriends(userId, query);
+		const myFriends: Users[] = [];
+		for (const friend of friends) {
+			if (friend.follower.id !== +userId) myFriends.push(friend.follower);
+			else if (friend.followee.id !== +userId) myFriends.push(friend.followee);
+		}
+		return [myFriends, total];
 	}
 
 	async findFriendById(id: string) {

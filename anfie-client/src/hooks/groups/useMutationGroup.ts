@@ -9,14 +9,20 @@ export const useMutationGroup = () => {
 
   const { mutate: mutationCreateGroup, isPending: isCreateGroupPending } =
     useMutation<any, TResponseError, { form: TGroupForm }>({
-      mutationKey: [mutationKeys.MUTATION_CREATE_NOTE],
+      mutationKey: [mutationKeys.MUTATION_UPDATE_GROUP],
       mutationFn: ({ form }) => groupsService.postCreateGroup(form),
     });
 
   const { mutate: mutationUpdateGroup, isPending: isUpdateGroupPending } =
     useMutation<any, TResponseError, { id: string; form: TGroupForm }>({
-      mutationKey: [mutationKeys.MUTATION_UPDATE_NOTE],
+      mutationKey: [mutationKeys.MUTATION_UPDATE_GROUP],
       mutationFn: ({ id, form }) => groupsService.patchUpdateGroup(id, form),
+    });
+
+  const { mutate: mutationLeaveGroup, isPending: isLeaveGroupPending } =
+    useMutation<any, TResponseError, { groupId: string }>({
+      mutationKey: [mutationKeys.MUTATION_LEAVE_GROUP],
+      mutationFn: ({ groupId }) => groupsService.deleteLeaveGroup(groupId),
     });
 
   const onCreateOrUpdateGroup = useCallback(
@@ -31,7 +37,7 @@ export const useMutationGroup = () => {
             onSuccess: () => {
               cb?.();
               queryClient.invalidateQueries({
-                queryKey: [queryKeys.GET_LIST_INFINITY_NOTES],
+                queryKey: [queryKeys.GET_LIST_INFINITE_GROUP_CONVERSATIONS],
               });
               message.success("Updated group successfully");
             },
@@ -49,7 +55,7 @@ export const useMutationGroup = () => {
           onSuccess: () => {
             cb?.();
             queryClient.invalidateQueries({
-              queryKey: [queryKeys.GET_LIST_INFINITY_NOTES],
+              queryKey: [queryKeys.GET_LIST_INFINITE_GROUP_CONVERSATIONS],
             });
             message.success("Created group successfully");
           },
@@ -59,8 +65,31 @@ export const useMutationGroup = () => {
     [mutationCreateGroup, mutationUpdateGroup, queryClient]
   );
 
+  const onLeaveGroup = useCallback(
+    ({ groupId, cb }: TLeaveGroupParams) => {
+      mutationLeaveGroup(
+        { groupId },
+        {
+          onError: (error) => {
+            message.error(error.message);
+          },
+          onSuccess: () => {
+            cb?.();
+            queryClient.invalidateQueries({
+              queryKey: [queryKeys.GET_LIST_INFINITE_GROUP_CONVERSATIONS],
+            });
+            message.success("Left group successfully");
+          },
+        }
+      );
+    },
+    [mutationLeaveGroup, queryClient]
+  );
+
   return {
+    onLeaveGroup,
     onCreateOrUpdateGroup,
     isCreateGroupPending,
+    isUpdateGroupPending,
   };
 };

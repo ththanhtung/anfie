@@ -1,16 +1,17 @@
 "use client";
 import {
   ConversationItem,
+  CreateGroupModal,
   LayoutConversation,
   MessagePanel,
 } from "@/components";
 import { useSocketContext } from "@/configs";
 import { EConversationTypes, queryKeys } from "@/constants";
-import { useListInfiniteConversations } from "@/hooks";
+import { useListInfiniteConversations, useMutationGroup } from "@/hooks";
 import { _common } from "@/utils";
 import { useQueryClient } from "@tanstack/react-query";
 import { List } from "antd";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 
 const ConversationPage = () => {
   const { conversations } = useListInfiniteConversations();
@@ -18,6 +19,19 @@ const ConversationPage = () => {
   const [valueChecked, setValueChecked] = React.useState<number>();
   const [selectedConversation, setSelectedConversation] =
     React.useState<TConversation>();
+  const { onCreateOrUpdateGroup } = useMutationGroup();
+
+  const onCreateGroup = useCallback(
+    (title: string, userIds: string[]) => {
+      onCreateOrUpdateGroup({
+        form: {
+          title,
+          users: userIds,
+        },
+      });
+    },
+    [onCreateOrUpdateGroup]
+  );
 
   const socket = useSocketContext();
   useEffect(() => {
@@ -154,6 +168,7 @@ const ConversationPage = () => {
           <MessagePanel
             conversation={selectedConversation}
             type={EConversationTypes.PRIVATE}
+            onCreate={onCreateGroup}
           />
         </div>
       </LayoutConversation>

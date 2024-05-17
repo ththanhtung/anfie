@@ -9,7 +9,7 @@ class Common {
     );
   };
 
-  getUserFullName = (user: TUser) => {
+  getUserFullName = (user: { firstName: string; lastName: string }) => {
     if (!user) {
       return "";
     }

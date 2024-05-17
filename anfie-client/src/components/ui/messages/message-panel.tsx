@@ -6,20 +6,32 @@ import {
   useMutationGroupMessage,
   useMutationMessage,
 } from "@/hooks";
-import React from "react";
+import React, { useRef } from "react";
 import MessagePanelHeader from "./message-panel-header";
 import MessagePanelFooter from "./message-panel-footer";
 import MessageContainer from "./message-container";
 import { _common } from "@/utils";
 import { EConversationTypes } from "@/constants";
+import { CreateGroupModal, LeaveGroupModal } from "@/components";
 
 type TProps = {
   type: EConversationTypes;
   conversation?: TConversation;
   group?: TGroupConversation;
+  onCreate?: (title: string, userIds: string[]) => void;
+  onLeave?: (params: TLeaveGroupParams) => void;
 };
-const MessagePanel = ({ conversation, group, type }: TProps) => {
+const MessagePanel = ({
+  conversation,
+  group,
+  type,
+  onCreate,
+  onLeave,
+}: TProps) => {
   console.log({ conversation, group, type });
+
+  const createGroupRef = useRef<TModalRef>(null);
+  const leaveGroupRef = useRef<TModalRef>(null);
 
   const {
     messages: conversationMessages,
@@ -37,6 +49,14 @@ const MessagePanel = ({ conversation, group, type }: TProps) => {
 
   const { onCreateMessage } = useMutationMessage();
   const { onCreateGroupMessage } = useMutationGroupMessage();
+
+  const onCreateGroup = () => {
+    createGroupRef.current?.showModal();
+  };
+
+  const onLeaveGroup = () => {
+    leaveGroupRef.current?.showModal();
+  };
 
   const sentMessage = async ({ content }: TMessageForm) => {
     if (!content) return;
@@ -63,40 +83,52 @@ const MessagePanel = ({ conversation, group, type }: TProps) => {
   };
 
   return (
-    <div className="w-full h-full bg-white rounded-md flex flex-col justify-between">
-      <MessagePanelHeader
-        recipientName={
-          type === EConversationTypes.PRIVATE
-            ? _common.getUserFullName(conversation?.recipient!)
-            : group?.title || ""
-        }
-      />
-      <MessageContainer
-        messages={
-          type === EConversationTypes.PRIVATE
-            ? conversationMessages
-            : groupMessages
-        }
-        totalMessages={
-          type === EConversationTypes.PRIVATE
-            ? total || 0
-            : totalGroupMessages || 0
-        }
-        isFetchingNextPage={
-          type === EConversationTypes.PRIVATE
-            ? isFetchingNextPage
-            : isFetchingNextPageGroupMessages
-        }
-        fetchNextPage={
-          type === EConversationTypes.PRIVATE
-            ? fetchNextPage
-            : fetchNextPageGroupMessages
-        }
-      />
-      <div className="px-6">
-        <MessagePanelFooter sendMessage={sentMessage} />
+    <>
+      <div className="w-full h-full bg-white rounded-md flex flex-col justify-between">
+        <MessagePanelHeader
+          onCreate={onCreateGroup}
+          onLeave={onLeaveGroup}
+          type={type}
+          recipientName={
+            type === EConversationTypes.PRIVATE
+              ? _common.getUserFullName(conversation?.recipient!)
+              : group?.title || ""
+          }
+        />
+        <MessageContainer
+          messages={
+            type === EConversationTypes.PRIVATE
+              ? conversationMessages
+              : groupMessages
+          }
+          totalMessages={
+            type === EConversationTypes.PRIVATE
+              ? total || 0
+              : totalGroupMessages || 0
+          }
+          isFetchingNextPage={
+            type === EConversationTypes.PRIVATE
+              ? isFetchingNextPage
+              : isFetchingNextPageGroupMessages
+          }
+          fetchNextPage={
+            type === EConversationTypes.PRIVATE
+              ? fetchNextPage
+              : fetchNextPageGroupMessages
+          }
+        />
+        <div className="px-6">
+          <MessagePanelFooter sendMessage={sentMessage} />
+        </div>
       </div>
-    </div>
+      <CreateGroupModal ref={createGroupRef} onCreate={onCreate} />
+      <LeaveGroupModal
+        ref={leaveGroupRef}
+        onOk={() => {
+          onLeave?.({ groupId: group?.id?.toString() || "" });
+        }}
+      />
+    </>
   );
 };
 

@@ -12,7 +12,7 @@ export const useListInfiniteGroups = () => {
   });
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage, isLoading } =
     useInfiniteQuery({
-      queryKey: [queryKeys.GET_LIST_INFINITE_NOTES, params],
+      queryKey: [queryKeys.GET_LIST_INFINITE_GROUP_CONVERSATIONS, params],
       queryFn: ({ pageParam }) =>
         groupsService.getListGroups({
           ...params,

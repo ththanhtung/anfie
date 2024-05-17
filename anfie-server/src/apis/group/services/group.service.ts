@@ -16,14 +16,18 @@ export class GroupService {
 
 	async create(user: TUserJwt, createGroupDto: CreateGroupDto) {
 		const users = await this.userService.findUsersByIds(createGroupDto.users);
-		const isAllFriends = this.friendService.isAllFriends(createGroupDto.users);
-		if (isAllFriends) {
-			throw new BadRequestException([
-				{
-					message: 'some users are not friends'
-				}
-			]);
+
+		for (const requestedUser of users) {
+			const isFriend = await this.friendService.isFriend(user.userId.toString(), requestedUser.id.toString());
+			if (!isFriend) {
+				throw new BadRequestException([
+					{
+						message: 'some users are not friends'
+					}
+				]);
+			}
 		}
+
 		return this.groupRepository.createOne({
 			creatorId: user.userId.toString(),
 			adminId: user.userId.toString(),

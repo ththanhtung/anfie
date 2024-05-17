@@ -6,7 +6,7 @@ import {
 } from "@/components";
 import { useSocketContext } from "@/configs";
 import { EConversationTypes, queryKeys } from "@/constants";
-import { useListInfiniteGroupConversations } from "@/hooks";
+import { useListInfiniteGroupConversations, useMutationGroup } from "@/hooks";
 import { _common } from "@/utils";
 import { useQueryClient } from "@tanstack/react-query";
 import { List } from "antd";
@@ -18,6 +18,8 @@ const GroupConversationPage = () => {
   const [valueChecked, setValueChecked] = React.useState<number>();
   const [selectedConversation, setSelectedConversation] =
     React.useState<TGroupConversation>();
+
+  const { onLeaveGroup } = useMutationGroup();
 
   const socket = useSocketContext();
   useEffect(() => {
@@ -81,9 +83,7 @@ const GroupConversationPage = () => {
         // Create a new page object with the updated data
         const conversations = latestPage?.data;
 
-        const index = conversations.findIndex(
-          (c) => c.id === payload.groupId
-        );
+        const index = conversations.findIndex((c) => c.id === payload.groupId);
 
         const messageConversation = conversations[index];
         messageConversation.lastMessage = payload;
@@ -154,6 +154,7 @@ const GroupConversationPage = () => {
           <MessagePanel
             group={selectedConversation}
             type={EConversationTypes.GROUP}
+            onLeave={onLeaveGroup}
           />
         </div>
       </LayoutConversation>

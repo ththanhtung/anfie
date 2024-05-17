@@ -33,3 +33,8 @@ type TCreateOrUpdateGroupParams = {
   form: TGroupForm;
   cb?: () => void;
 };
+
+type TLeaveGroupParams = {
+  groupId: string;
+  cb?: () => void;
+};

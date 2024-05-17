@@ -6,3 +6,4 @@ export * from "./confessions";
 export * from "./message-request";
 export * from "./notes";
 export * from "./friend-requests";
+export * from "./groups";

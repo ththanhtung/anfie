@@ -17,3 +17,4 @@ export * from "./user-profiles";
 export * from "./friend-requests";
 export * from "./group-conversations";
 export * from "./group-messages";
+export * from "./friends";
