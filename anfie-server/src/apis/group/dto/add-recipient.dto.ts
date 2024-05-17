@@ -5,5 +5,5 @@ export class AddRecipientDto {
 		each: true
 	})
 	@IsNotEmpty()
-	recipientId: string[];
+	recipientIds: string[];
 }

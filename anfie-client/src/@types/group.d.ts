@@ -28,9 +28,19 @@ type TGroupForm = {
   users: string[];
 };
 
+type TGroupAddReceipientsForm = {
+  recipientIds: string[];
+};
+
 type TCreateOrUpdateGroupParams = {
   id?: string;
   form: TGroupForm;
+  cb?: () => void;
+};
+
+type TAddRecipientsToGroupParams = {
+  groupId: string;
+  form: TGroupAddReceipientsForm;
   cb?: () => void;
 };
 

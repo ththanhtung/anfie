@@ -19,7 +19,7 @@ const GroupConversationPage = () => {
   const [selectedConversation, setSelectedConversation] =
     React.useState<TGroupConversation>();
 
-  const { onLeaveGroup } = useMutationGroup();
+  const { onLeaveGroup, onAddRecipientsToGroup } = useMutationGroup();
 
   const socket = useSocketContext();
   useEffect(() => {
@@ -155,6 +155,7 @@ const GroupConversationPage = () => {
             group={selectedConversation}
             type={EConversationTypes.GROUP}
             onLeave={onLeaveGroup}
+            onAddRecipients={onAddRecipientsToGroup}
           />
         </div>
       </LayoutConversation>

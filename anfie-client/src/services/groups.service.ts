@@ -37,6 +37,17 @@ export class GroupsServiceApis extends HttpClient {
     );
     return data;
   }
+
+  public async postAddRecipientsToGroup(
+    groupId: string,
+    form: TGroupAddReceipientsForm
+  ) {
+    const { data } = await this.instance.post(
+      `${ENDPOINT_APIS.groups.list}/${groupId}/recipient`,
+      form
+    );
+    return data;
+  }
 }
 
 export const groupsService = new GroupsServiceApis();

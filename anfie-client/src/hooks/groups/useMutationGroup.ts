@@ -25,6 +25,19 @@ export const useMutationGroup = () => {
       mutationFn: ({ groupId }) => groupsService.deleteLeaveGroup(groupId),
     });
 
+  const {
+    mutate: mutationAddRecipientsToGroup,
+    isPending: isAddRecipientsToGroupPending,
+  } = useMutation<
+    any,
+    TResponseError,
+    { groupId: string; form: TGroupAddReceipientsForm }
+  >({
+    mutationKey: [mutationKeys.MUTATION_ADD_RECIPIENTS_TO_GROUP],
+    mutationFn: ({ groupId, form }) =>
+      groupsService.postAddRecipientsToGroup(groupId, form),
+  });
+
   const onCreateOrUpdateGroup = useCallback(
     ({ id, form, cb }: TCreateOrUpdateGroupParams) => {
       if (id) {
@@ -86,10 +99,34 @@ export const useMutationGroup = () => {
     [mutationLeaveGroup, queryClient]
   );
 
+  const onAddRecipientsToGroup = useCallback(
+    ({ groupId, form, cb }: TAddRecipientsToGroupParams) => {
+      mutationAddRecipientsToGroup(
+        { groupId, form },
+        {
+          onError: (error) => {
+            message.error(error.message);
+          },
+          onSuccess: () => {
+            cb?.();
+            queryClient.invalidateQueries({
+              queryKey: [queryKeys.GET_LIST_INFINITE_GROUP_CONVERSATIONS],
+            });
+            message.success("Added recipients to group successfully");
+          },
+        }
+      );
+    },
+    [mutationAddRecipientsToGroup, queryClient]
+  );
+
   return {
+    onAddRecipientsToGroup,
     onLeaveGroup,
     onCreateOrUpdateGroup,
     isCreateGroupPending,
     isUpdateGroupPending,
+    isLeaveGroupPending,
+    isAddRecipientsToGroupPending,
   };
 };

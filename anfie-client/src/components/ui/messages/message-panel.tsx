@@ -12,7 +12,11 @@ import MessagePanelFooter from "./message-panel-footer";
 import MessageContainer from "./message-container";
 import { _common } from "@/utils";
 import { EConversationTypes } from "@/constants";
-import { CreateGroupModal, LeaveGroupModal } from "@/components";
+import {
+  AddRecipientsModal,
+  CreateGroupModal,
+  LeaveGroupModal,
+} from "@/components";
 
 type TProps = {
   type: EConversationTypes;
@@ -20,6 +24,7 @@ type TProps = {
   group?: TGroupConversation;
   onCreate?: (title: string, userIds: string[]) => void;
   onLeave?: (params: TLeaveGroupParams) => void;
+  onAddRecipients?: (params: TAddRecipientsToGroupParams) => void;
 };
 const MessagePanel = ({
   conversation,
@@ -27,11 +32,13 @@ const MessagePanel = ({
   type,
   onCreate,
   onLeave,
+  onAddRecipients,
 }: TProps) => {
   console.log({ conversation, group, type });
 
   const createGroupRef = useRef<TModalRef>(null);
   const leaveGroupRef = useRef<TModalRef>(null);
+  const addRecipientsRef = useRef<TModalRef>(null);
 
   const {
     messages: conversationMessages,
@@ -56,6 +63,10 @@ const MessagePanel = ({
 
   const onLeaveGroup = () => {
     leaveGroupRef.current?.showModal();
+  };
+
+  const onShowAddRecipientsModal = () => {
+    addRecipientsRef.current?.showModal();
   };
 
   const sentMessage = async ({ content }: TMessageForm) => {
@@ -88,6 +99,7 @@ const MessagePanel = ({
         <MessagePanelHeader
           onCreate={onCreateGroup}
           onLeave={onLeaveGroup}
+          onAddRecipients={onShowAddRecipientsModal}
           type={type}
           recipientName={
             type === EConversationTypes.PRIVATE
@@ -127,6 +139,11 @@ const MessagePanel = ({
         onOk={() => {
           onLeave?.({ groupId: group?.id?.toString() || "" });
         }}
+      />
+      <AddRecipientsModal
+        ref={addRecipientsRef}
+        onAdd={onAddRecipients}
+        groupId={group?.id?.toString() || ""}
       />
     </>
   );

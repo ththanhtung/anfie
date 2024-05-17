@@ -46,7 +46,7 @@ export class GroupService {
 			]);
 		}
 
-		return this.groupRepository.addRecipient(groupId, addRecipientDto.recipientId);
+		return this.groupRepository.addRecipient(groupId, addRecipientDto.recipientIds);
 	}
 
 	async leaveGroup(groupId: string, userId: string) {

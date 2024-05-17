@@ -12,6 +12,7 @@ type TProps = {
   recipientName: string;
   onCreate: () => void;
   onLeave: () => void;
+  onAddRecipients: () => void;
   type: EConversationTypes;
 };
 
@@ -20,6 +21,7 @@ const MessagePanelHeader = ({
   type,
   onCreate,
   onLeave,
+  onAddRecipients,
 }: TProps) => {
   const dropdownItems: MenuProps["items"] = useMemo(() => {
     return type === EConversationTypes.PRIVATE
@@ -101,6 +103,7 @@ const MessagePanelHeader = ({
                   // onArchive();
                   break;
                 case EDropdownAction.ADD_RECIPIENT:
+                  onAddRecipients();
                   break;
                 case EDropdownAction.LEAVE_GROUP:
                   onLeave();
