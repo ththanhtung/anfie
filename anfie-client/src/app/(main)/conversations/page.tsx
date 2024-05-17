@@ -8,12 +8,15 @@ import {
 import { useSocketContext } from "@/configs";
 import { EConversationTypes, queryKeys } from "@/constants";
 import { useListInfiniteConversations, useMutationGroup } from "@/hooks";
+import { userInfoStoreAtom } from "@/stores";
 import { _common } from "@/utils";
 import { useQueryClient } from "@tanstack/react-query";
 import { List } from "antd";
+import { useAtomValue } from "jotai";
 import React, { useCallback, useEffect, useRef } from "react";
 
 const ConversationPage = () => {
+  const currentUser = useAtomValue(userInfoStoreAtom);
   const { conversations } = useListInfiniteConversations();
   const queryClient = useQueryClient();
   const [valueChecked, setValueChecked] = React.useState<number>();
@@ -146,7 +149,11 @@ const ConversationPage = () => {
           dataSource={conversations}
           renderItem={(item: TConversation) => (
             <ConversationItem
-              username={_common.getUserFullName(item?.recipient)}
+              username={_common.getUserFullName(
+                currentUser.userId === item?.creatorId.toString()
+                  ? item?.recipient!
+                  : item?.creator!
+              )}
               lastMessage={item?.lastMessage}
               id={Math.round(Math.random() * 100000000)}
               value={valueChecked}
@@ -160,7 +167,6 @@ const ConversationPage = () => {
       </div>
     );
   }, [conversations, valueChecked]);
-
   return (
     <>
       <LayoutConversation renderLeft={renderLeft()}>

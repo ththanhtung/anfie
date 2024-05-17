@@ -17,6 +17,8 @@ import {
   CreateGroupModal,
   LeaveGroupModal,
 } from "@/components";
+import { useAtomValue } from "jotai";
+import { userInfoStoreAtom } from "@/stores";
 
 type TProps = {
   type: EConversationTypes;
@@ -35,6 +37,8 @@ const MessagePanel = ({
   onAddRecipients,
 }: TProps) => {
   console.log({ conversation, group, type });
+
+  const currentUser = useAtomValue(userInfoStoreAtom);
 
   const createGroupRef = useRef<TModalRef>(null);
   const leaveGroupRef = useRef<TModalRef>(null);
@@ -103,7 +107,11 @@ const MessagePanel = ({
           type={type}
           recipientName={
             type === EConversationTypes.PRIVATE
-              ? _common.getUserFullName(conversation?.recipient!)
+              ? _common.getUserFullName(
+                  currentUser.userId === conversation?.creatorId.toString()
+                    ? conversation?.recipient!
+                    : conversation?.creator!
+                )
               : group?.title || ""
           }
         />
@@ -133,7 +141,11 @@ const MessagePanel = ({
           <MessagePanelFooter sendMessage={sentMessage} />
         </div>
       </div>
-      <CreateGroupModal ref={createGroupRef} onCreate={onCreate} />
+      <CreateGroupModal
+        ref={createGroupRef}
+        onCreate={onCreate}
+        currentConversation={conversation}
+      />
       <LeaveGroupModal
         ref={leaveGroupRef}
         onOk={() => {

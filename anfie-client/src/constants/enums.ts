@@ -14,4 +14,5 @@ export enum EDropdownAction {
   LEAVE_GROUP = "leave-group",
   ADD_RECIPIENT = "add-recipient",
   REMOVE_RECIPIENT = "remove-recipient",
+  MEMBERS = "members",
 }

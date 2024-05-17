@@ -13,13 +13,13 @@ import React, {
 } from "react";
 type TProps = {
   onCreate?: (title: string, userIds: string[]) => void;
-  currentConversation?: TConversation;
+  currentConversation: TConversation;
 };
 type TModalRef = {
   showModal: () => void;
   closeModal: () => void;
 };
-const CreateGroupModal = (
+const GroupMembersModal = (
   { onCreate, currentConversation }: TProps,
   ref: Ref<TModalRef>
 ) => {
@@ -52,12 +52,19 @@ const CreateGroupModal = (
   } = useListInfiniteFriends();
 
   const onFinish = (value: any) => {
-    let currentRecipientId: string =
-      currentConversation?.recipientId === +currentUser.userId
-        ? currentConversation?.creatorId.toString()
-        : currentConversation?.recipientId.toString() || "";
-        
-    onCreate?.(value.title, [...(value?.friends ?? []), currentRecipientId]);
+    let currentRecipientId: string = currentConversation?.recipientId
+
+    console.log({ currentConversation });
+    
+
+    console.log({ currentRecipientId });
+
+    return;
+    onCreate?.(
+      value.title,
+      [...value?.friends, currentUser.userId.toString(), currentRecipientId] ??
+        []
+    );
   };
 
   return (
@@ -95,4 +102,4 @@ const CreateGroupModal = (
   );
 };
 
-export default memo(forwardRef(CreateGroupModal));
+export default memo(forwardRef(GroupMembersModal));

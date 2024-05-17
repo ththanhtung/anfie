@@ -17,7 +17,6 @@ const ConversationItem = ({
   value,
   onClick,
 }: TProps) => {
-
   return (
     <div
       className={`conversation-item hover: shadow-md hover:scale-[1.02] ${
@@ -26,18 +25,10 @@ const ConversationItem = ({
       onClick={onClick}
     >
       <Avatar icon={<UserOutlined />} size="large" />
-      <div className="item-body">
+      <div className="item-body ml-4">
         <h3 className="font-semibold capitalize">{username}</h3>
         <p className="text-slate-500">{lastMessage?.content}</p>
       </div>
-      <Button
-        className=""
-        type="primary"
-        shape="round"
-        // style={{ backgroundColor: "#87d068" }}
-        icon={<UserAddOutlined />}
-        size="large"
-      />
     </div>
   );
 };
