@@ -29,7 +29,7 @@ export class MessageService {
 		return { ...message, user, conversation };
 	}
 
-	async getMessagesFromConversation(conversationId: number, query: GetMessagesDto) {
+	async getMessagesFromConversation(conversationId: string, query: GetMessagesDto) {
 		return this.messageRepository.getMessagesFromConversation(conversationId, query);
 	}
 

@@ -7,7 +7,7 @@ export class PostMediaRepository extends Repository<PostMedia> {
 		super(repository.target, repository.manager, repository.queryRunner);
 	}
 
-	async createOne(postId: number) {
+	async createOne(postId: string) {
 		const postMedia = await this.create({ postId });
 		return this.save(postMedia);
 	}

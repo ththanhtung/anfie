@@ -17,7 +17,7 @@ export class MessageRequestsService {
 		const confession = await this.confessionService.findOneById(dto.confessionId);
 
 		const receiverId = confession.ownerId.toString();
-		const receiver = await this.userService.findOneById(+receiverId);
+		const receiver = await this.userService.findOneById(receiverId);
 		if (!receiver)
 			throw new NotFoundException([
 				{
@@ -62,7 +62,7 @@ export class MessageRequestsService {
 				}
 			]);
 
-		if (request.senderId === +userId)
+		if (request.senderId === userId)
 			throw new BadRequestException([
 				{
 					message: 'cannot sent friend request for yourself'
@@ -88,7 +88,7 @@ export class MessageRequestsService {
 				}
 			]);
 
-		if (request.receiverId === +senderId)
+		if (request.receiverId === senderId)
 			throw new BadRequestException([
 				{
 					message: 'cannot sent friend request for yourself'
@@ -115,7 +115,7 @@ export class MessageRequestsService {
 				}
 			]);
 
-		if (request.receiverId === +senderId)
+		if (request.receiverId === senderId)
 			throw new BadRequestException([
 				{
 					message: 'cannot sent friend request for yourself'

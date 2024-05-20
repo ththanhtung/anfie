@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { MessageMediaRepository } from './repositories';
 import { MediaUploaderService } from '../media-uploader/media-uploader.service';
-import { extname } from 'path';
 
 @Injectable()
 export class MessageMediaService {
@@ -9,7 +8,7 @@ export class MessageMediaService {
 		private readonly messageMediaRepository: MessageMediaRepository,
 		private readonly mediaUploaderService: MediaUploaderService
 	) {}
-	async create(messageId: number, medias: Express.Multer.File[]) {
+	async create(messageId: string, medias: Express.Multer.File[]) {
 		if (!medias || medias === undefined) {
 			return;
 		}

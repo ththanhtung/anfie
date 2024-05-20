@@ -9,7 +9,7 @@ type TCreateAdminParams = {
 };
 
 type TAdminJwt = {
-	adminId: number;
+	adminId: string;
 	username: string;
 	roles: string[];
 	iat: number;

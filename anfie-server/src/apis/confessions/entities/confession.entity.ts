@@ -9,7 +9,7 @@ export class Confession extends BaseEntity<Confession> {
 	@Column({
 		name: 'owner_id'
 	})
-	ownerId: number;
+	ownerId: string;
 
 	@Column({
 		name: 'confession_content'

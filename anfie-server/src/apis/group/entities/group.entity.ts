@@ -13,18 +13,18 @@ export class Group extends BaseEntity<Group> {
 	@Column({
 		name: 'group_creator_id'
 	})
-	creatorId: number;
+	creatorId: string;
 
 	@Column({
 		name: 'group_admin_id'
 	})
-	adminId: number;
+	adminId: string;
 
 	@Column({
 		name: 'group_last_message_id',
 		nullable: true
 	})
-	lastMessageId: number;
+	lastMessageId: string;
 
 	@OneToOne(() => Users, { createForeignKeyConstraints: false })
 	@JoinColumn({

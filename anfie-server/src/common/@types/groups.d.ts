@@ -23,18 +23,18 @@ type TRemoveGroupRecipientParams = {
 };
 
 type TUpdateLastGroupMessageParams = {
-	groupId: number;
-	messageId: number;
+	groupId: string;
+	messageId: string;
 };
 
 type TGroup = {
-	id: number;
+	id: string;
 	created_at: string;
 	updated_at: string;
 	title: string;
-	creatorId: number;
-	adminId: number;
-	lastMessageId: number;
+	creatorId: string;
+	adminId: string;
+	lastMessageId: string;
 	avatar: any;
 	lastMessageDate: any;
 	users: TUser[];

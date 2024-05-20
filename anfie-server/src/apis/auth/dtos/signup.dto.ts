@@ -1,5 +1,4 @@
-import { IsDateString, IsEnum, IsString } from 'class-validator';
-import { Genders } from 'src/common';
+import { IsDateString, IsString } from 'class-validator';
 
 export class SignupDto {
 	@IsString()
@@ -17,8 +16,8 @@ export class SignupDto {
 	@IsDateString()
 	dob: Date;
 
-	@IsEnum(Genders)
-	gender: Genders;
+	@IsString()
+	gender: string;
 
 	@IsString()
 	phone: string;

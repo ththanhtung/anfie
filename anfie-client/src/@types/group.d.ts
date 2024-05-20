@@ -1,16 +1,16 @@
 type TGroup = {
-  adminId: number;
-  creatorId: number;
+  adminId: string;
+  creatorId: string;
   title: string;
   users: TUserGroup[];
-  id: number;
+  id: string;
   created_at: string;
   updated_at: string;
   deleted_at: any;
 };
 
 type TUserGroup = {
-  id: number;
+  id: string;
   created_at: string;
   updated_at: string;
   email: string;

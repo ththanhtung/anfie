@@ -1,4 +1,4 @@
-import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { LoginDto } from '../dtos';
 import { UserService } from 'src/apis/user/services';
 import * as argon from 'argon2';

@@ -1,6 +1,6 @@
 type TNote = {
   userId: string;
-  id: number;
+  id: string;
   created_at: string;
   updated_at: string;
   deleted_at: any;

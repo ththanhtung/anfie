@@ -8,19 +8,19 @@ export class Comment extends BaseEntity<Comment> {
 	@Column({
 		name: 'post_id'
 	})
-	postId: number;
+	postId: string;
 
 	@Column({
 		name: 'user_id'
 	})
-	userId: number;
+	userId: string;
 
 	@Column({
 		name: 'comment_parent_id',
 		nullable: true,
 		unique: false
 	})
-	parentId: number;
+	parentId: string;
 
 	@Column({
 		name: 'comment_content'

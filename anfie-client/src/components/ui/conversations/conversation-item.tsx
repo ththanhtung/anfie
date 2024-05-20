@@ -5,8 +5,8 @@ type TProps = {
   avatar?: string;
   username: string;
   lastMessage: TMessage | TGroupMessage;
-  id: number;
-  value?: number;
+  id: string;
+  value?: string;
   onClick: () => void;
 };
 const ConversationItem = ({

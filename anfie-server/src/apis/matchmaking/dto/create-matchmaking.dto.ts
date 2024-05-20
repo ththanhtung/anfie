@@ -1,3 +1,3 @@
 export class CreateMatchmakingDto {
-	userIds: number[];
+	userIds: string[];
 }

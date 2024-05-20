@@ -15,5 +15,17 @@ class Common {
     }
     return `${user.firstName} ${user.lastName}`;
   };
+
+  findLabels(valueOrLabel: string, options: TOption[]): string[] {
+    const labels: string[] = [];
+
+    for (const option of options) {
+      if (option.value === valueOrLabel || option.label === valueOrLabel) {
+        labels.push(option.label);
+      }
+    }
+
+    return labels;
+  }
 }
 export const _common = new Common();

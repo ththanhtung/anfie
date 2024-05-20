@@ -7,10 +7,10 @@ type TPostParams = {
 
 type TPost = {
   content: string;
-  authorId: number;
+  authorId: string;
   totalLikes: number;
-  groupId: any;
-  id: number;
+  groupId: string;
+  id: string;
   created_at: string;
   updated_at: string;
 };

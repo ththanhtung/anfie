@@ -12,12 +12,12 @@ export class ConversationRepository extends Repository<Conversation> {
 
 	async createOne(createConversationDto: CreateConversationDto) {
 		const conversation = this.create();
-		conversation.creatorId = +createConversationDto.user1;
-		conversation.recipientId = +createConversationDto.user2;
+		conversation.creatorId = createConversationDto.user1;
+		conversation.recipientId = createConversationDto.user2;
 		return this.save(conversation);
 	}
 
-	async checkExist(userId: number, recipientId: number) {
+	async checkExist(userId: string, recipientId: string) {
 		const conversation = await this.findOne({
 			where: [
 				{
@@ -40,7 +40,7 @@ export class ConversationRepository extends Repository<Conversation> {
 		}
 	}
 
-	async findOneById(id: number) {
+	async findOneById(id: string) {
 		const conversation = await this.findOne({ where: { id: id } });
 		if (!conversation) {
 			throw new ConflictException([
@@ -53,7 +53,7 @@ export class ConversationRepository extends Repository<Conversation> {
 		return conversation;
 	}
 
-	async getConversations(userId: number, query: PaginationDto) {
+	async getConversations(userId: string, query: PaginationDto) {
 		return pagination(this, query, {
 			where: [
 				{
@@ -69,11 +69,11 @@ export class ConversationRepository extends Repository<Conversation> {
 		return this.update(conversationId, { lastMessageId: messageId });
 	}
 
-	async deleteOneById(id: number) {
+	async deleteOneById(id: string) {
 		return this.delete({ id: id });
 	}
 
-	async findOneByUserIds(creatorId: number, recipientId: number) {
+	async findOneByUserIds(creatorId: string, recipientId: string) {
 		const conversation = await this.findOne({
 			where: [
 				{

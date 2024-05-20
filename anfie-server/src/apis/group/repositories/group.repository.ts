@@ -20,8 +20,8 @@ export class GroupRepository extends Repository<Group> {
 		const { creatorId, title, users } = params;
 
 		const groupParams = {
-			adminId: +creatorId,
-			creatorId: +creatorId,
+			adminId: creatorId,
+			creatorId: creatorId,
 			title,
 			users
 		};
@@ -30,7 +30,7 @@ export class GroupRepository extends Repository<Group> {
 	}
 
 	async findOneById(id: string) {
-		const group = await this.findOne({ where: { id: +id }, relations: ['users'] });
+		const group = await this.findOne({ where: { id: id }, relations: ['users'] });
 		if (!group) {
 			throw new ConflictException([
 				{
@@ -67,7 +67,7 @@ export class GroupRepository extends Repository<Group> {
 	async isUserInGroup(groupId: string, userId: string) {
 		const group = await this.findOneById(groupId);
 
-		const inGroup = group.users.find((user) => user.id === +userId);
+		const inGroup = group.users.find((user) => user.id === userId);
 
 		if (inGroup) return true;
 		return false;
@@ -80,21 +80,21 @@ export class GroupRepository extends Repository<Group> {
 	async removeRecipient() {}
 
 	async findOneAndRemoveUserById(groupId: string, userId: string) {
-		const group = await this.findOne({ where: { id: +groupId }, relations: ['users'] });
-		if (group.adminId === +userId)
+		const group = await this.findOne({ where: { id: groupId }, relations: ['users'] });
+		if (group.adminId === userId)
 			throw new BadRequestException([
 				{
 					message: 'admin cannot leave the group'
 				}
 			]);
 
-		group.users = group.users.filter((user) => user.id !== +userId);
+		group.users = group.users.filter((user) => user.id !== userId);
 		return this.save(group);
 	}
 
 	async getMyGroups(userId: string, query: GetGroupsDto) {
 		return pagination(this, query, {
-			where: { users: { id: +userId } },
+			where: { users: { id: userId } },
 			relations: ['creator', 'admin', 'lastMessage', 'users']
 		});
 	}

@@ -23,7 +23,7 @@ export class PostRepository extends Repository<Post> {
 		});
 	}
 
-	async getPostsByUserIds(ids: number[], query: GetPostsDto) {
+	async getPostsByUserIds(ids: string[], query: GetPostsDto) {
 		return pagination(this, query, {
 			where: { author: { id: In(ids) } },
 			relations: ['author']
@@ -33,7 +33,7 @@ export class PostRepository extends Repository<Post> {
 	async findOneById(id: string) {
 		return this.findOne({
 			where: {
-				id: +id
+				id: id
 			}
 		});
 	}
@@ -41,7 +41,7 @@ export class PostRepository extends Repository<Post> {
 	async getAllAdmin(query: GetPostsAdminDto) {
 		const options = {};
 		if (query.userId) {
-			options['authorId'] = +query.userId;
+			options['authorId'] = query.userId;
 		}
 		return pagination(this, query, {
 			where: options
@@ -56,7 +56,7 @@ export class PostRepository extends Repository<Post> {
 
 	async getPostsByUserId(userId: string, query: GetPostsDto) {
 		return pagination(this, query, {
-			where: { authorId: +userId }
+			where: { authorId: userId }
 		});
 	}
 }

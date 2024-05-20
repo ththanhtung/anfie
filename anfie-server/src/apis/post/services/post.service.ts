@@ -12,7 +12,7 @@ export class PostService {
 		private readonly friendsService: FriendService,
 		private readonly postMediaService: PostMediaService
 	) {}
-	async create(authorId: number, createPostDto: CreatePostDto, medias: Express.Multer.File[]) {
+	async create(authorId: string, createPostDto: CreatePostDto, medias: Express.Multer.File[]) {
 		const post = await this.postRepository.createOne({ authorId, totalLikes: 0, ...createPostDto });
 		this.postMediaService.create(post.id, medias);
 		return post;

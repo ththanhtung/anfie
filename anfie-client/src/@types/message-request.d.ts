@@ -6,12 +6,12 @@ type TMessageRequestParams = {
 };
 
 type TMessageRequest = {
-  senderId: number;
-  receiverId: number;
-  confessionId: number;
+  senderId: string;
+  receiverId: string;
+  confessionId: string;
   content: string;
   confession: TConfession;
-  id: number;
+  id: string;
   created_at: string;
   updated_at: string;
   deleted_at: any;

@@ -55,7 +55,7 @@ export class AdminRepository extends Repository<Admin> {
 		return existingUser;
 	}
 
-	updateAccessToken(user_id: number, accessToken: string | undefined) {
+	updateAccessToken(user_id: string, accessToken: string | undefined) {
 		return this.update(
 			{ id: user_id },
 			{
@@ -82,7 +82,7 @@ export class AdminRepository extends Repository<Admin> {
 		return user;
 	}
 
-	async removeById(id: number) {
+	async removeById(id: string) {
 		const user_admin = await this.findOneOrFail({ where: { id } });
 
 		return this.softRemove(user_admin);

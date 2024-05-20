@@ -2,10 +2,10 @@ type TMessage = {
   content: string;
   userId: string;
   user: TUser;
-  conversationId: number;
+  conversationId: string;
   conversation: TConversation;
   groupId: null;
-  id: number;
+  id: string;
   created_at: string;
   updated_at: string;
   isSeen: boolean;

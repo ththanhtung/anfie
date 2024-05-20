@@ -20,13 +20,13 @@ export class GroupMessage extends BaseEntity<GroupMessage> {
 	@Column({
 		name: 'user_id'
 	})
-	userId: number;
+	userId: string;
 
 	@Column({
 		name: 'group_id',
 		nullable: true
 	})
-	groupId?: number;
+	groupId?: string;
 
 	@OneToMany(() => MessageMedia, (messageMedia) => messageMedia.message)
 	@JoinColumn()

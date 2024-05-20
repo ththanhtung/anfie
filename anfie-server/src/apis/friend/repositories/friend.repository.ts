@@ -13,14 +13,14 @@ export class FriendRepository extends Repository<Friend> {
 
 	async getFriends(id: string, query: GetFriendsDto) {
 		return pagination(this, query, {
-			where: [{ followee: { id: +id } }, { follower: { id: +id } }],
+			where: [{ followee: { id: id } }, { follower: { id: id } }],
 			relations: ['followee', 'follower']
 		});
 	}
 
 	async getFollowers(id: string) {
 		return this.find({
-			where: { followee: { id: +id } }
+			where: { followee: { id: id } }
 		});
 	}
 
@@ -28,12 +28,12 @@ export class FriendRepository extends Repository<Friend> {
 		return this.findOne({
 			where: [
 				{
-					followee: { id: +firstUserId },
-					follower: { id: +secondUserId }
+					followee: { id: firstUserId },
+					follower: { id: secondUserId }
 				},
 				{
-					followee: { id: +secondUserId },
-					follower: { id: +firstUserId }
+					followee: { id: secondUserId },
+					follower: { id: firstUserId }
 				}
 			]
 		});
@@ -42,7 +42,7 @@ export class FriendRepository extends Repository<Friend> {
 	async findFriendById(id: string) {
 		return this.findOne({
 			where: {
-				id: +id
+				id: id
 			},
 			relations: ['followee', 'follower']
 		});
@@ -50,12 +50,12 @@ export class FriendRepository extends Repository<Friend> {
 
 	async deleteFriend(id: string) {
 		return this.delete({
-			followee: { id: +id }
+			followee: { id: id }
 		});
 	}
 
 	async createOne(followerId: string, followeeId: string) {
-		return this.save({ followerId: +followerId, followeeId: +followeeId });
+		return this.save({ followerId: followerId, followeeId: followeeId });
 	}
 
 	async areAllFriends(userIds: string[]) {

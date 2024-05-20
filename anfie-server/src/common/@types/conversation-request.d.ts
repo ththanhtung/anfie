@@ -1,12 +1,12 @@
 type TConversationRequestStatus = 'pending' | 'accepted' | 'rejected';
 
 type TConversationRequestResponse = {
-	id: number;
+	id: string;
 	created_at: string;
 	updated_at: string;
 	deleted_at: any;
-	firstUserId: number;
-	secondUserId: number;
+	firstUserId: string;
+	secondUserId: string;
 	status: string;
 	matchedReason: string;
 	expiratedAt: string;

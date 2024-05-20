@@ -20,11 +20,11 @@ export class ConversationController {
 
 	@Get(':id')
 	findOne(@Param('id') id: string) {
-		return this.conversationService.findOneById(+id);
+		return this.conversationService.findOneById(id);
 	}
 
 	@Delete(':id')
 	deleteOneById(@Param('id') id: string) {
-		return this.conversationService.deleteOneById(+id);
+		return this.conversationService.deleteOneById(id);
 	}
 }

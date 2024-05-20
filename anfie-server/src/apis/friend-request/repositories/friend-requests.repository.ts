@@ -17,11 +17,11 @@ export class FriendRequestRepository extends Repository<FriendRequest> {
 		return pagination(this, query, {
 			where: [
 				{
-					sender: { id: +id },
+					sender: { id: id },
 					status
 				},
 				{
-					receiver: { id: +id },
+					receiver: { id: id },
 					status
 				}
 			],
@@ -32,7 +32,7 @@ export class FriendRequestRepository extends Repository<FriendRequest> {
 	async findOneById(id: string) {
 		return this.findOne({
 			where: {
-				id: +id
+				id: id
 			}
 		});
 	}
@@ -40,10 +40,10 @@ export class FriendRequestRepository extends Repository<FriendRequest> {
 	async findOneAndDelete(id: string) {
 		const request = await this.findOne({
 			where: {
-				id: +id
+				id: id
 			}
 		});
-		this.delete({ id: +id });
+		this.delete({ id: id });
 		return request;
 	}
 
@@ -51,13 +51,13 @@ export class FriendRequestRepository extends Repository<FriendRequest> {
 		return this.findOne({
 			where: [
 				{
-					sender: { id: +firstUserId },
-					receiver: { id: +secondUserId },
+					sender: { id: firstUserId },
+					receiver: { id: secondUserId },
 					status: 'pending'
 				},
 				{
-					sender: { id: +secondUserId },
-					receiver: { id: +firstUserId },
+					sender: { id: secondUserId },
+					receiver: { id: firstUserId },
 					status: 'pending'
 				}
 			]
@@ -72,15 +72,15 @@ export class FriendRequestRepository extends Repository<FriendRequest> {
 	}
 
 	async accepted(id: string) {
-		return this.save({ id: +id, status: 'accepted' });
+		return this.save({ id: id, status: 'accepted' });
 	}
 
 	async reject(id: string) {
-		return this.save({ id: +id, status: 'rejected' });
+		return this.save({ id: id, status: 'rejected' });
 	}
 
 	async getFriendRequestsAdmin(query: GetFriendRequestsAdminDto) {
-		const userId = query.userId ? +query.userId : null;
+		const userId = query.userId ? query.userId : null;
 
 		if (!userId) return pagination(this, query);
 

@@ -6,14 +6,14 @@ type TFriendParams = {
 };
 
 type TuserFriend = {
-  id: number;
+  id: string;
   created_at: string;
   updated_at: string;
   email: string;
-  firstName: any;
-  lastName: any;
+  firstName: string;
+  lastName: string;
   dob: any;
-  profilePictureUrl: any;
+  profilePictureUrl: string;
 };
 
 type TFriendForm = {

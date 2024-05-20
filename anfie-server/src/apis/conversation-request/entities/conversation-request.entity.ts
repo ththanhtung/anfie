@@ -7,12 +7,12 @@ export class ConversationRequest extends BaseEntity<ConversationRequest> {
 	@Column({
 		name: 'first_user_id'
 	})
-	firstUserId: number;
+	firstUserId: string;
 
 	@Column({
 		name: 'second_user_id'
 	})
-	secondUserId: number;
+	secondUserId: string;
 
 	@Column({
 		default: 'pending'

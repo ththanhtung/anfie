@@ -11,7 +11,7 @@ export class PostMedia extends BaseEntity<PostMedia> {
 	@Column({
 		name: 'post_id'
 	})
-	postId: number;
+	postId: string;
 
 	@ManyToOne(() => Post, (post) => post.medias)
 	@JoinColumn({

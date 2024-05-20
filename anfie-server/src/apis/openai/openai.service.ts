@@ -20,17 +20,17 @@ export class OpenAIService {
 			.map((profile) => {
 				const preferences = profile?.preferences?.map((preference) => preference?.name).join();
 				const locations = profile?.locations?.map((location) => location?.name).join();
-				const age = calculateAge(profile?.dob);
+				const age = calculateAge(profile.user.dob);
 				let ageRange = `${profile?.maxAge} to ${profile?.minAge}`;
 				const preferGender = profile.preferGenders.map((gender) => gender.name).join();
 
-				let prompt = `Name: ${profile?.firstName} ${profile?.lastName}, ID: ${profile?.user?.id}, `;
+				let prompt = `Name: ${profile?.user.firstName} ${profile?.user.lastName}, ID: ${profile?.user?.id}, `;
 
 				if (profile.gender) {
 					prompt += `Gender: ${profile?.gender}, `;
 				}
 
-				if (profile.dob) {
+				if (profile.user.dob) {
 					prompt += `Age: ${age}, `;
 				}
 

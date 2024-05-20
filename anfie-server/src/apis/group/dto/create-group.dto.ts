@@ -15,7 +15,7 @@ export class CreateGroupAdminDto {
 	users: string[];
 
 	@IsString()
-	title: string;
+	title: string; 
 
 	@IsString()
 	creatorId: string;

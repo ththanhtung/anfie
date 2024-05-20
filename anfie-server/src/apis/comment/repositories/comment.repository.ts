@@ -14,7 +14,7 @@ export class CommentRepository extends Repository<Comment> {
 	async findOneById(id: string) {
 		return this.findOne({
 			where: {
-				id: +id
+				id: id
 			}
 		});
 	}
@@ -22,7 +22,7 @@ export class CommentRepository extends Repository<Comment> {
 	async increaseCommentRightBy2(postId: string, rightValue: number) {
 		return this.update(
 			{
-				postId: +postId,
+				postId: postId,
 				commentRight: MoreThanOrEqual(rightValue)
 			},
 			{
@@ -33,7 +33,7 @@ export class CommentRepository extends Repository<Comment> {
 	async increaseCommentLeftBy2(postId: string, rightValue: number) {
 		return this.update(
 			{
-				postId: +postId,
+				postId: postId,
 				commentLeft: MoreThan(rightValue)
 			},
 			{
@@ -45,7 +45,7 @@ export class CommentRepository extends Repository<Comment> {
 	async findMaxRightValue(postId: string) {
 		return this.findOne({
 			where: {
-				postId: +postId
+				postId: postId
 			},
 			select: ['commentRight'],
 			order: {
@@ -65,11 +65,11 @@ export class CommentRepository extends Repository<Comment> {
 		console.log({ content, parentId, left, right, userId, postId });
 		return this.save({
 			content,
-			parentId: parentId ? +parentId : null,
+			parentId: parentId ? parentId : null,
 			commentLeft: left,
 			commentRight: right,
-			userId: +userId,
-			postId: +postId
+			userId: userId,
+			postId: postId
 		});
 	}
 
@@ -79,7 +79,7 @@ export class CommentRepository extends Repository<Comment> {
 			if (!parent) throw new NotFoundException([{ message: 'parent comment not found' }]);
 			return pagination(this, query, {
 				where: {
-					postId: +query.postId,
+					postId: query.postId,
 					commentLeft: MoreThan(parent.commentLeft),
 					commentRight: LessThanOrEqual(parent.commentRight)
 				},
@@ -90,7 +90,7 @@ export class CommentRepository extends Repository<Comment> {
 		}
 		return pagination(this, query, {
 			where: {
-				postId: +query.postId
+				postId: query.postId
 			},
 			order: {
 				commentLeft: 'ASC'
@@ -104,7 +104,7 @@ export class CommentRepository extends Repository<Comment> {
 
 	async deleteBetween(postId: string, leftValue: number, rightValue: number) {
 		return this.delete({
-			postId: +postId,
+			postId: postId,
 			commentLeft: Between(leftValue, rightValue)
 		});
 	}
@@ -112,7 +112,7 @@ export class CommentRepository extends Repository<Comment> {
 	async decreaseCommentLeft(postId: string, leftValue: number, amount: number) {
 		return this.update(
 			{
-				postId: +postId,
+				postId: postId,
 				commentLeft: MoreThanOrEqual(leftValue)
 			},
 			{
@@ -124,7 +124,7 @@ export class CommentRepository extends Repository<Comment> {
 	async decreaseCommentRight(postId: string, rightValue: number, amount: number) {
 		return this.update(
 			{
-				postId: +postId,
+				postId: postId,
 				commentRight: MoreThanOrEqual(rightValue)
 			},
 			{

@@ -15,35 +15,35 @@ export class ReportTicket extends BaseEntity<ReportTicket> {
 		name: 'post_id',
 		nullable: true
 	})
-	postId: number;
+	postId: string;
 
 	@Column({
 		name: 'confession_id',
 		nullable: true
 	})
-	confessionId: number;
+	confessionId: string;
 
 	@Column({
 		name: 'comment_id',
 		nullable: true
 	})
-	commentId: number;
+	commentId: string;
 
 	@Column({
 		name: 'mod_id',
 		nullable: true
 	})
-	modId: number;
+	modId: string;
 
 	@Column({
 		name: 'reporter_id'
 	})
-	reporterId: number;
+	reporterId: string;
 
 	@Column({
 		name: 'reportee_id'
 	})
-	reporteeId: number;
+	reporteeId: string;
 
 	@Column({
 		name: 'report_content'

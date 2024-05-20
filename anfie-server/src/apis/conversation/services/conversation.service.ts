@@ -6,11 +6,11 @@ import { FIFTEEN_MINUTES } from 'src/common';
 @Injectable()
 export class ConversationService {
 	constructor(private readonly conversationRepository: ConversationRepository) {}
-	async findOneByUserIds(creatorId: number, recipientId: number) {
+	async findOneByUserIds(creatorId: string, recipientId: string) {
 		return this.conversationRepository.findOneByUserIds(creatorId, recipientId);
 	}
 
-	async findAll(userId: number, query: GetConversationsDto) {
+	async findAll(userId: string, query: GetConversationsDto) {
 		return this.conversationRepository.getConversations(userId, query);
 	}
 
@@ -18,11 +18,11 @@ export class ConversationService {
 		return this.conversationRepository.updateLastMessage({ conversationId, messageId });
 	}
 
-	findOneById(id: number) {
+	findOneById(id: string) {
 		return this.conversationRepository.findOneById(id);
 	}
 
-	async deleteOneById(id: number) {
+	async deleteOneById(id: string) {
 		const conversation = await this.conversationRepository.findOneById(id);
 		const conversationDuration = Date.now() - conversation.created_at.getTime();
 

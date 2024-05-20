@@ -7,10 +7,10 @@ type TConfessionParams = {
 };
 
 type TConfession = {
-  id: number;
+  id: string;
   created_at: string;
   updated_at: string;
-  ownerId: number;
+  ownerId: string;
   content: string;
   tags: TTag[];
 };

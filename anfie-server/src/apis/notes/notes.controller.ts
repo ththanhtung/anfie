@@ -21,7 +21,7 @@ export class NotesController {
 
 	@Get(':id')
 	findOne(@Param('id') id: string) {
-		return this.notesService.findOne(+id);
+		return this.notesService.findOne(id);
 	}
 
 	@Patch(':id')
@@ -31,6 +31,6 @@ export class NotesController {
 
 	@Delete(':id/delete')
 	remove(@Param('id') id: string) {
-		return this.notesService.remove(+id);
+		return this.notesService.remove(id);
 	}
 }

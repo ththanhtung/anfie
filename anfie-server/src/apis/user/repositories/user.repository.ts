@@ -36,7 +36,7 @@ export class UserRepository extends Repository<Users> {
 		return user;
 	}
 
-	async findOneById(id: number) {
+	async findOneById(id: string) {
 		const user = await this.findOne({ where: { id: id } });
 		if (!user) {
 			throw new ConflictException([
@@ -55,7 +55,7 @@ export class UserRepository extends Repository<Users> {
 		return this.save(user);
 	}
 
-	async updateRefreshToken(userId: number, refreshToken: string | null) {
+	async updateRefreshToken(userId: string, refreshToken: string | null) {
 		const user = await this.findOne({ where: { id: userId } });
 		user.refreshToken = refreshToken;
 		return this.save(user);
@@ -73,7 +73,7 @@ export class UserRepository extends Repository<Users> {
 		}
 		return user;
 	}
-	async updateAccessToken(userId: number, accessToken: string | null) {
+	async updateAccessToken(userId: string, accessToken: string | null) {
 		const user = await this.findOne({ where: { id: userId } });
 		user.accessToken = accessToken;
 		return this.save(user);
@@ -93,7 +93,24 @@ export class UserRepository extends Repository<Users> {
 	}
 
 	async findUsersByIds(ids: string[]) {
-		const idsInt = ids.map((id) => +id);
-		return this.find({ where: { id: In(idsInt) } });
+		return this.find({ where: { id: In(ids) } });
+	}
+
+	async updateUserInfo(user: { id: string; firstName?: string; lastName?: string; dob?: Date; profilePictureUrl?: string }) {
+		await this.update(
+			{ id: user.id },
+			{
+				firstName: user.firstName,
+				lastName: user.lastName,
+				dob: user.dob,
+				profilePictureUrl: user.profilePictureUrl
+			}
+		);
+
+		return this.findOne({
+			where: {
+				id: user.id
+			}
+		});
 	}
 }

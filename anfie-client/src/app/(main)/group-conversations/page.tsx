@@ -15,7 +15,7 @@ import React, { useCallback, useEffect } from "react";
 const GroupConversationPage = () => {
   const { groupConversations } = useListInfiniteGroupConversations();
   const queryClient = useQueryClient();
-  const [valueChecked, setValueChecked] = React.useState<number>();
+  const [valueChecked, setValueChecked] = React.useState<string>();
   const [selectedConversation, setSelectedConversation] =
     React.useState<TGroupConversation>();
 
@@ -83,7 +83,9 @@ const GroupConversationPage = () => {
         // Create a new page object with the updated data
         const conversations = latestPage?.data;
 
-        const index = conversations.findIndex((c) => c.id === payload.groupId);
+        const index = conversations.findIndex(
+          (c: TGroupConversation) => c.id === payload.groupId
+        );
 
         const messageConversation = conversations[index];
         messageConversation.lastMessage = payload;

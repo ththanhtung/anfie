@@ -1,7 +1,7 @@
 type TCreateMessageParams = {
-	userId: number;
-	conversationId?: number;
-	groupId?: number;
+	userId: string;
+	conversationId?: string;
+	groupId?: string;
 	content: string;
 	medias?: Express.Multer.File[];
 };
@@ -12,10 +12,10 @@ type TUpdateMessageMediaParams = {
 };
 
 type TMessage = {
-	id: number;
+	id: string;
 	content: string;
-	userId: number;
-	conversationId: number;
+	userId: string;
+	conversationId: string;
 	groupId: any;
 	created_at: string;
 	updated_at: string;
@@ -26,11 +26,11 @@ type TMessage = {
 
 type TCreateMessageResponse = {
 	content: string;
-	userId: number;
-	conversationId: number;
+	userId: string;
+	conversationId: string;
 	conversation: TCreateConversationResponse;
-	groupId: any;
-	id: number;
+	groupId: string;
+	id: string;
 	created_at: string;
 	updated_at: string;
 	deleted_at: any;

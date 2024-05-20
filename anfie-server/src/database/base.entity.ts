@@ -6,8 +6,8 @@ export class BaseEntity<T> {
 		Object.assign(this, entity);
 	}
 
-	@PrimaryGeneratedColumn()
-	id: number;
+	@PrimaryGeneratedColumn('uuid')
+	id: string;
 
 	@CreateDateColumn({
 		type: 'timestamp with time zone'

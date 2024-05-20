@@ -57,7 +57,7 @@ export class EventGateway {
 
 	@Cron(CronExpression.EVERY_5_SECONDS)
 	async matchMaking() {
-		const usersFindingNewFriendIds: number[] = Array.from(this.sessionManager.getSockets().entries())
+		const usersFindingNewFriendIds: string[] = Array.from(this.sessionManager.getSockets().entries())
 			.filter(([_, socket]) => socket.isFindingNewFriend)
 			.map(([userId]) => userId);
 

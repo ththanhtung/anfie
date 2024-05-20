@@ -9,27 +9,6 @@ import { Exclude } from 'class-transformer';
 
 @Entity()
 export class UserProfiles extends BaseEntity<UserProfiles> {
-	@Exclude()
-	@Column({
-		name: 'user_first_name',
-		nullable: true
-	})
-	firstName: string;
-
-	@Exclude()
-	@Column({
-		name: 'user_last_name',
-		nullable: true
-	})
-	lastName: string;
-
-	@Exclude()
-	@Column({
-		name: 'user_dob',
-		nullable: true
-	})
-	dob: Date;
-
 	@Column({
 		name: 'user_gender'
 	})
@@ -70,13 +49,6 @@ export class UserProfiles extends BaseEntity<UserProfiles> {
 		default: 0
 	})
 	reportedCount: number;
-
-	@Exclude()
-	@Column({
-		name: 'user_profile_picture_url',
-		nullable: true
-	})
-	profilePictureUrl: string;
 
 	@Column({
 		name: 'user_bio',

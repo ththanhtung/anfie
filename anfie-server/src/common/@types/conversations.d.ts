@@ -1,26 +1,26 @@
 type TUpdateLastMessageParams = {
-	conversationId: number;
-	messageId: number;
+	conversationId: string;
+	messageId: string;
 };
 
 type TCreateConversationResponse = {
-	id: number;
+	id: string;
 	created_at: string;
 	updated_at: string;
-	creatorId: number;
-	recipientId: number;
-	lastMessageId: number;
+	creatorId: string;
+	recipientId: string;
+	lastMessageId: string;
 	lastMessage: TCreateMessageResponse;
 	lastMessageDate: Date;
 };
 
 type TConversation = {
-	id: number;
+	id: string;
 	created_at: string;
 	updated_at: string;
-	creatorId: number;
-	recipientId: number;
-	lastMessageId: number;
+	creatorId: string;
+	recipientId: string;
+	lastMessageId: string;
 	lastMessage: TCreateMessageResponse;
 	lastMessageDate: Date;
 };

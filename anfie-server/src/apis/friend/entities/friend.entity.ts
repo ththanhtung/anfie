@@ -7,12 +7,12 @@ export class Friend extends BaseEntity<Friend> {
 	@Column({
 		name: 'follower_id'
 	})
-	followerId: number;
+	followerId: string;
 
 	@Column({
 		name: 'followee_id'
 	})
-	followeeId: number;
+	followeeId: string;
 
 	@ManyToOne(() => Users, { createForeignKeyConstraints: false })
 	@JoinColumn({

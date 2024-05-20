@@ -10,10 +10,10 @@ type TUpdateUserProfileForm = {
   user: TUpdateUserUserProfile;
   gender?: string;
   phone?: string;
-  maxAge?: any;
-  minAge?: any;
+  maxAge?: number;
+  minAge?: number;
   isBanned?: boolean;
-  profilePictureUrl?: any;
+  profilePictureUrl?: string;
   bio?: string;
   locations?: string[];
   preferences?: string[];

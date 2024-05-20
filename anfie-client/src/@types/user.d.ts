@@ -1,5 +1,5 @@
 type TUser = {
-  id: number;
+  id: string;
   created_at: string;
   updated_at: string;
   deleted_at?: any;
@@ -13,7 +13,7 @@ type TUser = {
 };
 
 type TUserProfile = {
-  id: number;
+  id: string;
   created_at: string;
   updated_at: string;
   deleted_at: any;
@@ -27,5 +27,5 @@ type TUserProfile = {
   profilePictureUrl: any;
   bio: string;
   strangerConversationSlots: number;
-  userId: number;
+  userId: string;
 };

@@ -1,14 +1,19 @@
-import { Body, Controller, HttpCode, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, Patch, UseGuards } from '@nestjs/common';
 import { UserService } from './services';
-import { CreateUserDto } from './dto';
+import { AtGuard, GetCurrentUser } from 'src/common';
+import { UpdateUserProfileDto } from './dto';
 
 @Controller('user')
+@UseGuards(AtGuard)
 export class UserController {
 	constructor(private readonly userService: UserService) {}
 
-	@Post('/create')
-	@HttpCode(201)
-	async createUser(@Body() dto: CreateUserDto) {
-		return this.userService.createOne(dto);
+	@Patch('me')
+	@HttpCode(200)
+	async updateUserProfile(@GetCurrentUser('userId') userId: string, @Body() dto: UpdateUserProfileDto) {
+		console.log({ userId });
+
+		// return;
+		return this.userService.updateOne(userId, dto);
 	}
 }

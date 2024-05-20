@@ -62,11 +62,11 @@ export class AdminService {
 		};
 	}
 
-	async logout(user_id: number) {
+	async logout(user_id: string) {
 		this.adminRepository.updateAccessToken(user_id, undefined);
 	}
 
-	async remove(user_id: number) {
+	async remove(user_id: string) {
 		return this.adminRepository.removeById(user_id);
 	}
 
@@ -91,7 +91,7 @@ export class AdminService {
 		return { accessToken, refreshToken };
 	}
 
-	async getDetail(id: number) {
+	async getDetail(id: string) {
 		return this.adminRepository.findOneOrFail({ where: { id } });
 	}
 }

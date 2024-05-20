@@ -9,19 +9,19 @@ export class Conversation extends BaseEntity<Conversation> {
 	@Column({
 		name: 'conversation_creator_id'
 	})
-	creatorId: number;
+	creatorId: string;
 
 	@Column({
 		name: 'conversation_recipient_id',
 		unique: false
 	})
-	recipientId: number;
+	recipientId: string;
 
 	@Column({
 		name: 'conversation_last_message_id',
 		nullable: true
 	})
-	lastMessageId: number;
+	lastMessageId: string;
 
 	@OneToMany(() => Message, (message) => message.conversation, {
 		nullable: true

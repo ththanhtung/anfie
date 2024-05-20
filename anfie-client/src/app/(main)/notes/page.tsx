@@ -35,7 +35,7 @@ const NotePage = () => {
         />
       </div>
     );
-  }, [notes, onCreateOrUpdateNote]);
+  }, [handleAddNote, notes, onCreateOrUpdateNote]);
 
   const NoteDoneItems = (
     <div className="text-center p-8">

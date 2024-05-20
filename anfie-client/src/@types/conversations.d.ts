@@ -6,11 +6,11 @@ type TConversationParams = {
 };
 
 type TConversation = {
-  id: number;
+  id: string;
   created_at: string;
   updated_at: string;
-  creatorId: number;
-  recipientId: number;
+  creatorId: string;
+  recipientId: string;
   lastMessageDate: any;
   creator: TUser;
   recipient: TUser;

@@ -28,7 +28,7 @@ export class ConversationRequestService {
 	}
 
 	async createOne(firstUserId: string, secondUserId: string, matchedReason: string) {
-		const firstUser = await this.userService.findOneById(+firstUserId);
+		const firstUser = await this.userService.findOneById(firstUserId);
 		if (!firstUser)
 			throw new NotFoundException([
 				{
@@ -36,7 +36,7 @@ export class ConversationRequestService {
 				}
 			]);
 
-		const secondUser = await this.userService.findOneById(+secondUserId);
+		const secondUser = await this.userService.findOneById(secondUserId);
 		if (!secondUser)
 			throw new NotFoundException([
 				{
@@ -100,12 +100,12 @@ export class ConversationRequestService {
 		}
 
 		const { firstUserId, secondUserId } = request;
-		if (firstUserId === +userId) {
+		if (firstUserId === userId) {
 			request = await this.conversationRequestRepository.firstUserAccepted(requestId);
 			if (request.isSecondUserAccepted) {
 				this.conversationRequestRepository.accepted(request.id.toString());
 			}
-		} else if (secondUserId === +userId) {
+		} else if (secondUserId === userId) {
 			request = await this.conversationRequestRepository.secondUserAccepted(requestId);
 			if (request.isFirstUserAccepted) {
 				this.conversationRequestRepository.accepted(request.id.toString());
@@ -144,7 +144,7 @@ export class ConversationRequestService {
 				}
 			]);
 
-		if (request.firstUserId !== +userId && request.secondUserId !== +userId)
+		if (request.firstUserId !== userId && request.secondUserId !== userId)
 			throw new BadRequestException([
 				{
 					message: 'request not belong to user'
@@ -171,7 +171,7 @@ export class ConversationRequestService {
 			]);
 		}
 
-		if (request.firstUserId !== +userId || request.secondUserId !== +userId)
+		if (request.firstUserId !== userId || request.secondUserId !== userId)
 			throw new BadRequestException([
 				{
 					message: 'request not belong to user'

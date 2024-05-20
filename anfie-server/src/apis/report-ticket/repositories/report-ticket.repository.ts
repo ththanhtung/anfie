@@ -12,12 +12,12 @@ export class ReportTicketRepository extends Repository<ReportTicket> {
 
 	async createOne(params: TCreateReportTicketParams) {
 		return this.save({
-			postId: params.postId ? +params.postId : null,
-			confessionId: params.confessionId ? +params.confessionId : null,
-			commentId: params.commentId ? +params.commentId : null,
+			postId: params.postId ? params.postId : null,
+			confessionId: params.confessionId ? params.confessionId : null,
+			commentId: params.commentId ? params.commentId : null,
 			messages: params.messages,
-			reporterId: params.reporterId ? +params.reporterId : null,
-			reporteeId: params.reporteeId ? +params.reporteeId : null,
+			reporterId: params.reporterId ? params.reporterId : null,
+			reporteeId: params.reporteeId ? params.reporteeId : null,
 			content: params.content,
 			type: params.type
 		});
@@ -41,7 +41,7 @@ export class ReportTicketRepository extends Repository<ReportTicket> {
 
 		return pagination(this, query, {
 			where: {
-				reporter: { id: +userId },
+				reporter: { id: userId },
 				...options
 			},
 			relations: ['mod', 'reporter', 'reportee']
@@ -51,7 +51,7 @@ export class ReportTicketRepository extends Repository<ReportTicket> {
 	async findOneById(id: string) {
 		return this.findOne({
 			where: {
-				id: +id
+				id: id
 			}
 		});
 	}
@@ -59,10 +59,10 @@ export class ReportTicketRepository extends Repository<ReportTicket> {
 	async findOneAndDelete(id: string) {
 		const request = await this.findOne({
 			where: {
-				id: +id
+				id: id
 			}
 		});
-		this.delete({ id: +id });
+		this.delete({ id: id });
 		return request;
 	}
 
@@ -70,13 +70,13 @@ export class ReportTicketRepository extends Repository<ReportTicket> {
 		return this.findOne({
 			where: [
 				{
-					reporter: { id: +firstUserId },
-					reportee: { id: +secondUserId },
+					reporter: { id: firstUserId },
+					reportee: { id: secondUserId },
 					status: 'pending'
 				},
 				{
-					reporter: { id: +secondUserId },
-					reportee: { id: +firstUserId },
+					reporter: { id: secondUserId },
+					reportee: { id: firstUserId },
 					status: 'pending'
 				}
 			]
@@ -84,11 +84,11 @@ export class ReportTicketRepository extends Repository<ReportTicket> {
 	}
 
 	async accepted(id: string, modId: string) {
-		return this.save({ id: +id, status: 'accepted', modId: +modId });
+		return this.save({ id: id, status: 'accepted', modId: modId });
 	}
 
 	async reject(id: string, modId: string) {
-		return this.save({ id: +id, status: 'rejected', modId: +modId });
+		return this.save({ id: id, status: 'rejected', modId: modId });
 	}
 
 	async getReportTicketsAdmin(query: GetReportTicketsAdminDto) {

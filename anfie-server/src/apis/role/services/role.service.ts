@@ -20,7 +20,7 @@ export class RoleService {
 		return this.roleRepository.getAll(query);
 	}
 
-	async getDetailById(id: number) {
+	async getDetailById(id: string) {
 		return this.roleRepository.findOneOrFail({ where: { id } });
 	}
 
@@ -28,7 +28,7 @@ export class RoleService {
 		return this.roleRepository.findOneOrFail({ where: { name } });
 	}
 
-	async update(id: number, updateRoleDto: UpdateRoleDto) {
+	async update(id: string, updateRoleDto: UpdateRoleDto) {
 		const { name, permissions } = updateRoleDto;
 
 		const role = await this.getDetailById(id);
@@ -39,7 +39,7 @@ export class RoleService {
 		return this.roleRepository.save(role);
 	}
 
-	async remove(id: number) {
+	async remove(id: string) {
 		const role = await this.getDetailById(id);
 		return this.roleRepository.softRemove(role);
 	}

@@ -54,16 +54,16 @@ export class GroupService {
 	}
 
 	async removeRecipient(groupId: string, userId: string, removeUserId: string) {
-		await this.userService.findOneById(+removeUserId);
+		await this.userService.findOneById(removeUserId);
 		const group = await this.groupRepository.findOneById(groupId);
-		if (group.adminId !== +userId)
+		if (group.adminId !== userId)
 			throw new BadRequestException([
 				{
 					message: 'only admin can remove other user'
 				}
 			]);
 
-		if (group.adminId === +removeUserId)
+		if (group.adminId === removeUserId)
 			throw new BadRequestException([
 				{
 					message: 'you cannot remove yourself as an admin'
@@ -78,7 +78,7 @@ export class GroupService {
 	}
 
 	async findOneById(id: string) {
-		return this.groupRepository.findOne({ where: { id: +id }, relations: ['users'] });
+		return this.groupRepository.findOne({ where: { id: id }, relations: ['users'] });
 	}
 
 	async updateLastGroupMessage({ groupId, messageId }: TUpdateLastGroupMessageParams) {

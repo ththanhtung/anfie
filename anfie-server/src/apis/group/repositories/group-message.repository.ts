@@ -25,7 +25,7 @@ export class GroupMessageRepository extends Repository<GroupMessage> {
 		return newMessage;
 	}
 
-	async getGroupMessagesFromGroupConversation(groupId: number, query: GetGroupMessagesDto) {
+	async getGroupMessagesFromGroupConversation(groupId: string, query: GetGroupMessagesDto) {
 		return pagination(this, query, {
 			where: {
 				groupId: groupId

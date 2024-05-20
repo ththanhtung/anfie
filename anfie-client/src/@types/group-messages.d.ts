@@ -2,9 +2,9 @@ type TGroupMessage = {
   content: string;
   userId: string;
   user: TUser;
-  groupId: number;
+  groupId: string;
   group: TGroup;
-  id: number;
+  id: string;
   created_at: string;
   updated_at: string;
   isSeen: boolean;

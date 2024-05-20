@@ -9,13 +9,13 @@ export class Post extends BaseEntity<Post> {
 	@Column({
 		name: 'author_id'
 	})
-	authorId: number;
+	authorId: string;
 
 	@Column({
 		name: 'group_id',
 		nullable: true
 	})
-	groupId: number;
+	groupId: string;
 
 	@Column({
 		name: 'post_content'

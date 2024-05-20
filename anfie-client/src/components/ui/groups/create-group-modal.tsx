@@ -53,7 +53,7 @@ const CreateGroupModal = (
 
   const onFinish = (value: any) => {
     let currentRecipientId: string =
-      currentConversation?.recipientId === +currentUser.userId
+      currentConversation?.recipientId === currentUser.userId
         ? currentConversation?.creatorId.toString()
         : currentConversation?.recipientId.toString() || "";
         

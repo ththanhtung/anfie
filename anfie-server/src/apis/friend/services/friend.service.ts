@@ -14,8 +14,8 @@ export class FriendService {
 		const [friends, total] = await this.friendRepository.getFriends(userId, query);
 		const myFriends: Users[] = [];
 		for (const friend of friends) {
-			if (friend.follower.id !== +userId) myFriends.push(friend.follower);
-			else if (friend.followee.id !== +userId) myFriends.push(friend.followee);
+			if (friend.follower.id !== userId) myFriends.push(friend.follower);
+			else if (friend.followee.id !== userId) myFriends.push(friend.followee);
 		}
 		return [myFriends, total];
 	}

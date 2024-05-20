@@ -6,11 +6,11 @@ type TGroupConversationParams = {
 };
 
 type TGroupConversation = {
-  id: number;
+  id: string;
   created_at: string;
   updated_at: string;
-  adminId: number;
-  creatorId: number;
+  adminId: string;
+  creatorId: string;
   lastMessageDate: any;
   creator: TUser;
   admin: TUser;

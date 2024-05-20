@@ -17,7 +17,7 @@ export class GroupMessagesController {
 	@UseInterceptors(FilesInterceptor('medias'))
 	async create(
 		@GetCurrentUser() user: TUserJwt,
-		@Param('id', ParseIntPipe) groupId: number,
+		@Param('id') groupId: string,
 		@UploadedFiles() medias: Express.Multer.File[],
 		@Body() createMessageDto: CreateGroupMessageDto
 	) {
@@ -34,7 +34,7 @@ export class GroupMessagesController {
 	}
 
 	@Get()
-	async getGroupMessagesFromGroupConversation(@Param('id', ParseIntPipe) groupId: number, @Query() query: GetGroupMessagesDto) {
+	async getGroupMessagesFromGroupConversation(@Param('id', ParseIntPipe) groupId: string, @Query() query: GetGroupMessagesDto) {
 		return this.groupMessageService.getGroupMessagesFromGroupConversation(groupId, query);
 	}
 }

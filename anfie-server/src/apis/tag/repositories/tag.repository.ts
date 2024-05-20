@@ -20,13 +20,13 @@ export class TagRepository extends Repository<Tag> {
 	async findOneById(id: string) {
 		return this.findOne({
 			where: {
-				id: +id
+				id: id
 			}
 		});
 	}
 
 	async removeOneById(id: string) {
-		return this.delete({ id: +id });
+		return this.delete({ id: id });
 	}
 
 	async findByNames(names: string[]) {

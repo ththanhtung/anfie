@@ -13,13 +13,13 @@ export class ConfessionRepository extends Repository<Confession> {
 	}
 
 	async createOne({ ownerId, content, tags }: TCreateConfession) {
-		return this.save({ ownerId: +ownerId, content, tags });
+		return this.save({ ownerId: ownerId, content, tags });
 	}
 
 	async getConfestionsRandom(query: GetConfestionsDto) {
 		const limit = query.limit ? +query.limit : 10;
 
-		if (!query.tagIds ) {
+		if (!query.tagIds) {
 			return await this.createQueryBuilder('confession')
 				.select()
 				.leftJoinAndSelect('confession.tags', 'tag')
@@ -43,7 +43,7 @@ export class ConfessionRepository extends Repository<Confession> {
 	async findOneById(id: string) {
 		return this.findOne({
 			where: {
-				id: +id
+				id: id
 			}
 		});
 	}
@@ -51,7 +51,7 @@ export class ConfessionRepository extends Repository<Confession> {
 	async getConfessions(query: GetConfessionsAdminDto) {
 		return pagination(this, query, {
 			where: {
-				ownerId: +query.userId || null,
+				ownerId: query.userId || null,
 				tags: {
 					name: query.tag
 				}

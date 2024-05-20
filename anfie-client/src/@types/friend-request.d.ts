@@ -6,18 +6,18 @@ type TFriendRequestParams = {
 };
 
 type TFriendRequest = {
-  id: number;
+  id: string;
   created_at: string;
   updated_at: string;
-  senderId: number;
-  receiverId: number;
+  senderId: string;
+  receiverId: string;
   status: string;
   sender: TUserFriendRequest;
   receiver: TUserFriendRequest;
 };
 
 type TUserFriendRequest = {
-  id: number;
+  id: string;
   created_at: string;
   updated_at: string;
   email: string;

@@ -1,5 +1,5 @@
 type TMatchResult = {
-	id1: number;
-	id2: number;
+	id1: string;
+	id2: string;
 	reason: string;
 };

@@ -1,7 +1,7 @@
 type TCreatePostParams = {
-	authorId: number;
+	authorId: string;
 	content: string;
-	groupId?: number;
+	groupId?: string;
 	totalLikes: number;
 };
 

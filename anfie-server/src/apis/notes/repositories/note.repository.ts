@@ -11,13 +11,13 @@ export class NoteRepository extends Repository<Note> {
 
 	async createOne(userId: string) {
 		return this.save({
-			userId: +userId
+			userId: userId
 		});
 	}
 
 	async updateNote({ id, title, content, isPin }: TUpdateNodeParams) {
 		await this.save({
-			id: +id,
+			id: id,
 			title,
 			content,
 			isPin
@@ -32,14 +32,14 @@ export class NoteRepository extends Repository<Note> {
 	}
 
 	async findOneAndRemoveById(id: string) {
-		return this.delete({ id: +id });
+		return this.delete({ id: id });
 	}
 
 	findNotesByUserId(id: string, query: GetNotesDto) {
 		return pagination(this, query, {
 			relations: ['user'],
 			where: {
-				userId: +id
+				userId: id
 			}
 		});
 	}
@@ -47,7 +47,7 @@ export class NoteRepository extends Repository<Note> {
 	async findOneById(id: string) {
 		return this.findOne({
 			where: {
-				id: +id
+				id: id
 			}
 		});
 	}

@@ -17,7 +17,7 @@ export class MessageRepository extends Repository<Message> {
 		return this.save(message);
 	}
 
-	async getMessagesFromConversation(conversationId: number, query: GetMessagesDto) {
+	async getMessagesFromConversation(conversationId: string, query: GetMessagesDto) {
 		return pagination(this, query, {
 			where: {
 				conversationId: conversationId

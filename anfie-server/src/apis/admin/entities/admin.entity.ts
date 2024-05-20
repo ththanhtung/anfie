@@ -21,6 +21,7 @@ export class Admin extends BaseEntity<Admin> {
 	@Column({ default: AdminUserType.ADMIN })
 	type!: AdminUserType;
 
+	@Exclude()
 	@Column({
 		name: 'admin_password'
 	})

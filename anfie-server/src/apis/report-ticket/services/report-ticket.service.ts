@@ -64,7 +64,7 @@ export class ReportTicketService {
 		}
 
 		const reporterId = user.userId.toString();
-		const reportedUser = await this.userService.findOneById(+dto.reporteeId);
+		const reportedUser = await this.userService.findOneById(dto.reporteeId);
 		if (!reportedUser)
 			throw new NotFoundException([
 				{
@@ -120,7 +120,7 @@ export class ReportTicketService {
 				}
 			]);
 
-		if (request.reporterId === +userId)
+		if (request.reporterId === userId)
 			throw new BadRequestException([
 				{
 					message: 'cannot sent report ticket for yourself'

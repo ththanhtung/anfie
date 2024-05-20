@@ -17,11 +17,11 @@ export class ConversationRequestRepository extends Repository<ConversationReques
 		return pagination(this, query, {
 			where: [
 				{
-					firstUser: { id: +id },
+					firstUser: { id: id },
 					status
 				},
 				{
-					secondUser: { id: +id },
+					secondUser: { id: id },
 					status
 				}
 			],
@@ -32,7 +32,7 @@ export class ConversationRequestRepository extends Repository<ConversationReques
 	async findOneById(id: string) {
 		return this.findOne({
 			where: {
-				id: +id
+				id: id
 			},
 			relations: ['firstUser', 'secondUser']
 		});
@@ -41,10 +41,10 @@ export class ConversationRequestRepository extends Repository<ConversationReques
 	async findOneAndDelete(id: string) {
 		const request = await this.findOne({
 			where: {
-				id: +id
+				id: id
 			}
 		});
-		this.delete({ id: +id });
+		this.delete({ id: id });
 		return request;
 	}
 
@@ -52,13 +52,13 @@ export class ConversationRequestRepository extends Repository<ConversationReques
 		return this.findOne({
 			where: [
 				{
-					firstUser: { id: +firstUserId },
-					secondUser: { id: +secondUserId },
+					firstUser: { id: firstUserId },
+					secondUser: { id: secondUserId },
 					status: 'pending'
 				},
 				{
-					firstUser: { id: +secondUserId },
-					secondUser: { id: +firstUserId },
+					firstUser: { id: secondUserId },
+					secondUser: { id: firstUserId },
 					status: 'pending'
 				}
 			]
@@ -70,8 +70,8 @@ export class ConversationRequestRepository extends Repository<ConversationReques
 		expiration.setSeconds(expiration.getSeconds() + EXPIRATION_WINDOW_SECONDS);
 
 		const request = await this.save({
-			firstUserId: +firstUserId,
-			secondUserId: +secondUserId,
+			firstUserId: firstUserId,
+			secondUserId: secondUserId,
 			expiratedAt: expiration,
 			matchedReason
 		});
@@ -85,7 +85,7 @@ export class ConversationRequestRepository extends Repository<ConversationReques
 	}
 
 	async accepted(id: string) {
-		return this.save({ id: +id, status: 'accepted' });
+		return this.save({ id: id, status: 'accepted' });
 	}
 
 	async reject(id: string) {
@@ -94,7 +94,7 @@ export class ConversationRequestRepository extends Repository<ConversationReques
 	}
 
 	async getConversationRequestsAdmin(query: GetConversationRequestsAdminDto) {
-		const userId = query.userId ? +query.userId : null;
+		const userId = query.userId ? query.userId : null;
 
 		if (!userId) return pagination(this, query);
 

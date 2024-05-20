@@ -21,19 +21,19 @@ export class Message extends BaseEntity<Message> {
 	@Column({
 		name: 'user_id'
 	})
-	userId: number;
+	userId: string;
 
 	@Column({
 		name: 'group_id',
 		nullable: true
 	})
-	groupId?: number;
+	groupId?: string;
 
 	@Column({
 		name: 'conversation_id',
 		nullable: true
 	})
-	conversationId?: number;
+	conversationId?: string;
 
 	@OneToMany(() => MessageMedia, (messageMedia) => messageMedia.message)
 	@JoinColumn()

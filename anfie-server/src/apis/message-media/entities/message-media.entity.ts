@@ -11,7 +11,7 @@ export class MessageMedia extends BaseEntity<MessageMedia> {
 	@Column({
 		name: 'message_id'
 	})
-	messageId: number;
+	messageId: string;
 
 	@ManyToOne(() => Message, (message) => message.medias, { cascade: true, onDelete: 'CASCADE' })
 	@JoinColumn({

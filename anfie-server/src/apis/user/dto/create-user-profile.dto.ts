@@ -15,7 +15,7 @@ export class CreateUserProfileDto {
 	dob: Date;
 
 	@IsEnum(Genders)
-	gender: Genders;
+	gender: string;
 
 	@IsString()
 	phone: string;

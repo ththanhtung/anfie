@@ -29,7 +29,7 @@ export class GroupMessageService {
 		return { ...message, user, group };
 	}
 
-	async getGroupMessagesFromGroupConversation(groupId: number, query: GetGroupMessagesDto) {
+	async getGroupMessagesFromGroupConversation(groupId: string, query: GetGroupMessagesDto) {
 		return this.messageRepository.getGroupMessagesFromGroupConversation(groupId, query);
 	}
 

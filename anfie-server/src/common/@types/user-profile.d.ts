@@ -12,7 +12,7 @@ type TCreateUserProfileParams = {
 };
 
 type TUpdateUserProfileParams = {
-	id: number;
+	id: string;
 	firstname?: string;
 	lastname?: string;
 	dob?: Date;

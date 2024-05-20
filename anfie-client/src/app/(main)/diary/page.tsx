@@ -7,6 +7,7 @@ import {
   PostItem,
   PostModal,
 } from "@/components";
+import { EConversationTypes } from "@/constants";
 import { useListInfiniteConversations, useListInfinitePosts } from "@/hooks";
 import { Divider, List } from "antd";
 import React, { useCallback, useRef } from "react";
@@ -14,7 +15,7 @@ import React, { useCallback, useRef } from "react";
 const DiaryPage = () => {
   const { posts } = useListInfinitePosts();
   const { conversations } = useListInfiniteConversations();
-  const [valueChecked, setValueChecked] = React.useState<number>();
+  const [valueChecked, setValueChecked] = React.useState<string>();
   const [selectedConversation, setSelectedConversation] =
     React.useState<TConversation>();
   const ref = useRef<TModalRef>(null);
@@ -46,7 +47,10 @@ const DiaryPage = () => {
           />
         </div>
         <div className="h-1/2">
-          <MessagePanel conversation={selectedConversation} />
+          <MessagePanel
+            conversation={selectedConversation}
+            type={EConversationTypes.PRIVATE}
+          />
         </div>
       </div>
     );

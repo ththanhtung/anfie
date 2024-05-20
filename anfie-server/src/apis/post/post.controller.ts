@@ -13,7 +13,7 @@ export class PostController {
 	@Post()
 	@UseInterceptors(FilesInterceptor('medias'))
 	async create(
-		@GetCurrentUser('userId') authorId: number,
+		@GetCurrentUser('userId') authorId: string,
 		@Body() createPostDto: CreatePostDto,
 		@UploadedFiles() medias: Express.Multer.File[]
 	) {

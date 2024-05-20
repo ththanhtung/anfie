@@ -8,7 +8,7 @@ export class PostMediaService {
 		private readonly postMediaRepository: PostMediaRepository,
 		private readonly mediaUploaderService: MediaUploaderService
 	) {}
-	async create(postId: number, medias: Express.Multer.File[]) {
+	async create(postId: string, medias: Express.Multer.File[]) {
 		if (!medias || medias === undefined) {
 			return;
 		}

@@ -9,17 +9,17 @@ export class MessageRequest extends BaseEntity<MessageRequest> {
 	@Column({
 		name: 'sender_id'
 	})
-	senderId: number;
+	senderId: string;
 
 	@Column({
 		name: 'receiver_id'
 	})
-	receiverId: number;
+	receiverId: string;
 
 	@Column({
 		name: 'confession_id'
 	})
-	confessionId: number;
+	confessionId: string;
 
 	@OneToOne(() => Users, { createForeignKeyConstraints: false })
 	@JoinColumn({

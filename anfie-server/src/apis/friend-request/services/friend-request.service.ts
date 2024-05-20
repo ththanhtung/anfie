@@ -25,10 +25,10 @@ export class FriendRequestService {
 				}
 			]);
 
-		if (request.senderId === userId)
+		if (request.senderId !== userId)
 			throw new BadRequestException([
 				{
-					message: 'cannot sent friend request for yourself'
+					message: 'only sender can cancel friend request'
 				}
 			]);
 
@@ -36,7 +36,7 @@ export class FriendRequestService {
 	}
 
 	async createOne(senderId: string, receiverId: string) {
-		const receiver = await this.userService.findOneById(+receiverId);
+		const receiver = await this.userService.findOneById(receiverId);
 		if (!receiver)
 			throw new NotFoundException([
 				{

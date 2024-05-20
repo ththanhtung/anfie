@@ -14,7 +14,7 @@ export class NotesService {
 		return this.noteRepository.findNotesByUserId(userId, query);
 	}
 
-	findOne(id: number) {
+	findOne(id: string) {
 		return this.noteRepository.findOneById(id.toString());
 	}
 
@@ -27,7 +27,7 @@ export class NotesService {
 		});
 	}
 
-	remove(id: number) {
+	remove(id: string) {
 		return this.noteRepository.findOneAndRemoveById(id.toString());
 	}
 }

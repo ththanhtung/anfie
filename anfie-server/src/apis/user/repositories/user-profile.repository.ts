@@ -3,7 +3,7 @@ import { UserProfiles } from '../entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GetUserProfilesDto } from '../dto';
 import { pagination } from 'src/common';
-import { TCreateUserProfileParams, TUpdateUserPreferencesParams, TUpdateUserProfileParams } from 'src/common/@types/user-profile';
+import { TCreateUserProfileParams, TUpdateUserProfileParams } from 'src/common/@types/user-profile';
 
 export class UserProfileRepository extends Repository<UserProfiles> {
 	constructor(@InjectRepository(UserProfiles) repository: Repository<UserProfiles>) {
@@ -23,13 +23,19 @@ export class UserProfileRepository extends Repository<UserProfiles> {
 	}
 
 	async updateUserPreferences(profile: UserProfiles) {
-		return this.save(profile);
+		await this.save(profile);
+		return this.findOne({
+			where: {
+				id: profile.id
+			},
+			relations: ['locations', 'preferences', 'preferGenders', 'user']
+		});
 	}
 
 	async getProfileByUserId(id: string) {
 		return this.findOne({
 			where: {
-				user: { id: +id }
+				user: { id: id }
 			},
 			relations: ['locations', 'preferences', 'preferGenders', 'user']
 		});
@@ -41,14 +47,14 @@ export class UserProfileRepository extends Repository<UserProfiles> {
 	}
 
 	async banUser(userId: string) {
-		await this.update({ user: { id: +userId } }, { isBanned: true, isActive: false });
+		await this.update({ user: { id: userId } }, { isBanned: true, isActive: false });
 	}
 
 	async increaseReportedCountByOne(userId: string) {
-		await this.update({ user: { id: +userId } }, { reportedCount: () => 'user_reported_count + 1' });
+		await this.update({ user: { id: userId } }, { reportedCount: () => 'user_reported_count + 1' });
 		const profile = await this.findOne({
 			where: {
-				user: { id: +userId }
+				user: { id: userId }
 			}
 		});
 
@@ -58,10 +64,10 @@ export class UserProfileRepository extends Repository<UserProfiles> {
 	}
 
 	async reduceStrangerConversationSlotByOne(userId: string) {
-		await this.update({ user: { id: +userId } }, { strangerConversationSlots: () => 'user_stranger_conversation_slots - 1' });
+		await this.update({ user: { id: userId } }, { strangerConversationSlots: () => 'user_stranger_conversation_slots - 1' });
 		const profile = await this.findOne({
 			where: {
-				user: { id: +userId }
+				user: { id: userId }
 			}
 		});
 

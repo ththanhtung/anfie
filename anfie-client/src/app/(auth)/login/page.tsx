@@ -6,6 +6,7 @@ import React, { useRef } from "react";
 
 const LoginPage = () => {
   const refTab = useRef<HTMLDivElement>(null);
+  
   const items: TabsProps["items"] = [
     {
       key: EActionTabs.LOGIN,
@@ -21,6 +22,7 @@ const LoginPage = () => {
   return (
     <div ref={refTab}>
       <Tabs
+        className="w-full"
         defaultActiveKey="1"
         items={items}
         onTabClick={(key, event) => {
