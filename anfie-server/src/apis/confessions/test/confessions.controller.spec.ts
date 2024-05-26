@@ -4,6 +4,7 @@ import { ConfessionsService } from '../services';
 import { Confession } from '../entities';
 import { confessionStub } from './stubs';
 import { CreateConfestionDto } from '../dto';
+import { OrderBy } from 'src/common';
 
 jest.mock('../services/confessions.service');
 
@@ -21,6 +22,10 @@ describe('ConfessionsController', () => {
 		confessionController = moduleRef.get<ConfessionsController>(ConfessionsController);
 		confessionsService = moduleRef.get<ConfessionsService>(ConfessionsService);
 		jest.clearAllMocks();
+	});
+
+	it('should be defined', () => {
+		expect(confessionController).toBeDefined();
 	});
 
 	describe('createOne', () => {
@@ -42,6 +47,32 @@ describe('ConfessionsController', () => {
 
 			test('then it should return a Confession', () => {
 				expect(confession).toEqual(confessionStub());
+			});
+		});
+	});
+
+	describe('getConfestionsRandom', () => {
+		let confessions: Confession[];
+		let total: number;
+		describe('when getConfestionsRandom is called', () => {
+			beforeEach(async () => {
+				[confessions, total] = await confessionController.getConfestionsRandom({
+					page: '1',
+					limit: '10',
+					order_by: '',
+					sort: OrderBy.ASC
+				});
+			});
+			it('should call confessionsService', () => {
+				expect(confessionsService.getConfestionsRandom).toHaveBeenCalled();
+			});
+
+			it('should return an array of Confessions', () => {
+				expect(confessions).toEqual([confessionStub()]);
+			});
+
+			it('should return an number', () => {
+				expect(total).toEqual(1);
 			});
 		});
 	});
