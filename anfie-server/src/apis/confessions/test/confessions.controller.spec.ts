@@ -54,17 +54,19 @@ describe('ConfessionsController', () => {
 	describe('getConfestionsRandom', () => {
 		let confessions: Confession[];
 		let total: number;
+		const query = {
+			page: '1',
+			limit: '10',
+			order_by: '',
+			sort: OrderBy.ASC
+		};
+
 		describe('when getConfestionsRandom is called', () => {
 			beforeEach(async () => {
-				[confessions, total] = await confessionController.getConfestionsRandom({
-					page: '1',
-					limit: '10',
-					order_by: '',
-					sort: OrderBy.ASC
-				});
+				[confessions, total] = await confessionController.getConfestionsRandom(query);
 			});
 			it('should call confessionsService', () => {
-				expect(confessionsService.getConfestionsRandom).toHaveBeenCalled();
+				expect(confessionsService.getConfestionsRandom).toHaveBeenCalledWith(query);
 			});
 
 			it('should return an array of Confessions', () => {
