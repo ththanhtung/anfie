@@ -11,9 +11,9 @@ export class ConfessionsService {
 		private readonly tagService: TagService
 	) {}
 
-	async createOne(user: TUserJwt, dto: CreateConfestionDto) {
+	async createOne(userId: string, dto: CreateConfestionDto) {
 		const tags = await this.tagService.findByNames(dto.tags);
-		return this.confestionRepository.createOne({ ownerId: user.userId.toString(), content: dto.content, tags });
+		return this.confestionRepository.createOne({ ownerId: userId, content: dto.content, tags });
 	}
 
 	async getConfestionsRandom(query: GetConfestionsDto) {

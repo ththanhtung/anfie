@@ -10,8 +10,8 @@ export class ConfessionsController {
 	constructor(private readonly confestionsService: ConfessionsService) {}
 
 	@Post()
-	async createOne(@GetCurrentUser() user: TUserJwt, @Body() createConfestionDto: CreateConfestionDto) {
-		return this.confestionsService.createOne(user, createConfestionDto);
+	async createOne(@GetCurrentUser('userId') userId: string, @Body() createConfestionDto: CreateConfestionDto) {
+		return this.confestionsService.createOne(userId, createConfestionDto);
 	}
 
 	@Get()

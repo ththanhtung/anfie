@@ -18,7 +18,7 @@ export class Confession extends BaseEntity<Confession> {
 
 	@ManyToOne(() => Users, (user) => user.confessions)
 	@JoinColumn({ name: 'owner_id' })
-	owner: Users;
+	owner?: Users;
 
 	@ManyToMany(() => Tag, (tag) => tag.confessions)
 	@JoinTable({
@@ -32,9 +32,9 @@ export class Confession extends BaseEntity<Confession> {
 			referencedColumnName: 'id'
 		}
 	})
-	tags: Tag[];
+	tags?: Tag[];
 
 	@OneToMany(() => MessageRequest, (message) => message.confession, { nullable: true, cascade: true, onDelete: 'CASCADE' })
 	@JoinColumn()
-	messageRequests: MessageRequest[];
+	messageRequests?: MessageRequest[];
 }

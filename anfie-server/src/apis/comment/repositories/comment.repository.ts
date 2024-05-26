@@ -98,7 +98,7 @@ export class CommentRepository extends Repository<Comment> {
 		});
 	}
 
-	async findOneAndDelete(id: number) {
+	async findOneAndDelete(id: string) {
 		return this.delete(id);
 	}
 

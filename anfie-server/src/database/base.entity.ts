@@ -7,7 +7,7 @@ export class BaseEntity<T> {
 	}
 
 	@PrimaryGeneratedColumn('uuid')
-	id: string;
+	id?: string;
 
 	@CreateDateColumn({
 		type: 'timestamp with time zone'

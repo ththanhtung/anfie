@@ -1,6 +1,7 @@
 export const ENDPOINT_APIS = {
   auth: {
     login: "api/auth/login",
+    signup: "api/auth/signup",
   },
   conversation: {
     list: "api/conversations",

@@ -7,5 +7,5 @@ export class CreateConfestionDto {
 
 	@IsString({ each: true })
 	@IsOptional()
-	tags: string[];
+	tags?: string[];
 }

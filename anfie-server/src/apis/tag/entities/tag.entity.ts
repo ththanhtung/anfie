@@ -10,5 +10,5 @@ export class Tag extends BaseEntity<Tag> {
 	name: string;
 
 	@ManyToMany(() => Confession, (confession) => confession.tags)
-	confessions: Confession[];
+	confessions?: Confession[];
 }

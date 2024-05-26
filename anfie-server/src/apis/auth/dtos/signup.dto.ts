@@ -1,4 +1,4 @@
-import { IsDateString, IsString } from 'class-validator';
+import { IsArray, IsDateString, IsOptional, IsString } from 'class-validator';
 
 export class SignupDto {
 	@IsString()
@@ -22,6 +22,15 @@ export class SignupDto {
 	@IsString()
 	phone: string;
 
-	@IsString()
-	bio: string;
+	@IsArray()
+	@IsOptional()
+	preferences: string[];
+
+	@IsArray()
+	@IsOptional()
+	locations: string[];
+
+	@IsArray()
+	@IsOptional()
+	preferGenders: string[];
 }

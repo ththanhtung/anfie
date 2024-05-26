@@ -11,6 +11,13 @@ export class AuthServiceApis extends HttpClient {
     });
     return data;
   }
+
+  public async postSignupUser(form: TFormSignup) {
+    const { data } = await this.instance.post(ENDPOINT_APIS.auth.signup, {
+      ...form,
+    });
+    return data;
+  }
 }
 
 export const authService = new AuthServiceApis();

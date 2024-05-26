@@ -4,9 +4,9 @@ import { PaginationDto } from 'src/common';
 export class GetConfessionsAdminDto extends PaginationDto {
 	@IsString()
 	@IsOptional()
-	userId: string;
+	userId?: string;
 
 	@IsString()
 	@IsOptional()
-	tag: string;
+	tag?: string;
 }

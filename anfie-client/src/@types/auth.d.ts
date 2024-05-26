@@ -16,3 +16,8 @@ type TFormLogin = {
   email: string;
   password: string;
 };
+
+type TFormSignup = {
+  email: string;
+  password: string;
+};
