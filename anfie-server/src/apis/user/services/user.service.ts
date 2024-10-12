@@ -92,4 +92,12 @@ export class UserService {
 	async findUsersByIds(ids: string[]) {
 		return this.userRepository.findUsersByIds(ids);
 	}
+
+	async finUsersFindFriend() {
+		return this.userRepository.findUsersFindFriend();
+	}
+
+	async toggleFindingFriend(id: string) {
+		return this.userRepository.toggleFindingFriend(id);
+	}
 }

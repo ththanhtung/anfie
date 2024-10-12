@@ -26,7 +26,7 @@ const ProfilePage = () => {
   const { userProfile } = useUserProfile();
 
   const [currentProlfile, setCurrentProfile] =
-    useState<TUpdateUserProfileForm>(userProfile);
+    useState<TUpdateUserProfileForm>();
 
   const debounceProfile: TUpdateUserProfileForm = useDebounce(
     currentProlfile,
@@ -57,10 +57,10 @@ const ProfilePage = () => {
 
   const initialValues = useMemo(() => {
     return {
-      firstName: userProfile?.firstName,
-      lastName: userProfile?.lastName,
+      firstName: userProfile?.user?.firstName,
+      lastName: userProfile?.user?.lastName,
       email: userProfile?.user?.email,
-      dateOfBirth: userProfile?.dob ? dayjs(userProfile?.dob) : "",
+      dateOfBirth: userProfile?.user?.dob ? dayjs(userProfile?.user?.dob) : "",
       gender: userProfile?.gender,
       preferences: userProfile?.preferences?.map(
         (preference: TPreference) => preference?.name

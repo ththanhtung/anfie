@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, Patch, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpCode, Patch, Post, UseGuards } from '@nestjs/common';
 import { UserService } from './services';
 import { AtGuard, GetCurrentUser } from 'src/common';
 import { UpdateUserProfileDto } from './dto';
@@ -15,5 +15,14 @@ export class UserController {
 
 		// return;
 		return this.userService.updateOne(userId, dto);
+	}
+
+	@Post('find-new-friend')
+	@HttpCode(200)
+	async toggleFindingFriend(@GetCurrentUser('userId') userId: string) {
+		console.log({ userId });
+
+		// return;
+		return this.userService.toggleFindingFriend(userId);
 	}
 }

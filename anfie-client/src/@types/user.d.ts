@@ -10,6 +10,7 @@ type TUser = {
   lastName: string;
   dob?: string;
   profilePictureUrl?: string;
+  isFindFriend: boolean;
 };
 
 type TUserProfile = {
@@ -19,8 +20,8 @@ type TUserProfile = {
   deleted_at: any;
   gender: string;
   phone: string;
-  maxAge: any;
-  minAge: any;
+  maxAge: number;
+  minAge: number;
   isActive: boolean;
   isBanned: boolean;
   reportedCount: number;
@@ -28,4 +29,24 @@ type TUserProfile = {
   bio: string;
   strangerConversationSlots: number;
   userId: string;
+};
+
+type TGetTUserProfileResponse = {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  gender: string;
+  phone: string;
+  maxAge: any;
+  minAge: any;
+  isActive: boolean;
+  isBanned: boolean;
+  reportedCount: number;
+  bio: any;
+  strangerConversationSlots: number;
+  userId: string;
+  locations: any[];
+  preferences: any[];
+  preferGenders: TPreferGender[];
+  user: TUser;
 };

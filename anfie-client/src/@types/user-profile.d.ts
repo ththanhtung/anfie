@@ -23,3 +23,7 @@ type TUpdateUserProfileForm = {
 type TUpdateUserUserProfile = {
   email: string;
 };
+
+type TFindNewFriendParams = {
+  cb?: () => void;
+};

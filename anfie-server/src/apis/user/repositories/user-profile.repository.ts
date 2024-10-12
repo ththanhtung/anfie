@@ -42,8 +42,7 @@ export class UserProfileRepository extends Repository<UserProfiles> {
 	}
 
 	async getProfilesByUserIds(ids: string[]) {
-		const idsInt = ids.map((id) => +id);
-		return this.find({ where: { user: { id: In(idsInt) } }, relations: ['locations', 'preferences', 'preferGenders', 'user'] });
+		return this.find({ where: { user: { id: In(ids) } }, relations: ['locations', 'preferences', 'preferGenders', 'user'] });
 	}
 
 	async banUser(userId: string) {

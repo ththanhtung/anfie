@@ -15,6 +15,6 @@ export const options: DataSourceOptions & SeederOptions = {
 	database: TYPEORM_DATABASE,
 	synchronize: true,
 	seeds: ['dist/src/database/seeds/**/*.js']
-}; 
+};
 
 export default new DataSource(options);

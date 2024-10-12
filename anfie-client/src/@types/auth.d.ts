@@ -3,6 +3,10 @@ type TLoginResponse = {
   tokens: TTokens;
 };
 
+type TSignupResponse = {
+  user: TUser;
+}
+
 type TUserInfo = {
   userId: string;
   email: string;
@@ -19,5 +23,14 @@ type TFormLogin = {
 
 type TFormSignup = {
   email: string;
-  password: string;
+  hash: string;
+  lastName: string;
+  firstName: string;
+  dob: string;
+  gender: string;
+  phone: string;
+  preferences?: string[];
+  preferGenders?: string[];
+  locations?: string[];
+  preferGenders?: string[];
 };

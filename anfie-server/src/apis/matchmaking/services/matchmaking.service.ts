@@ -1,23 +1,37 @@
 import { Injectable } from '@nestjs/common';
-import { CreateMatchmakingDto } from '../dto';
-import { ConversationAdminService, ConversationService } from 'src/apis/conversation/services';
-import { OpenAIService } from 'src/apis/openai/openai.service';
-import { UserProfileService } from 'src/apis/user/services';
+import { LlamaService } from 'src/apis/llama/llama.service';
+import { UserProfileService, UserService } from 'src/apis/user/services';
 
 @Injectable()
 export class MatchmakingService {
 	constructor(
-		private readonly conversationAdminService: ConversationAdminService,
-		private readonly conversationService: ConversationService,
-		private readonly openAIService: OpenAIService,
-		private readonly userProfileService: UserProfileService
+		private readonly llamaService: LlamaService,
+		private readonly userProfileService: UserProfileService,
+		private readonly userService: UserService
 	) {}
-	async matchmaking(dto: CreateMatchmakingDto) {
-		const userProfiles = await this.userProfileService.getProfilesByUserIds(dto.userIds.map((u) => u.toString()));
+	async matchmaking() {
+		// console.log({ dto });
 
-		const match = await this.openAIService.matchRequest(userProfiles);
+		const users = await this.userService.finUsersFindFriend();
+
+		if (users.length < 2) {
+			return;
+		}
+
+		const usersInQueue = users.map((user) => user.id);
+
+		const userProfiles = await this.userProfileService.getProfilesByUserIds(usersInQueue);
+
+		const match = await this.llamaService.matchRequest(userProfiles);
+
+		if (!match) {
+			return;
+		}
 
 		console.log({ match });
+
+		await this.userService.toggleFindingFriend(match.id1);
+		await this.userService.toggleFindingFriend(match.id2);
 
 		return match;
 	}

@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { MatchmakingService } from './services/matchmaking.service';
 import { ConversationModule } from '../conversation/conversation.module';
-import { OpenAIModule } from '../openai/openai.module';
 import { UserModule } from '../user/user.module';
+import { LlamaModule } from '../llama/llama.module';
 
 @Module({
-	imports: [ConversationModule, OpenAIModule, UserModule],
+	imports: [ConversationModule, LlamaModule, UserModule],
 	providers: [MatchmakingService],
 	exports: [MatchmakingService]
 })

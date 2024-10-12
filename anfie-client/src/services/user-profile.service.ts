@@ -6,18 +6,25 @@ export class UserProfilesServiceApis extends HttpClient {
   }
 
   public async getUserProfile() {
-    const { data } = await this.instance.get(
-      ENDPOINT_APIS.userProfiles.list + "/me"
-    );
+    const { data } = await this.instance.get<
+      TResultResponse<TGetTUserProfileResponse>
+    >(ENDPOINT_APIS.userProfiles.list + "/me");
     return data;
   }
 
   public async patchUpdateUserProfile(form: any) {
     const { data } = await this.instance.patch(
-      ENDPOINT_APIS.userProfiles.list + "/me",
+      ENDPOINT_APIS.users.list + "/me",
       {
         ...form,
       }
+    );
+    return data;
+  }
+
+  public async postFindNewFriends() {
+    const { data } = await this.instance.post(
+      `${ENDPOINT_APIS.users.list}/find-new-friend`
     );
     return data;
   }

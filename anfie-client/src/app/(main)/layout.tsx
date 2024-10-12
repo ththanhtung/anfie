@@ -50,7 +50,7 @@ const ConversationLayout = ({ children }: PropsWithChildren) => {
     socket.on?.(
       "onConversationRequestCreated",
       (payload: TConversationRequestResponse) => {
-        if (payload.firstUserId === +currentUser.userId) {
+        if (payload.firstUserId === currentUser.userId) {
           setMatchedUser(payload.secondUserProfile);
         } else {
           setMatchedUser(payload.firstUserProfile);
@@ -60,7 +60,7 @@ const ConversationLayout = ({ children }: PropsWithChildren) => {
           onRejectConversationRequest({
             requestId: payload.id.toString(),
           });
-        }, 10000);
+        }, 30000);
 
         setConversationRequest(payload);
         conversationRequestModalref.current?.showModal();

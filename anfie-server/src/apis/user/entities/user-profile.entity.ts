@@ -5,7 +5,6 @@ import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne 
 import { Users } from './user.entity';
 import { ReportTicket } from 'src/apis/report-ticket/entities';
 import { PreferGender } from 'src/apis/prefer-gender/entities';
-import { Exclude } from 'class-transformer';
 
 @Entity()
 export class UserProfiles extends BaseEntity<UserProfiles> {

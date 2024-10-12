@@ -46,6 +46,12 @@ export class Users extends BaseEntity<Users> {
 	})
 	profilePictureUrl: string;
 
+	@Column({
+		name: 'user_is_find_friend',
+		nullable: true
+	})
+	isFindFriend: boolean;
+
 	@OneToMany(() => Message, (message) => message.user)
 	@JoinColumn()
 	messages: Message[];

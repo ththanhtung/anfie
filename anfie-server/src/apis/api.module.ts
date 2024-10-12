@@ -26,6 +26,7 @@ import { TagModule } from './tag/tag.module';
 import { UtilsModule } from './utils/utils.module';
 import { PostMediaModule } from './post-media/post-media.module';
 import { ConversationRequestModule } from './conversation-request/conversation-request.module';
+import { LlamaModule } from './llama/llama.module';
 
 @Module({
 	imports: [
@@ -54,7 +55,8 @@ import { ConversationRequestModule } from './conversation-request/conversation-r
 		TagModule,
 		UtilsModule,
 		PostMediaModule,
-		ConversationRequestModule
+		ConversationRequestModule,
+		LlamaModule
 	]
 })
 export class ApiModule {}

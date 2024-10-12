@@ -98,7 +98,7 @@ const ConversationPage = () => {
         const conversations = latestPage?.data;
 
         const index = conversations.findIndex(
-          (c) => c.id === payload.conversationId
+          (c: any) => c.id === payload.conversationId
         );
 
         const messageConversation = conversations[index];
@@ -154,7 +154,7 @@ const ConversationPage = () => {
                   : item?.creator!
               )}
               lastMessage={item?.lastMessage}
-              id={Math.round(Math.random() * 100000000)}
+              id={Math.round(Math.random() * 100000000).toString()}
               value={valueChecked}
               onClick={() => {
                 setValueChecked(item?.id);

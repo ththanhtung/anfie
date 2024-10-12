@@ -51,4 +51,7 @@ export const ENDPOINT_APIS = {
   friends: {
     list: "api/friends",
   },
+  users: {
+    list: "api/user",
+  },
 };

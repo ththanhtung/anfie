@@ -5,6 +5,7 @@ import {
   useListInfinityPreferences,
   useMutationPreferGender,
   useMutationPreference,
+  useSignup,
 } from "@/hooks";
 import { _common, _formatDay } from "@/utils";
 import { Button, Form, Input, message } from "antd";
@@ -12,24 +13,37 @@ import { DefaultOptionType } from "antd/es/select";
 import React, { useCallback } from "react";
 
 const FormSignup = () => {
-  
+  const { mutateCreateAccount, isCreateAccountPending } = useSignup();
   const onFinish = (value: any) => {
-    let preferGenders: string[] = value?.preferGender.map(
-      (tag: string) => _common.findLabels(tag, preferGenderOptions)[0]
-    );
+    let preferGenders: string[] =
+      value?.preferGenders?.map(
+        (tag: string) => _common.findLabels(tag, preferGenderOptions)[0]
+      ) ?? [];
 
-    let preferences: string[] = value?.preferences.map(
-      (tag: string) => _common.findLabels(tag, preferenceOptions)[0]
-    );
+    let preferences: string[] =
+      value?.preferences?.map(
+        (tag: string) => _common.findLabels(tag, preferenceOptions)[0]
+      ) ?? [];
 
-    let locations: string[] = value?.locations?.map(
-      (tag: string) => _common.findLabels(tag, locationOptions)[0]
-    ) ?? [];
+    let locations: string[] =
+      value?.locations?.map(
+        (tag: string) => _common.findLabels(tag, locationOptions)[0]
+      ) ?? [];
 
-    console.log({
+    let gender: string =
+      value?.gender?.map(
+        (tag: string) => _common.findLabels(tag, preferGenderOptions)[0]
+      )[0] ?? "";
+
+    console.log({ gender });
+
+    mutateCreateAccount({
+      ...value,
+      hash: value.password,
       preferGenders,
       preferences,
       locations,
+      gender,
     });
   };
 
@@ -62,8 +76,6 @@ const FormSignup = () => {
 
   const handleSelectGenders = useCallback(
     (value: any, options: DefaultOptionType | DefaultOptionType[]) => {
-      console.log({ value, options });
-
       if (value.length > 1) {
         value.pop();
       }
@@ -167,10 +179,10 @@ const FormSignup = () => {
           },
         });
       }
-      setCurrentProfile((prevProfile: any) => ({
-        ...prevProfile,
-        preferences: tags,
-      }));
+      // setCurrentProfile((prevProfile: any) => ({
+      //   ...prevProfile,
+      //   preferences: tags,
+      // }));
     },
 
     [preferenceOptions, onCreateOrUpdatePreference]
@@ -247,6 +259,18 @@ const FormSignup = () => {
       >
         <Input type="password" placeholder="Comfirm Password" />
       </Form.Item>
+      <Form.Item
+        name="phone"
+        rules={[
+          { required: true, message: "please input your phone number!" },
+          {
+            type: "string",
+            message: "The input is not valid",
+          },
+        ]}
+      >
+        <Input placeholder="Phone Number" />
+      </Form.Item>
       <Form.Item name="preferences">
         <AFSelectInfinite
           allowClear
@@ -271,7 +295,7 @@ const FormSignup = () => {
           onChange={handleSelectGenders}
         />
       </Form.Item>
-      <Form.Item name="preferGender">
+      <Form.Item name="preferGenders">
         <AFSelectInfinite
           allowClear
           options={preferGenderOptions}
@@ -296,7 +320,7 @@ const FormSignup = () => {
         />
       </Form.Item>
       <Form.Item
-        name="date-of-birth"
+        name="dob"
         rules={[
           {
             required: true,
@@ -306,7 +330,11 @@ const FormSignup = () => {
       >
         <AFDatePicker placeholder="Date of Birth" />
       </Form.Item>
-      <Button type="primary" htmlType="submit">
+      <Button
+        type="primary"
+        htmlType="submit"
+        disabled={isCreateAccountPending}
+      >
         Sign up
       </Button>
     </Form>

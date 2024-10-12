@@ -33,4 +33,8 @@ export class SignupDto {
 	@IsArray()
 	@IsOptional()
 	preferGenders: string[];
+
+	@IsArray()
+	@IsOptional()
+	bio: string;
 }

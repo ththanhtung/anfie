@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
-import { In, Repository } from 'typeorm';
+import { In, Not, Repository } from 'typeorm';
 import { Users } from '../entities';
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from '../dto';
 
@@ -112,5 +112,30 @@ export class UserRepository extends Repository<Users> {
 				id: user.id
 			}
 		});
+	}
+
+	async findUsersFindFriend() {
+		const user = await this.find({ where: { isFindFriend: true } });
+		if (!user) {
+			throw new ConflictException([
+				{
+					field: 'accessToken',
+					message: 'user not found'
+				}
+			]);
+		}
+		return user;
+	}
+
+	async toggleFindingFriend(id: string) {
+		const user = await this.findOne({ where: { id: id } });
+		if (!user) {
+			throw new NotFoundException([
+				{
+					message: 'user not found'
+				}
+			]);
+		}
+		await this.update({ id: id }, { isFindFriend: !user.isFindFriend });
 	}
 }

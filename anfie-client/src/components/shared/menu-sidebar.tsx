@@ -14,11 +14,13 @@ import { useAtomValue } from "jotai";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 import { TbMessageCircleUp } from "react-icons/tb";
-import { IoBookOutline, IoPersonAddOutline, IoPersonAddSharp } from "react-icons/io5";
+import { IoBookOutline, IoPersonAddOutline } from "react-icons/io5";
 import { TbShieldQuestion } from "react-icons/tb";
 import { AiOutlineComment } from "react-icons/ai";
+import { MdOutlineStorefront } from "react-icons/md";
+import { useMutationUserProfile, useUserProfile } from "@/hooks";
 
 type TProps = {
   href: string;
@@ -27,6 +29,17 @@ const MenuSidebar = ({ href }: TProps) => {
   const socket = useSocketContext();
   const collapsed = useAtomValue(collapsedAtom);
   const router = useRouter();
+  const { onFindNewFriend } = useMutationUserProfile();
+  const { userProfile } = useUserProfile();
+  console.log({ userProfile });
+
+  useEffect(() => {
+    setIsFindingNewFriend(userProfile?.user?.isFindFriend);
+  }, [userProfile]);
+  
+  const [isFindingNewFriend, setIsFindingNewFriend] = React.useState(
+    userProfile?.user?.isFindFriend
+  );
   const items: MenuProps["items"] = [
     {
       key: "diary",
@@ -69,6 +82,11 @@ const MenuSidebar = ({ href }: TProps) => {
       label: "notes",
     },
     {
+      key: "store",
+      icon: <MdOutlineStorefront />,
+      label: "Store",
+    },
+    {
       key: "profile",
       icon: <UserOutlined />,
       label: "profile",
@@ -79,8 +97,21 @@ const MenuSidebar = ({ href }: TProps) => {
       label: "logout",
     },
   ];
+
+  socket.on?.("onConversationCreated", (payload: any) => {
+    setIsFindingNewFriend(false);
+  });
+
+  socket.on?.("onConversationRequestRejected", (payload: any) => {
+    setIsFindingNewFriend(false);
+  });
+
   const findNewFriend = () => {
-    socket.emit("onFindNewFriend", {});
+    onFindNewFriend({
+      cb: () => {
+        setIsFindingNewFriend((prev) => !prev);
+      },
+    });
     console.log("findNewFriend", socket);
   };
 
@@ -111,7 +142,7 @@ const MenuSidebar = ({ href }: TProps) => {
         size="large"
         onClick={findNewFriend}
       >
-        NEW FRIEND
+        {isFindingNewFriend ? "Cancel" : "Find New Friend"}
       </Button>
     </div>
   );

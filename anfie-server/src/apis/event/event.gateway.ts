@@ -11,6 +11,7 @@ import { ConversationAdminService } from '../conversation/services';
 import { ConversationRequestService } from '../conversation-request/services';
 import { ConversationRequest } from '../conversation-request/entities';
 import { group } from 'console';
+import { UserService } from '../user/services';
 
 @WebSocketGateway({
 	cors: {
@@ -25,6 +26,7 @@ export class EventGateway {
 		private readonly matchmakingService: MatchmakingService,
 		private readonly conversationAdminService: ConversationAdminService,
 		private readonly conversationRequestService: ConversationRequestService
+		// private readonly userService: UserService
 	) {}
 
 	@WebSocketServer()
@@ -50,23 +52,18 @@ export class EventGateway {
 		console.log(socket.user);
 	}
 
-	@SubscribeMessage('onFindNewFriend')
-	onFindNewFriend(@MessageBody() data: any, @ConnectedSocket() client: AuthenticatedSocket) {
-		client.isFindingNewFriend = true;
-	}
+	// @SubscribeMessage('onFindNewFriend')
+	// async onFindNewFriend(@MessageBody() data: any, @ConnectedSocket() client: AuthenticatedSocket) {
+	// 	console.log('find new friend', client.user.userId);
 
-	@Cron(CronExpression.EVERY_5_SECONDS)
+	// 	await this.userService.toggleFindingFriend(client.user.userId);
+	// }
+
+	@Cron('30 * * * * *')
 	async matchMaking() {
-		const usersFindingNewFriendIds: string[] = Array.from(this.sessionManager.getSockets().entries())
-			.filter(([_, socket]) => socket.isFindingNewFriend)
-			.map(([userId]) => userId);
+		const match = await this.matchmakingService.matchmaking();
 
-		if (usersFindingNewFriendIds.length < 4) return;
-		console.log('finding new friends');
-
-		const match = await this.matchmakingService.matchmaking({
-			userIds: usersFindingNewFriendIds
-		});
+		if (!match) return;
 
 		const conversationRequest = await this.conversationRequestService.createOne(
 			match.id1.toString(),
@@ -74,13 +71,13 @@ export class EventGateway {
 			match.reason
 		);
 
+
 		const firstUserSocket = this.sessionManager.getUserSocket(conversationRequest.firstUserId);
 		const secondUserSocket =
 			conversationRequest.secondUserId === conversationRequest.firstUserId
 				? this.sessionManager.getUserSocket(conversationRequest.firstUserId)
 				: this.sessionManager.getUserSocket(conversationRequest.secondUserId);
-		firstUserSocket.isFindingNewFriend = false;
-		secondUserSocket.isFindingNewFriend = false;
+
 		if (firstUserSocket) firstUserSocket.emit('onConversationRequestCreated', conversationRequest);
 		if (secondUserSocket) secondUserSocket.emit('onConversationRequestCreated', conversationRequest);
 	}
