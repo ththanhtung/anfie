@@ -1,4 +1,5 @@
-import { ArrayNotEmpty, IsString } from 'class-validator';
+import { ArrayNotEmpty, IsEnum, IsOptional, IsString } from 'class-validator';
+import { EGroupType } from 'src/common';
 
 export class CreateGroupDto {
 	@IsString({ each: true })
@@ -7,6 +8,10 @@ export class CreateGroupDto {
 
 	@IsString()
 	title: string;
+
+	@IsEnum(EGroupType)
+	@IsOptional()
+	type?: EGroupType;
 }
 
 export class CreateGroupAdminDto {
@@ -15,7 +20,7 @@ export class CreateGroupAdminDto {
 	users: string[];
 
 	@IsString()
-	title: string; 
+	title: string;
 
 	@IsString()
 	creatorId: string;

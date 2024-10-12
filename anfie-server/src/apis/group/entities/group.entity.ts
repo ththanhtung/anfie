@@ -2,6 +2,7 @@ import { Users } from 'src/apis/user/entities';
 import { BaseEntity } from 'src/database';
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne } from 'typeorm';
 import { GroupMessage } from './group-message.entity';
+import { EGroupType } from 'src/common';
 
 @Entity()
 export class Group extends BaseEntity<Group> {
@@ -11,12 +12,14 @@ export class Group extends BaseEntity<Group> {
 	title: string;
 
 	@Column({
-		name: 'group_creator_id'
+		name: 'group_creator_id',
+		nullable: true
 	})
 	creatorId: string;
 
 	@Column({
-		name: 'group_admin_id'
+		name: 'group_admin_id',
+		nullable: true
 	})
 	adminId: string;
 
@@ -30,16 +33,24 @@ export class Group extends BaseEntity<Group> {
 	@JoinColumn({
 		name: 'group_creator_id'
 	})
-	creator: Users;
+	creator?: Users;
 
 	@OneToOne(() => Users, { createForeignKeyConstraints: false })
 	@JoinColumn({
 		name: 'group_admin_id'
 	})
-	admin: Users;
+	admin?: Users;
 
 	@Column({ nullable: true, name: 'group_avatar_url' })
 	avatar?: string;
+
+	@Column({
+		name: 'group_type',
+		type: 'enum',
+		enum: EGroupType,
+		default: EGroupType.PRIVATE
+	})
+	type: EGroupType;
 
 	@ManyToMany(() => Users, (user) => user.groups)
 	@JoinTable({

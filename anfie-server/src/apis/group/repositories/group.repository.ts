@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 import { TCreateGroupParams, TLeaveGroupParams, TUpdateLastGroupMessageParams } from 'src/common/@types/groups';
 import { UserService } from 'src/apis/user/services';
-import { pagination } from 'src/common';
+import { EGroupType, pagination } from 'src/common';
 import { GetGroupsDto } from '../dto';
 
 @Injectable()
@@ -17,13 +17,14 @@ export class GroupRepository extends Repository<Group> {
 	}
 
 	async createOne(params: TCreateGroupParams) {
-		const { creatorId, title, users } = params;
+		const { creatorId, title, users, type } = params;
 
 		const groupParams = {
 			adminId: creatorId,
 			creatorId: creatorId,
 			title,
-			users
+			users,
+			type: type as EGroupType
 		};
 
 		return this.save(groupParams);

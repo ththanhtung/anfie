@@ -20,6 +20,7 @@ import { IoBookOutline, IoPersonAddOutline } from "react-icons/io5";
 import { TbShieldQuestion } from "react-icons/tb";
 import { AiOutlineComment } from "react-icons/ai";
 import { MdOutlineStorefront } from "react-icons/md";
+import { LuDoorOpen } from "react-icons/lu";
 import { useMutationUserProfile, useUserProfile } from "@/hooks";
 
 type TProps = {
@@ -57,6 +58,11 @@ const MenuSidebar = ({ href }: TProps) => {
       label: "group conversations",
     },
     {
+      key: "alley",
+      icon: <LuDoorOpen />,
+      label: "Alley",
+    },
+    {
       key: "message-requests",
       icon: <TbMessageCircleUp />,
       label: "message requests",
@@ -80,11 +86,6 @@ const MenuSidebar = ({ href }: TProps) => {
       key: "notes",
       icon: <SnippetsOutlined />,
       label: "notes",
-    },
-    {
-      key: "store",
-      icon: <MdOutlineStorefront />,
-      label: "Store",
     },
     {
       key: "profile",

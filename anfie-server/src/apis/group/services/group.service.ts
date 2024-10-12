@@ -29,10 +29,10 @@ export class GroupService {
 		}
 
 		return this.groupRepository.createOne({
-			creatorId: user.userId.toString(),
-			adminId: user.userId.toString(),
+			...(user.userId && { adminId: user.userId.toString(), creatorId: user.userId.toString() }),
 			users: users,
-			title: createGroupDto.title
+			title: createGroupDto.title,
+			type: createGroupDto.type
 		});
 	}
 

@@ -1,10 +1,11 @@
 import { Users } from 'src/apis/user/entities';
 
 type TCreateGroupParams = {
-	creatorId: string;
-	adminId: string;
+	creatorId?: string | null | undefined;
+	adminId?: string | null | undefined;
 	title: string;
 	users: Users[];
+	type?: string;
 };
 
 type TAddGroupRecipientParams = {

@@ -27,6 +27,7 @@ import { UtilsModule } from './utils/utils.module';
 import { PostMediaModule } from './post-media/post-media.module';
 import { ConversationRequestModule } from './conversation-request/conversation-request.module';
 import { LlamaModule } from './llama/llama.module';
+import { AlleyModule } from './alley/alley.module';
 
 @Module({
 	imports: [
@@ -56,7 +57,8 @@ import { LlamaModule } from './llama/llama.module';
 		UtilsModule,
 		PostMediaModule,
 		ConversationRequestModule,
-		LlamaModule
+		LlamaModule,
+		AlleyModule
 	]
 })
 export class ApiModule {}

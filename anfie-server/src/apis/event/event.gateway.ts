@@ -71,7 +71,6 @@ export class EventGateway {
 			match.reason
 		);
 
-
 		const firstUserSocket = this.sessionManager.getUserSocket(conversationRequest.firstUserId);
 		const secondUserSocket =
 			conversationRequest.secondUserId === conversationRequest.firstUserId

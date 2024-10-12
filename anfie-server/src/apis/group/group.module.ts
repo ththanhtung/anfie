@@ -13,6 +13,7 @@ import { MessageMediaModule } from '../message-media/message-media.module';
 @Module({
 	imports: [TypeOrmModule.forFeature([Group, GroupMessage]), UserModule, FriendModule, MessageMediaModule],
 	controllers: [GroupController, GroupRecipientController, GroupAdminController, GroupMessagesController],
-	providers: [GroupService, GroupRepository, GroupAdminService, GroupMessageRepository, GroupMessageService]
+	providers: [GroupService, GroupRepository, GroupAdminService, GroupMessageRepository, GroupMessageService],
+	exports: [GroupService]
 })
 export class GroupModule {}
