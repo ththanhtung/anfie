@@ -6,20 +6,46 @@ import {
 } from "@/components";
 import { useSocketContext } from "@/configs";
 import { EConversationTypes, queryKeys } from "@/constants";
-import { useListInfiniteGroupConversations, useMutationGroup } from "@/hooks";
+import {
+  useGetDetailsPublicGroup,
+  useListInfiniteGroupConversations,
+  useMutationGroup,
+} from "@/hooks";
+import { userInfoStoreAtom } from "@/stores";
 import { _common } from "@/utils";
 import { useQueryClient } from "@tanstack/react-query";
 import { List } from "antd";
+import { useAtomValue } from "jotai";
+import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect } from "react";
 
-const GroupConversationPage = () => {
-  const { groupConversations } = useListInfiniteGroupConversations();
+const GroupConversationDetailPage = ({ params }: TDetailPage) => {
   const queryClient = useQueryClient();
-  const [valueChecked, setValueChecked] = React.useState<string>();
-  const [selectedConversation, setSelectedConversation] =
-    React.useState<TGroupConversation>();
+  const { publicGroup } = useGetDetailsPublicGroup(params.id);
+  const currentUser = useAtomValue(userInfoStoreAtom);
+  console.log({ publicGroup });
 
   const { onLeaveGroup, onAddRecipientsToGroup } = useMutationGroup();
+
+  useEffect(() => {
+    if (!publicGroup) return;
+    if (publicGroup.type === "public") {
+      onAddRecipientsToGroup({
+        groupId: params.id,
+        form: {
+          recipientIds: [currentUser.userId],
+        },
+      });
+    }
+  }, [currentUser.userId, onAddRecipientsToGroup, params.id, publicGroup]);
+
+  useEffect(() => {
+    return () => {
+      onLeaveGroup({
+        groupId: params.id,
+      });
+    };
+  }, [onLeaveGroup, params.id]);
 
   const socket = useSocketContext();
   useEffect(() => {
@@ -125,44 +151,18 @@ const GroupConversationPage = () => {
     };
   }, [queryClient, socket]);
 
-  const renderLeft = useCallback(() => {
-    return (
-      <div>
-        <h1 className="text-center text-blue-600 my-4">Group Conversations</h1>
-        <List
-          className="p-8"
-          dataSource={groupConversations}
-          renderItem={(item: TGroupConversation) => (
-            <ConversationItem
-              username={item.title || ""}
-              lastMessage={item?.lastMessage}
-              id={Math.round(Math.random() * 100000000).toString()}
-              value={valueChecked}
-              onClick={() => {
-                setValueChecked(item?.id);
-                setSelectedConversation(item);
-              }}
-            />
-          )}
-        />
-      </div>
-    );
-  }, [groupConversations, valueChecked]);
-
   return (
     <>
-      <LayoutConversation renderLeft={renderLeft()}>
-        <div className="h-[100vh]">
-          <MessagePanel
-            group={selectedConversation}
-            type={EConversationTypes.GROUP}
-            onLeave={onLeaveGroup}
-            onAddRecipients={onAddRecipientsToGroup}
-          />
-        </div>
-      </LayoutConversation>
+      <div className="h-[100vh] w-full bg-red-700">
+        <MessagePanel
+          group={publicGroup}
+          type={EConversationTypes.GROUP}
+          onLeave={onLeaveGroup}
+          onAddRecipients={onAddRecipientsToGroup}
+        />
+      </div>
     </>
   );
 };
 
-export default GroupConversationPage;
+export default GroupConversationDetailPage;

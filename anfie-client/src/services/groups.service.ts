@@ -48,6 +48,13 @@ export class GroupsServiceApis extends HttpClient {
     );
     return data;
   }
+
+  public async getDetailsPublicGroup(groupId: string) {
+    const { data } = await this.instance.get<
+      TResultResponse<TGroupConversation>
+    >(`${ENDPOINT_APIS.groups.list}/public/${groupId}`);
+    return data;
+  }
 }
 
 export const groupsService = new GroupsServiceApis();

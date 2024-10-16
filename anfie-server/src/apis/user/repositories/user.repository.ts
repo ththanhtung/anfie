@@ -1,9 +1,10 @@
 /* eslint-disable prettier/prettier */
-import { In, Not, Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Users } from '../entities';
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from '../dto';
+import { EGroupType } from 'src/common';
 
 @Injectable()
 export class UserRepository extends Repository<Users> {
@@ -137,5 +138,25 @@ export class UserRepository extends Repository<Users> {
 			]);
 		}
 		await this.update({ id: id }, { isFindFriend: !user.isFindFriend });
+	}
+
+	async removeUserFromAllPublicGroups(userId: string) {
+		const user = await this.findOne({
+			where: { id: userId },
+			relations: ['groups']
+		});
+
+		if (!user) {
+			throw new NotFoundException([
+				{
+					message: 'user not found'
+				}
+			]);
+		}
+		// Lọc chỉ giữ lại các nhóm private
+		user.groups = user.groups.filter((group) => group.type !== EGroupType.PUBLIC);
+
+		// Lưu lại để cập nhật các liên kết
+		return this.save(user);
 	}
 }

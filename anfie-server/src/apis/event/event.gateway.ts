@@ -25,8 +25,8 @@ export class EventGateway {
 		private readonly sessionManager: EventSessionManager,
 		private readonly matchmakingService: MatchmakingService,
 		private readonly conversationAdminService: ConversationAdminService,
-		private readonly conversationRequestService: ConversationRequestService
-		// private readonly userService: UserService
+		private readonly conversationRequestService: ConversationRequestService,
+		private readonly userService: UserService
 	) {}
 
 	@WebSocketServer()
@@ -47,9 +47,9 @@ export class EventGateway {
 		});
 	}
 
-	handleDisconnect(socket: AuthenticatedSocket) {
-		console.log('handleDisconnect');
-		console.log(socket.user);
+	async handleDisconnect(socket: AuthenticatedSocket) {
+		await this.userService.removeUserFromAllPublicGroups(socket.user.userId);
+		console.log(`Client disconnected: ${socket.user.userId}`);
 	}
 
 	// @SubscribeMessage('onFindNewFriend')
@@ -102,6 +102,7 @@ export class EventGateway {
 	handleGroupMessageCreated(payload: TCreateGroupMessageResponse) {
 		this.server.emit('group-messages.created', payload);
 		const { users } = payload.group;
+
 		users.forEach((user) => {
 			const userSocket = this.sessionManager.getUserSocket(user.id);
 			if (userSocket)

@@ -14,7 +14,7 @@ import { useAtomValue } from "jotai";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { TbMessageCircleUp } from "react-icons/tb";
 import { IoBookOutline, IoPersonAddOutline } from "react-icons/io5";
 import { TbShieldQuestion } from "react-icons/tb";
@@ -37,10 +37,13 @@ const MenuSidebar = ({ href }: TProps) => {
   useEffect(() => {
     setIsFindingNewFriend(userProfile?.user?.isFindFriend);
   }, [userProfile]);
-  
+
   const [isFindingNewFriend, setIsFindingNewFriend] = React.useState(
     userProfile?.user?.isFindFriend
   );
+
+  const [current, setCurrent] = useState<string>(href);
+  
   const items: MenuProps["items"] = [
     {
       key: "diary",
@@ -58,7 +61,7 @@ const MenuSidebar = ({ href }: TProps) => {
       label: "group conversations",
     },
     {
-      key: "alley",
+      key: "alleys",
       icon: <LuDoorOpen />,
       label: "Alley",
     },
@@ -121,7 +124,8 @@ const MenuSidebar = ({ href }: TProps) => {
       localStorage.removeItem("access_token");
       router.push("/login");
     }
-    router.push(e.key);
+    setCurrent(e.key);
+    router.replace(`${process.env.NEXT_PUBLIC_URL}/${e.key}`);
   };
   return (
     <div className="flex flex-col items-center fixed">
@@ -134,6 +138,7 @@ const MenuSidebar = ({ href }: TProps) => {
         theme="light"
         mode="inline"
         items={items}
+        selectedKeys={[current]}
         style={{ border: "none", textTransform: "capitalize" }}
       />
       <Button

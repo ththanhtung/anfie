@@ -74,4 +74,12 @@ export class AlleyService {
 		const alley = await this.alleyRepository.findOneById(id);
 		return alley;
 	}
+
+	async getFirstAlley() {
+		return this.alleyRepository.findFirstAlley();
+	}
+
+	async findGroupsByAlleyId(alleyId: string) {
+		return this.alleyRepository.findGroupsByAlleyId(alleyId);
+	}
 }

@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, Get, Query } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Get, Query, Param } from '@nestjs/common';
 import { GroupService } from '../services/group.service';
 import { CreateGroupDto } from '../dto/create-group.dto';
 import { AtGuard, GetCurrentUser } from 'src/common';
@@ -17,5 +17,10 @@ export class GroupController {
 	@Get()
 	async getMyGroups(@GetCurrentUser('userId') userId: string, @Query() query: GetGroupsDto) {
 		return this.groupService.getMyGroups(userId, query);
+	}
+
+	@Get('/public/:id')
+	async findPublicGroupById(@Param('id') id: string) {
+		return this.groupService.findPublicGroupById(id);
 	}
 }

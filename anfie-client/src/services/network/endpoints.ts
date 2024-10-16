@@ -54,4 +54,7 @@ export const ENDPOINT_APIS = {
   users: {
     list: "api/user",
   },
+  alleys: {
+    list: "api/alleys",
+  }
 };

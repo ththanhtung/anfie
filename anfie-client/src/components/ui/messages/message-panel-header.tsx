@@ -7,6 +7,7 @@ import {
 } from "@ant-design/icons";
 import { Avatar, Button, Dropdown, MenuProps } from "antd";
 import React, { useMemo } from "react";
+import { FaRegCircleUser } from "react-icons/fa6";
 
 type TProps = {
   recipientName: string;
@@ -22,6 +23,7 @@ const MessagePanelHeader = ({
   onCreate,
   onLeave,
   onAddRecipients,
+  
 }: TProps) => {
   const dropdownItems: MenuProps["items"] = useMemo(() => {
     return type === EConversationTypes.PRIVATE
@@ -85,7 +87,22 @@ const MessagePanelHeader = ({
         </p>
       </div>
       <div className="flex justify-center items-center gap-4">
-        <Button
+        {type !== EConversationTypes.GROUP ? (
+          <Button
+            type="primary"
+            style={{
+              backgroundColor: "#52DD68",
+              alignItems: "center",
+              display: "flex",
+            }}
+            icon={<FaRegCircleUser />}
+            size="large"
+          >
+            View Others&apos; Photos
+          </Button>
+        ) : null}
+
+        {/* <Button
           type="primary"
           shape="circle"
           style={{ backgroundColor: "#52DD68" }}
@@ -98,7 +115,7 @@ const MessagePanelHeader = ({
           style={{ backgroundColor: "#52DD68" }}
           icon={<VideoCameraOutlined />}
           size="large"
-        />
+        /> */}
 
         <Dropdown
           menu={{

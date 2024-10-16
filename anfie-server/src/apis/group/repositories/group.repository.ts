@@ -78,16 +78,16 @@ export class GroupRepository extends Repository<Group> {
 		return this.findOneAndRemoveUserById(groupId, userId);
 	}
 
-	async removeRecipient() {}
-
 	async findOneAndRemoveUserById(groupId: string, userId: string) {
 		const group = await this.findOne({ where: { id: groupId }, relations: ['users'] });
-		if (group.adminId === userId)
-			throw new BadRequestException([
-				{
-					message: 'admin cannot leave the group'
-				}
-			]);
+		if (group.type === EGroupType.PRIVATE) {
+			if (group.adminId === userId)
+				throw new BadRequestException([
+					{
+						message: 'admin cannot leave the group'
+					}
+				]);
+		}
 
 		group.users = group.users.filter((user) => user.id !== userId);
 		return this.save(group);
@@ -102,5 +102,21 @@ export class GroupRepository extends Repository<Group> {
 
 	async updateLastGroupMessage({ groupId, messageId }: TUpdateLastGroupMessageParams) {
 		return this.update(groupId, { lastMessageId: messageId });
+	}
+
+	async findPublicGroupById(id: string) {
+		const group = await this.findOne({
+			where: { id: id, type: EGroupType.PUBLIC },
+			relations: ['users', 'lastMessage', 'admin', 'creator']
+		});
+		if (!group) {
+			throw new ConflictException([
+				{
+					field: 'id',
+					message: 'group not found'
+				}
+			]);
+		}
+		return group;
 	}
 }

@@ -12,6 +12,12 @@ import { Comment } from 'src/apis/comment/entities';
 @Entity()
 export class Users extends BaseEntity<Users> {
 	@Column({
+		name: 'user_nick_name',
+		nullable: true
+	})
+	nickName: string;
+
+	@Column({
 		name: 'user_email'
 	})
 	email: string;

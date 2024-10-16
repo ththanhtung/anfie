@@ -76,7 +76,8 @@ export class AlleyRepository extends Repository<Alley> {
 			return pagination(this, query, {
 				where: {
 					alleyLeft: MoreThan(parent.alleyLeft),
-					alleyRight: LessThanOrEqual(parent.alleyRight)
+					alleyRight: LessThanOrEqual(parent.alleyRight),
+					parentId
 				},
 				order: {
 					alleyLeft: 'ASC'
@@ -120,5 +121,24 @@ export class AlleyRepository extends Repository<Alley> {
 				alleyRight: () => `alley_right - ${amount}`
 			}
 		);
+	}
+
+	async findFirstAlley() {
+		return this.findOne({
+			where: {
+				alleyLeft: 1
+			}
+		});
+	}
+
+	async findGroupsByAlleyId(alleyId: string) {
+		const alley = await this.findOne({
+			where: {
+				id: alleyId
+			},
+			relations: ['group']
+		});
+
+		return alley.group;
 	}
 }

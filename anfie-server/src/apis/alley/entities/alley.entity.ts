@@ -17,7 +17,8 @@ export class Alley extends BaseEntity<Alley> {
 	title: string;
 
 	@Column({
-		name: 'alley_group_id'
+		name: 'alley_group_id',
+		nullable: true
 	})
 	groupId: string;
 
@@ -37,6 +38,9 @@ export class Alley extends BaseEntity<Alley> {
 	})
 	parent: Alley;
 
-	@OneToOne(() => Group, (group) => group.id)
+	@OneToOne(() => Group, { createForeignKeyConstraints: false })
+	@JoinColumn({
+		name: 'alley_group_id'
+	})
 	group: Group;
 }

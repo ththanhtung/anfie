@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, Get, Query, UseInterceptors, Param, UploadedFiles, ParseIntPipe } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Get, Query, UseInterceptors, Param, UploadedFiles } from '@nestjs/common';
 import { AtGuard, GetCurrentUser } from 'src/common';
 import { CreateGroupMessageDto, GetGroupMessagesDto } from '../dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
@@ -34,7 +34,7 @@ export class GroupMessagesController {
 	}
 
 	@Get()
-	async getGroupMessagesFromGroupConversation(@Param('id', ParseIntPipe) groupId: string, @Query() query: GetGroupMessagesDto) {
+	async getGroupMessagesFromGroupConversation(@Param('id') groupId: string, @Query() query: GetGroupMessagesDto) {
 		return this.groupMessageService.getGroupMessagesFromGroupConversation(groupId, query);
 	}
 }

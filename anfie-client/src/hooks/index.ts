@@ -18,3 +18,4 @@ export * from "./friend-requests";
 export * from "./group-conversations";
 export * from "./group-messages";
 export * from "./friends";
+export * from "./alleys";

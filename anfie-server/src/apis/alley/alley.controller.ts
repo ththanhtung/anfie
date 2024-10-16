@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, UseGuards, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards, Query } from '@nestjs/common';
 import { AlleyService } from './services/alley.service';
 import { CreateAlleyDto } from './dto/create-alley.dto';
 import { AtGuard, GetCurrentUser } from 'src/common';
@@ -18,8 +18,18 @@ export class AlleyController {
 		return this.alleyService.getAlleyByParentId(parentId, query);
 	}
 
-	@Delete(':id')
-	async deleteAlley(@Param('id') id: string) {
-		return this.alleyService.deleteAlley(id);
+	@Get(':id')
+	async getOneById(@Param('id') id: string) {
+		return this.alleyService.findOneById(id);
+	}
+
+	@Get('/')
+	async getFirstAlley() {
+		return this.alleyService.getFirstAlley();
+	}
+
+	@Get('/:id/groups')
+	async findGroupsByAlleyId(@Param('id') id: string) {
+		return this.alleyService.findGroupsByAlleyId(id);
 	}
 }

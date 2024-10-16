@@ -5,6 +5,7 @@ import { AddRecipientDto, GetGroupsDto } from '../dto';
 import { UserService } from 'src/apis/user/services';
 import { FriendService } from 'src/apis/friend/services';
 import { TUpdateLastGroupMessageParams } from 'src/common/@types/groups';
+import { EGroupType } from 'src/common';
 
 @Injectable()
 export class GroupService {
@@ -38,12 +39,14 @@ export class GroupService {
 
 	async addRecipient(user: TUserJwt, groupId: string, addRecipientDto: AddRecipientDto) {
 		const group = await this.groupRepository.findOneById(groupId);
-		if (group.adminId !== user.userId) {
-			throw new ForbiddenException([
-				{
-					message: 'only admin can add other user'
-				}
-			]);
+		if (group.type === EGroupType.PRIVATE) {
+			if (group.adminId !== user.userId) {
+				throw new ForbiddenException([
+					{
+						message: 'only admin can add other user'
+					}
+				]);
+			}
 		}
 
 		return this.groupRepository.addRecipient(groupId, addRecipientDto.recipientIds);
@@ -56,19 +59,21 @@ export class GroupService {
 	async removeRecipient(groupId: string, userId: string, removeUserId: string) {
 		await this.userService.findOneById(removeUserId);
 		const group = await this.groupRepository.findOneById(groupId);
-		if (group.adminId !== userId)
-			throw new BadRequestException([
-				{
-					message: 'only admin can remove other user'
-				}
-			]);
+		if (group.type === EGroupType.PRIVATE) {
+			if (group.adminId !== userId)
+				throw new BadRequestException([
+					{
+						message: 'only admin can remove other user'
+					}
+				]);
 
-		if (group.adminId === removeUserId)
-			throw new BadRequestException([
-				{
-					message: 'you cannot remove yourself as an admin'
-				}
-			]);
+			if (group.adminId === removeUserId)
+				throw new BadRequestException([
+					{
+						message: 'you cannot remove yourself as an admin'
+					}
+				]);
+		}
 
 		return this.groupRepository.findOneAndRemoveUserById(groupId, removeUserId);
 	}
@@ -83,5 +88,20 @@ export class GroupService {
 
 	async updateLastGroupMessage({ groupId, messageId }: TUpdateLastGroupMessageParams) {
 		return this.groupRepository.updateLastGroupMessage({ groupId, messageId });
+	}
+
+	async findPublicGroupById(id: string) {
+		return this.groupRepository.findPublicGroupById(id);
+	}
+
+	async removeUserFromAllPublicGroup(userId: string) {
+		const groups = await this.groupRepository.find({
+			where: {
+				type: EGroupType.PUBLIC,
+				users: {
+					id: userId
+				}
+			}
+		});
 	}
 }

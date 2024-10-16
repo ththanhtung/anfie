@@ -7,3 +7,4 @@ export * from "./message-request";
 export * from "./notes";
 export * from "./friend-requests";
 export * from "./groups";
+export * from "./alley";

@@ -6,3 +6,9 @@ type TDrawerRef = {
   showDrawer: () => void;
   closeDrawer: () => void;
 };
+
+type TDetailPage = {
+  params: {
+    id: string;
+  };
+};

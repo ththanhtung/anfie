@@ -17,4 +17,5 @@ type TGroupConversation = {
   lastMessage: TGroupMessage;
   avatar?: string;
   title: string;
+  type: 'public' | 'private';
 };

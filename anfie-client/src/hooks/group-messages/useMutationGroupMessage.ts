@@ -22,7 +22,7 @@ export const useMutationGroupMessage = () => {
       mutationCreateGroupMessage(
         { form, groupId },
         {
-          onSuccess: () => {
+          onSuccess: () => {    
             // queryClient.invalidateQueries({
             //   queryKey: [queryKeys.GET_LIST_INFINITE_MESSAGES],
             // });

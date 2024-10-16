@@ -4,6 +4,7 @@ type TGroup = {
   title: string;
   users: TUserGroup[];
   id: string;
+  type: 'public' | 'private';
   created_at: string;
   updated_at: string;
   deleted_at: any;

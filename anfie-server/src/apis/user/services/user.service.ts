@@ -100,4 +100,8 @@ export class UserService {
 	async toggleFindingFriend(id: string) {
 		return this.userRepository.toggleFindingFriend(id);
 	}
+
+	async removeUserFromAllPublicGroups(userId: string) {
+		return this.userRepository.removeUserFromAllPublicGroups(userId);
+	}
 }
