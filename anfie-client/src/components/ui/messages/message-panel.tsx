@@ -16,6 +16,7 @@ import {
   AddRecipientsModal,
   CreateGroupModal,
   LeaveGroupModal,
+  ShowAvatarModal,
 } from "@/components";
 import { useAtomValue } from "jotai";
 import { userInfoStoreAtom } from "@/stores";
@@ -43,6 +44,7 @@ const MessagePanel = ({
   const createGroupRef = useRef<TModalRef>(null);
   const leaveGroupRef = useRef<TModalRef>(null);
   const addRecipientsRef = useRef<TModalRef>(null);
+  const showAvatarRef = useRef<TModalRef>(null);
 
   const {
     messages: conversationMessages,
@@ -71,6 +73,10 @@ const MessagePanel = ({
 
   const onShowAddRecipientsModal = () => {
     addRecipientsRef.current?.showModal();
+  };
+
+  const onShowAvatar = () => {
+    showAvatarRef.current?.showModal();
   };
 
   const sentMessage = async ({ content }: TMessageForm) => {
@@ -104,6 +110,7 @@ const MessagePanel = ({
           onCreate={onCreateGroup}
           onLeave={onLeaveGroup}
           onAddRecipients={onShowAddRecipientsModal}
+          onShowAvatar={onShowAvatar}
           type={type}
           recipientName={
             type === EConversationTypes.PRIVATE
@@ -156,6 +163,11 @@ const MessagePanel = ({
         ref={addRecipientsRef}
         onAdd={onAddRecipients}
         groupId={group?.id?.toString() || ""}
+      />
+  
+      <ShowAvatarModal
+        ref={showAvatarRef}
+        conversation = {conversation}
       />
     </>
   );

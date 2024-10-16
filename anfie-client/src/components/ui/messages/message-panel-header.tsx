@@ -14,6 +14,7 @@ type TProps = {
   onCreate: () => void;
   onLeave: () => void;
   onAddRecipients: () => void;
+  onShowAvatar: () => void;
   type: EConversationTypes;
 };
 
@@ -23,7 +24,7 @@ const MessagePanelHeader = ({
   onCreate,
   onLeave,
   onAddRecipients,
-  
+  onShowAvatar,
 }: TProps) => {
   const dropdownItems: MenuProps["items"] = useMemo(() => {
     return type === EConversationTypes.PRIVATE
@@ -87,7 +88,7 @@ const MessagePanelHeader = ({
         </p>
       </div>
       <div className="flex justify-center items-center gap-4">
-        {type !== EConversationTypes.GROUP ? (
+        {type !== EConversationTypes.GROUP && recipientName ? (
           <Button
             type="primary"
             style={{
@@ -97,6 +98,7 @@ const MessagePanelHeader = ({
             }}
             icon={<FaRegCircleUser />}
             size="large"
+            onClick={onShowAvatar}
           >
             View Others&apos; Photos
           </Button>
