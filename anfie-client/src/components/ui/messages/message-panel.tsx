@@ -26,7 +26,7 @@ type TProps = {
   conversation?: TConversation;
   group?: TGroupConversation;
   onCreate?: (title: string, userIds: string[]) => void;
-  onLeave?: (params: TLeaveGroupParams) => void;
+  onLeave?: () => void;
   onAddRecipients?: (params: TAddRecipientsToGroupParams) => void;
 };
 const MessagePanel = ({
@@ -40,7 +40,6 @@ const MessagePanel = ({
   console.log({ conversation, group, type });
 
   const currentUser = useAtomValue(userInfoStoreAtom);
-
   const createGroupRef = useRef<TModalRef>(null);
   const leaveGroupRef = useRef<TModalRef>(null);
   const addRecipientsRef = useRef<TModalRef>(null);
@@ -79,6 +78,10 @@ const MessagePanel = ({
     showAvatarRef.current?.showModal();
   };
 
+  const onEndConversation = () => {
+    onLeave?.();
+  };
+
   const sentMessage = async ({ content }: TMessageForm) => {
     if (!content) return;
 
@@ -111,6 +114,7 @@ const MessagePanel = ({
           onLeave={onLeaveGroup}
           onAddRecipients={onShowAddRecipientsModal}
           onShowAvatar={onShowAvatar}
+          onEndConversation={onEndConversation}
           type={type}
           recipientName={
             type === EConversationTypes.PRIVATE
@@ -164,11 +168,8 @@ const MessagePanel = ({
         onAdd={onAddRecipients}
         groupId={group?.id?.toString() || ""}
       />
-  
-      <ShowAvatarModal
-        ref={showAvatarRef}
-        conversation = {conversation}
-      />
+
+      <ShowAvatarModal ref={showAvatarRef} conversation={conversation} />
     </>
   );
 };

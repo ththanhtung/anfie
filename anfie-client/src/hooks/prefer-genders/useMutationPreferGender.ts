@@ -6,16 +6,25 @@ import { preferGendersService } from "@/services";
 
 export const useMutationPreferGender = () => {
   const queryClient = useQueryClient();
-  const { mutate: mutationCreatePreferGender, isPending: isCreatePreferGenderPending } =
-    useMutation<any, TResponseError, TPreferGenderForm>({
-      mutationKey: [mutationKeys.MUTATION_CREATE_TAG],
-      mutationFn: (form) => preferGendersService.postCreatePreferGender(form),
-    });
-  const { mutate: mutationUpdatePreferGender, isPending: isUpdatePreferGenderPending } =
-    useMutation<any, TResponseError, { preferGenderId: string; form: TPreferGenderForm }>({
-      mutationKey: [mutationKeys.MUTATION_UPDATE_TAG],
-      mutationFn: ({ preferGenderId, form }) => preferGendersService.patchUpdatePreferGender(preferGenderId, form),
-    });
+  const {
+    mutate: mutationCreatePreferGender,
+    isPending: isCreatePreferGenderPending,
+  } = useMutation<any, TResponseError, TPreferGenderForm>({
+    mutationKey: [mutationKeys.MUTATION_CREATE_TAG],
+    mutationFn: (form) => preferGendersService.postCreatePreferGender(form),
+  });
+  const {
+    mutate: mutationUpdatePreferGender,
+    isPending: isUpdatePreferGenderPending,
+  } = useMutation<
+    any,
+    TResponseError,
+    { preferGenderId: string; form: TPreferGenderForm }
+  >({
+    mutationKey: [mutationKeys.MUTATION_UPDATE_TAG],
+    mutationFn: ({ preferGenderId, form }) =>
+      preferGendersService.patchUpdatePreferGender(preferGenderId, form),
+  });
 
   const onCreateOrUpdatePreferGender = useCallback(
     ({ preferGenderId, form, cb }: TCreateOrUpdatePreferGenderParams) => {
@@ -24,7 +33,7 @@ export const useMutationPreferGender = () => {
           { preferGenderId, form },
           {
             onError: (error) => {
-              message.error(error.message);
+              message.error(error.response.data.errors[0].message);
             },
             onSuccess: (data) => {
               cb?.(data);

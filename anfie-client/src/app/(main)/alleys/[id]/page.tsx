@@ -1,27 +1,17 @@
 "use client";
-import {
-  ConversationItem,
-  LayoutConversation,
-  MessagePanel,
-} from "@/components";
+
 import AlleyItem from "@/components/ui/alley/alley-item";
 import CreateAlleyModal from "@/components/ui/alley/create-alley-modal";
 import GroupItem from "@/components/ui/alley/group-item";
-import CreateConfessionModal from "@/components/ui/confessions/create-confession-modal";
-import { useSocketContext } from "@/configs";
-import { EConversationTypes, queryKeys } from "@/constants";
 import {
   useGetAlleyByParentId,
   useGetDetailsAlley,
   useGetGroupByAlleyId,
-  useListInfiniteGroupConversations,
-  useMutationGroup,
 } from "@/hooks";
 import { _common } from "@/utils";
-import { useQueryClient } from "@tanstack/react-query";
-import { Button, Input, List, Typography } from "antd";
-import { redirect, useRouter } from "next/navigation";
-import React, { useCallback, useEffect, useRef } from "react";
+import { Button, Input, Typography } from "antd";
+import { useRouter } from "next/navigation";
+import React, { useCallback, useRef } from "react";
 
 const AlleyDetailPage = ({ params }: TDetailPage) => {
   const { alleyChildren } = useGetAlleyByParentId(params.id);
@@ -29,7 +19,6 @@ const AlleyDetailPage = ({ params }: TDetailPage) => {
   const { alley } = useGetDetailsAlley(params.id);
   const ref = useRef<TModalRef>(null);
   const router = useRouter();
-  const { onLeaveGroup } = useMutationGroup();
 
   const onAddAlley = useCallback(() => {
     ref.current?.showModal();

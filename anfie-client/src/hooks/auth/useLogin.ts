@@ -25,7 +25,7 @@ export const useLogin = () => {
     async (form: TFormLogin, cb?: () => {}) => {
       mutate(form, {
         onError: (error) => {
-          message.error(error.message);
+          message.error(error.response.data.errors[0].message);
         },
         onSuccess: async (data) => {
           const userInfo = data.data.user;

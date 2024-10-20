@@ -70,8 +70,17 @@ export class UserService {
 		return this.userRepository.findOneByEmail(email);
 	}
 
-	async findOneById(id: string) {
-		return this.userRepository.findOneById(id);
+	async findOneById(id: string, withProfile?: boolean) {
+		let profile: UserProfiles = null;
+		if (withProfile) {
+			profile = await this.userProfileService.getProfileByUserId(id);
+		}
+		const user = await this.userRepository.findOneById(id);
+
+		return {
+			...user,
+			profile
+		};
 	}
 
 	async updateRefreshToken(userId: string, refreshToken: string | null) {
@@ -103,5 +112,18 @@ export class UserService {
 
 	async removeUserFromAllPublicGroups(userId: string) {
 		return this.userRepository.removeUserFromAllPublicGroups(userId);
+	}
+
+	async foundMatch(id: string) {
+		await this.userProfileService.reduceStrangerConversationSlotByOne(id);
+		await this.userRepository.toggleFindingFriend(id);
+	}
+
+	async reduceConversationSlot(id: string) {
+		return this.userProfileService.reduceStrangerConversationSlotByOne(id);
+	}
+
+	async increaseConversationSlot(id: string) {
+		return this.userProfileService.increaseStrangerConversationSlotByOne(id);
 	}
 }

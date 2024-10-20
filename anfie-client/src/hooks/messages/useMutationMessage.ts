@@ -31,7 +31,7 @@ export const useMutationMessage = () => {
             // });
           },
           onError: (error) => {
-            message.error(error.message);
+            message.error(error.response.data.errors[0].message);
           },
         }
       );

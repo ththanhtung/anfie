@@ -12,9 +12,14 @@ export const useMutationLocation = () => {
       mutationFn: (form) => locationsService.postCreateLocation(form),
     });
   const { mutate: mutationUpdateLocation, isPending: isUpdateLocationPending } =
-    useMutation<any, TResponseError, { locationId: string; form: TLocationForm }>({
+    useMutation<
+      any,
+      TResponseError,
+      { locationId: string; form: TLocationForm }
+    >({
       mutationKey: [mutationKeys.MUTATION_UPDATE_TAG],
-      mutationFn: ({ locationId, form }) => locationsService.patchUpdateLocation(locationId, form),
+      mutationFn: ({ locationId, form }) =>
+        locationsService.patchUpdateLocation(locationId, form),
     });
 
   const onCreateOrUpdateLocation = useCallback(
@@ -24,7 +29,7 @@ export const useMutationLocation = () => {
           { locationId, form },
           {
             onError: (error) => {
-              message.error(error.message);
+              message.error(error.response.data.errors[0].message);
             },
             onSuccess: (data) => {
               cb?.(data);

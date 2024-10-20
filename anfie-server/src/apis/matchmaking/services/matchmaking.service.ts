@@ -30,8 +30,8 @@ export class MatchmakingService {
 
 		console.log({ match });
 
-		await this.userService.toggleFindingFriend(match.id1);
-		await this.userService.toggleFindingFriend(match.id2);
+		await this.userService.foundMatch(match.id1);
+		await this.userService.foundMatch(match.id2);
 
 		return match;
 	}

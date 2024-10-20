@@ -29,7 +29,7 @@ export const useMutationConversatinoRequest = () => {
         { requestId },
         {
           onError: (error) => {
-            message.error(error.message);
+            message.error(error.response.data.errors[0].message);
           },
         }
       );
@@ -42,8 +42,11 @@ export const useMutationConversatinoRequest = () => {
       mutationRejectConversationRequest(
         { requestId },
         {
+          onSuccess: () => {
+            cb?.();
+          },
           onError: (error) => {
-            message.error(error.message);
+            message.error(error.response.data.errors[0].message);
           },
         }
       );

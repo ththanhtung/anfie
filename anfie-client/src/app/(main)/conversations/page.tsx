@@ -6,7 +6,12 @@ import {
 } from "@/components";
 import { useSocketContext } from "@/configs";
 import { EConversationTypes, queryKeys } from "@/constants";
-import { useListInfiniteConversations, useMutationGroup } from "@/hooks";
+import {
+  useListInfiniteConversations,
+  useMutationConfession,
+  useMutationConversation,
+  useMutationGroup,
+} from "@/hooks";
 import { userInfoStoreAtom } from "@/stores";
 import { _common } from "@/utils";
 import { useQueryClient } from "@tanstack/react-query";
@@ -22,6 +27,7 @@ const ConversationPage = () => {
   const [selectedConversation, setSelectedConversation] =
     React.useState<TConversation>();
   const { onCreateOrUpdateGroup } = useMutationGroup();
+  const { onLeaveConversation } = useMutationConversation();
 
   const onCreateGroup = useCallback(
     (title: string, userIds: string[]) => {
@@ -34,6 +40,15 @@ const ConversationPage = () => {
     },
     [onCreateOrUpdateGroup]
   );
+
+  const onLeave = useCallback(() => {
+    onLeaveConversation({
+      id: selectedConversation?.id ?? "",
+      cb: () => {
+        setSelectedConversation(undefined);
+      },
+    });
+  }, [onLeaveConversation, selectedConversation?.id]);
 
   const socket = useSocketContext();
   useEffect(() => {
@@ -174,6 +189,7 @@ const ConversationPage = () => {
             conversation={selectedConversation}
             type={EConversationTypes.PRIVATE}
             onCreate={onCreateGroup}
+            onLeave={onLeave}
           />
         </div>
       </LayoutConversation>

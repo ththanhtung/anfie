@@ -1,10 +1,20 @@
 type TResponseError = {
+  response: {
+    data: TBackendErrorResponse;
+  };
+};
+
+type TBackendErrorResponse = {
   code: number;
   message: string;
-  errors: string;
+  errors: TBackendErrorFormat[];
   data: [];
   success: boolean;
 };
+
+type TBackendErrorFormat = {
+  message: string;
+}
 
 type TMetadataPagination = {
   page: number;

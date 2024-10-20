@@ -42,4 +42,8 @@ export class UserProfileService {
 	async increaseReportedCountByOne(userId: string) {
 		return this.userProfileRepository.increaseReportedCountByOne(userId);
 	}
+
+	async increaseStrangerConversationSlotByOne(userId: string) {
+		return this.userProfileRepository.increaseStrangerConversationSlotByOne(userId);
+	}
 }

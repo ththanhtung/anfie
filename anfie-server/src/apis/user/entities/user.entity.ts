@@ -1,5 +1,5 @@
 import { BaseEntity } from 'src/database';
-import { BeforeInsert, Column, Entity, JoinColumn, ManyToMany, OneToMany } from 'typeorm';
+import { BeforeInsert, Column, Entity, JoinColumn, ManyToMany, OneToMany, OneToOne } from 'typeorm';
 import * as argon from 'argon2';
 import { Exclude } from 'class-transformer';
 import { Message } from 'src/apis/message/entities';
@@ -8,6 +8,7 @@ import { Post } from 'src/apis/post/entities';
 import { Note } from 'src/apis/notes/entities';
 import { Confession } from 'src/apis/confessions/entities';
 import { Comment } from 'src/apis/comment/entities';
+import { UserProfiles } from './user-profile.entity';
 
 @Entity()
 export class Users extends BaseEntity<Users> {
@@ -73,6 +74,9 @@ export class Users extends BaseEntity<Users> {
 	@Exclude()
 	@Column({ name: 'user_access_token', nullable: true })
 	accessToken?: string;
+
+	@OneToOne(() => UserProfiles, (userProfile) => userProfile.user)
+	profile: UserProfiles;
 
 	@ManyToMany(() => Group, (group) => group.users, { cascade: true, onDelete: 'CASCADE' })
 	groups: Group[];

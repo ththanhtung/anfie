@@ -6,23 +6,25 @@ import { useCallback } from "react";
 
 export const useMutationGroupMessage = () => {
   const queryClient = useQueryClient();
-  const { mutate: mutationCreateGroupMessage, isPending: isCreateGroupMessagePending } =
-    useMutation<
-      any,
-      TResponseError,
-      { groupId: string; form: TGroupMessageForm }
-    >({
-      mutationKey: [mutationKeys.MUTATION_CREATE_GROUP_MESSAGE],
-      mutationFn: ({ groupId, form }) =>
-        groupMessagesService.postCreateGroupMessage(form, groupId),
-    });
+  const {
+    mutate: mutationCreateGroupMessage,
+    isPending: isCreateGroupMessagePending,
+  } = useMutation<
+    any,
+    TResponseError,
+    { groupId: string; form: TGroupMessageForm }
+  >({
+    mutationKey: [mutationKeys.MUTATION_CREATE_GROUP_MESSAGE],
+    mutationFn: ({ groupId, form }) =>
+      groupMessagesService.postCreateGroupMessage(form, groupId),
+  });
 
   const onCreateGroupMessage = useCallback(
     ({ groupId, form, cb }: TCreateGroupMessageParams) => {
       mutationCreateGroupMessage(
         { form, groupId },
         {
-          onSuccess: () => {    
+          onSuccess: () => {
             // queryClient.invalidateQueries({
             //   queryKey: [queryKeys.GET_LIST_INFINITE_MESSAGES],
             // });
@@ -31,7 +33,7 @@ export const useMutationGroupMessage = () => {
             // });
           },
           onError: (error) => {
-            message.error(error.message);
+            message.error(error.response.data.errors[0].message);
           },
         }
       );

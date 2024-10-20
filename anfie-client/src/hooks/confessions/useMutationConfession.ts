@@ -28,7 +28,7 @@ export const useMutationConfession = () => {
             cb?.();
           },
           onError: (error) => {
-            message.error(error.message);
+            message.error(error.response.data.errors[0].message);
           },
         }
       );

@@ -8,11 +8,12 @@ import React, {
   useImperativeHandle,
   useState,
 } from "react";
-import { FaCheck } from "react-icons/fa6";
 import { Image } from "antd";
-import { useUserProfile } from "@/hooks";
 import { FIFTEEN_MINUTES } from "@/constants";
 import { _formatDay } from "@/utils";
+import { MdReportProblem } from "react-icons/md";
+import { useAtomValue } from "jotai";
+import { userInfoStoreAtom } from "@/stores";
 type TProps = {
   onReport?: () => void;
   conversation?: TConversation;
@@ -40,12 +41,16 @@ const ShowAvatarModal = (
     setIsModalOpen(false);
   };
 
-  const { userProfile } = useUserProfile();
+  const currentUser = useAtomValue(userInfoStoreAtom);
   const createdAt = conversation?.created_at
     ? new Date(conversation?.created_at)
     : new Date();
   const conversationDuration = (Date.now() - createdAt.getTime()) / 1000;
   const unlockTime = calculateExpirationDate(createdAt, FIFTEEN_MINUTES);
+  const recipient =
+    currentUser.userId === conversation?.creatorId
+      ? conversation?.recipient
+      : conversation?.creator;
 
   return (
     <Modal
@@ -61,8 +66,10 @@ const ShowAvatarModal = (
             <Image
               alt="avatar"
               width={500}
+              height={500}
+              className="object-cover"
               src={
-                userProfile?.user.profilePictureUrl ??
+                recipient?.profilePictureUrl ??
                 "https://cdn.icon-icons.com/icons2/1392/PNG/512/avatar_96675.png"
               }
             />
@@ -71,7 +78,7 @@ const ShowAvatarModal = (
               key={"accept"}
             >
               <Button
-                icon={<FaCheck size={22} />}
+                icon={<MdReportProblem />}
                 className="shadow-none flex items-center justify-center"
                 htmlType="submit"
                 onClick={onReport}

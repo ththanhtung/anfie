@@ -6,16 +6,25 @@ import { preferencesService } from "@/services";
 
 export const useMutationPreference = () => {
   const queryClient = useQueryClient();
-  const { mutate: mutationCreatePreference, isPending: isCreatePreferencePending } =
-    useMutation<any, TResponseError, TPreferenceForm>({
-      mutationKey: [mutationKeys.MUTATION_CREATE_TAG],
-      mutationFn: (form) => preferencesService.postCreatePreference(form),
-    });
-  const { mutate: mutationUpdatePreference, isPending: isUpdatePreferencePending } =
-    useMutation<any, TResponseError, { preferenceId: string; form: TPreferenceForm }>({
-      mutationKey: [mutationKeys.MUTATION_UPDATE_TAG],
-      mutationFn: ({ preferenceId, form }) => preferencesService.patchUpdatePreference(preferenceId, form),
-    });
+  const {
+    mutate: mutationCreatePreference,
+    isPending: isCreatePreferencePending,
+  } = useMutation<any, TResponseError, TPreferenceForm>({
+    mutationKey: [mutationKeys.MUTATION_CREATE_TAG],
+    mutationFn: (form) => preferencesService.postCreatePreference(form),
+  });
+  const {
+    mutate: mutationUpdatePreference,
+    isPending: isUpdatePreferencePending,
+  } = useMutation<
+    any,
+    TResponseError,
+    { preferenceId: string; form: TPreferenceForm }
+  >({
+    mutationKey: [mutationKeys.MUTATION_UPDATE_TAG],
+    mutationFn: ({ preferenceId, form }) =>
+      preferencesService.patchUpdatePreference(preferenceId, form),
+  });
 
   const onCreateOrUpdatePreference = useCallback(
     ({ preferenceId, form, cb }: TCreateOrUpdatePreferenceParams) => {
@@ -24,7 +33,7 @@ export const useMutationPreference = () => {
           { preferenceId, form },
           {
             onError: (error) => {
-              message.error(error.message);
+              message.error(error.response.data.errors[0].message);
             },
             onSuccess: (data) => {
               cb?.(data);

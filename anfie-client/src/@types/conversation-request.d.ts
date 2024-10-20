@@ -18,4 +18,5 @@ type TConversationRequestResponse = {
 
 type TAcceptConversationRequest = {
   requestId: string;
+  cb: () => void;
 };

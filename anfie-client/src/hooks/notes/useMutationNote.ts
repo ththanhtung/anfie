@@ -26,7 +26,7 @@ export const useMutationNote = () => {
           { id, form },
           {
             onError: (error) => {
-              message.error(error.message);
+              message.error(error.response.data.errors[0].message);
             },
             onSuccess: () => {
               message.success("Updated note successfully");

@@ -16,3 +16,13 @@ type TConversation = {
   recipient: TUser;
   lastMessage: TMessage;
 };
+
+type TLeaveConversationResponse = {
+  raw: any[];
+  affected: number;
+};
+
+type TLeaveConversationParams = {
+  id: string;
+  cb?: () => void;
+};

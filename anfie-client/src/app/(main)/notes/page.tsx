@@ -1,17 +1,11 @@
 "use client";
-import { LayoutNote, MessagePanel, NoteItem } from "@/components";
-import { useSocketContext } from "@/configs";
-import { queryKeys } from "@/constants";
+import { LayoutNote, NoteItem } from "@/components";
 import { useListInfiniteNotes, useMutationNote } from "@/hooks";
-import { useQueryClient } from "@tanstack/react-query";
 import { Button, List } from "antd";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback } from "react";
 
 const NotePage = () => {
-  const queryClient = useQueryClient();
   const { onCreateOrUpdateNote } = useMutationNote();
-  const [valueChecked, setValueChecked] = React.useState<number>();
-  const [selectedNote, setSelectedNote] = React.useState<TNote>();
   const { notes } = useListInfiniteNotes();
 
   console.log({ notes });

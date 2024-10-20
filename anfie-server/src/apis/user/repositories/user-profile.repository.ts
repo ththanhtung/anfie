@@ -74,4 +74,19 @@ export class UserProfileRepository extends Repository<UserProfiles> {
 			await this.banUser(userId);
 		}
 	}
+
+	async increaseStrangerConversationSlotByOne(userId: string) {
+		console.log({ userId });
+
+		await this.update({ user: { id: userId } }, { strangerConversationSlots: () => 'user_stranger_conversation_slots + 1' });
+		const profile = await this.findOne({
+			where: {
+				user: { id: userId }
+			}
+		});
+
+		if (profile.reportedCount > 9) {
+			await this.banUser(userId);
+		}
+	}
 }

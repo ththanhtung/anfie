@@ -38,7 +38,7 @@ export class UserRepository extends Repository<Users> {
 	}
 
 	async findOneById(id: string) {
-		const user = await this.findOne({ where: { id: id } });
+		const user = await this.findOne({ where: { id: id }});
 		if (!user) {
 			throw new ConflictException([
 				{

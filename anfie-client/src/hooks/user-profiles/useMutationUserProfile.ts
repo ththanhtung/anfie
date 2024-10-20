@@ -26,7 +26,7 @@ export const useMutationUserProfile = () => {
         { form },
         {
           onError: (error) => {
-            message.error(error.message);
+            message.error(error.response.data.errors[0].message);
           },
           onSuccess: (data) => {
             cb?.();
@@ -45,7 +45,7 @@ export const useMutationUserProfile = () => {
     ({ cb }: TFindNewFriendParams) => {
       mutationFindNewFriend(undefined, {
         onError: (error) => {
-          message.error(error.message);
+          message.error(error.response.data.errors[0].message);
         },
         onSuccess: (data) => {
           cb?.();

@@ -1,6 +1,6 @@
 "use client";
 import { useSocketContext } from "@/configs";
-import { images } from "@/constants";
+import { images, queryKeys } from "@/constants";
 import { collapsedAtom } from "@/stores/common-store";
 import {
   BellOutlined,
@@ -22,6 +22,7 @@ import { AiOutlineComment } from "react-icons/ai";
 import { MdOutlineStorefront } from "react-icons/md";
 import { LuDoorOpen } from "react-icons/lu";
 import { useMutationUserProfile, useUserProfile } from "@/hooks";
+import { useQueryClient } from "@tanstack/react-query";
 
 type TProps = {
   href: string;
@@ -32,6 +33,7 @@ const MenuSidebar = ({ href }: TProps) => {
   const router = useRouter();
   const { onFindNewFriend } = useMutationUserProfile();
   const { userProfile } = useUserProfile();
+  const queryClient = useQueryClient();
   console.log({ userProfile });
 
   useEffect(() => {
@@ -43,12 +45,14 @@ const MenuSidebar = ({ href }: TProps) => {
   );
 
   const [current, setCurrent] = useState<string>(href);
-  
+
+  const remainingConversations = userProfile?.strangerConversationSlots ?? 0;
+
   const items: MenuProps["items"] = [
     {
       key: "diary",
       icon: <IoBookOutline />,
-      label: "Diary",
+      label: "Group Page",
     },
     {
       key: "conversations",
@@ -103,6 +107,9 @@ const MenuSidebar = ({ href }: TProps) => {
   ];
 
   socket.on?.("onConversationCreated", (payload: any) => {
+    queryClient.invalidateQueries({
+      queryKey: [queryKeys.GET_USER_PROFILE],
+    });
     setIsFindingNewFriend(false);
   });
 
@@ -146,6 +153,7 @@ const MenuSidebar = ({ href }: TProps) => {
         htmlType="submit"
         shape="round"
         size="large"
+        disabled={remainingConversations < 1}
         onClick={findNewFriend}
       >
         {isFindingNewFriend ? "Cancel" : "Find New Friend"}

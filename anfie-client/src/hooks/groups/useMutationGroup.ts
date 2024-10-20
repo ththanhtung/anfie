@@ -45,7 +45,7 @@ export const useMutationGroup = () => {
           { id, form },
           {
             onError: (error) => {
-              message.error(error.message);
+              message.error(error.response.data.errors[0].message);
             },
             onSuccess: () => {
               cb?.();
@@ -84,7 +84,7 @@ export const useMutationGroup = () => {
         { groupId },
         {
           onError: (error) => {
-            message.error(error.message);
+            message.error(error.response.data.errors[0].message);
           },
           onSuccess: () => {
             cb?.();
@@ -105,7 +105,7 @@ export const useMutationGroup = () => {
         { groupId, form },
         {
           onError: (error) => {
-            message.error(error.message);
+            message.error(error.response.data.errors[0].message);
           },
           onSuccess: () => {
             cb?.();
