@@ -30,6 +30,13 @@ export class NotesServiceApis extends HttpClient {
     );
     return data;
   }
+
+  public async deleteNote(noteId: string) {
+    const { data } = await this.instance.delete(
+      `${ENDPOINT_APIS.notes.list}/${noteId}/delete`
+    );
+    return data;
+  }
 }
 
 export const notesService = new NotesServiceApis();

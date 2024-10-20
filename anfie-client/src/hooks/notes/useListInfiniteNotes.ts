@@ -9,6 +9,7 @@ export const useListInfiniteNotes = () => {
     page: 1,
     limit: 10,
     sort: "DESC",
+    order_by: 'created_at'
   });
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage, isLoading } =
     useInfiniteQuery({

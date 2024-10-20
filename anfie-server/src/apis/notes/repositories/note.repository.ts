@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { Note } from '../entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { pagination } from 'src/common';
@@ -39,7 +39,8 @@ export class NoteRepository extends Repository<Note> {
 		return pagination(this, query, {
 			relations: ['user'],
 			where: {
-				userId: id
+				userId: id,
+				...(query.title ? { title: Like(`%${query.title}%`) } : {})
 			}
 		});
 	}

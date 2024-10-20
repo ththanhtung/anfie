@@ -19,6 +19,12 @@ export const useMutationNote = () => {
       mutationFn: ({ id, form }) => notesService.patchUpdateNote(id, form),
     });
 
+  const { mutate: mutationDeleteNote, isPending: isDeleteNotePending } =
+    useMutation<any, TResponseError, { id: string }>({
+      mutationKey: [mutationKeys.MUTATION_LEAVE_CONVERSATION],
+      mutationFn: ({ id }) => notesService.deleteNote(id),
+    });
+
   const onCreateOrUpdateNote = useCallback(
     ({ id, form, cb }: TCreateOrUpdateNoteParams) => {
       if (id) {
@@ -59,8 +65,32 @@ export const useMutationNote = () => {
     [mutationCreateNote, mutationUpdateNote, queryClient]
   );
 
+  const onDeleteNote = useCallback(
+    ({ id, cb }: TDeleteNoteParams) => {
+      mutationDeleteNote(
+        { id },
+        {
+          onSuccess: () => {
+            queryClient.invalidateQueries({
+              queryKey: [queryKeys.GET_LIST_INFINITY_NOTES],
+            });
+            message.success("Delete note successfully");
+            cb?.();
+          },
+          onError: (error) => {
+            message.error(error.response.data.errors[0].message);
+          },
+        }
+      );
+    },
+    [mutationDeleteNote, queryClient]
+  );
+
   return {
+    onDeleteNote,
     onCreateOrUpdateNote,
     isCreateNotePending,
+    isUpdateNotePending,
+    isDeleteNotePending,
   };
 };

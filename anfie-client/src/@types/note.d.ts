@@ -14,6 +14,7 @@ type TNoteParams = {
   limit: number;
   orderBy?: string;
   sort?: TSort;
+  order_by?: string;
 };
 
 type TNoteForm = {
@@ -25,5 +26,10 @@ type TNoteForm = {
 type TCreateOrUpdateNoteParams = {
   id?: string;
   form: TNoteForm;
+  cb?: () => void;
+};
+
+type TDeleteNoteParams = {
+  id: string;
   cb?: () => void;
 };

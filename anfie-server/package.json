@@ -98,18 +98,19 @@
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
-		"collectCoverageFrom": [
-			"<rootDir>/apis/**/*.(t|j)s"
-		],
-		"coverageDirectory": "../coverage",
-		"testEnvironment": "node",
-		"moduleNameMapper": {
-			"^src/(.*)$": "<rootDir>/$1"
-		},
-		"coveragePathIgnorePatterns": [
-			".module.ts",
-			".entity.ts",
-			".dto.ts",
-			".swagger.ts"
-		]}
+    "collectCoverageFrom": [
+      "<rootDir>/apis/**/*.(t|j)s"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/$1"
+    },
+    "coveragePathIgnorePatterns": [
+      ".module.ts",
+      ".entity.ts",
+      ".dto.ts",
+      ".swagger.ts"
+    ]
+  }
 }
