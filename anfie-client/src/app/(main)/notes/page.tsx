@@ -1,6 +1,7 @@
 "use client";
 import { LayoutNote, NoteItem } from "@/components";
 import { useListInfiniteNotes, useMutationNote } from "@/hooks";
+import { _common } from "@/utils";
 import { Button, List } from "antd";
 import React, { useCallback, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
@@ -16,8 +17,6 @@ const NotePage = () => {
     }
   }, [fetchNextPage, inView]);
 
-  console.log({ notes });
-
   const handleAddNote = useCallback(() => {
     onCreateOrUpdateNote({ form: {} });
   }, [onCreateOrUpdateNote]);
@@ -29,14 +28,14 @@ const NotePage = () => {
       </Button>
 
       <div className="grid grid-cols-2 gap-4">
-        {notes?.map((note: TNote) => (
+        {_common.sortNotes(notes)?.map((note: TNote) => (
           <NoteItem
             key={note.id}
             note={note}
             onCreateOrUpdateNote={onCreateOrUpdateNote}
             onDelete={(id) => {
               console.log({ id });
-              
+
               onDeleteNote({
                 id,
               });
