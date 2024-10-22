@@ -15,6 +15,7 @@ type TConversation = {
   creator: TUser;
   recipient: TUser;
   lastMessage: TMessage;
+  mode: 'friend' | 'stranger';
 };
 
 type TLeaveConversationResponse = {

@@ -4,7 +4,7 @@ import { postService } from "@/services";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 
-export const useListInfinitePosts = () => {
+export const useListInfinitePosts = (groupId: string) => {
   const [params, setParams] = useState<TPostParams>({
     page: 1,
     limit: 10,
@@ -21,10 +21,11 @@ export const useListInfinitePosts = () => {
   } = useInfiniteQuery({
     queryKey: [queryKeys.GET_LIST_INFINITE_POSTS, params],
     queryFn: ({ pageParam }) =>
-      postService.getListPosts({
+      postService.getListPosts(groupId, {
         ...params,
         page: pageParam,
       }),
+    enabled: !!groupId,
     getNextPageParam: (lastPage, allPages) => {
       const { metadata } = lastPage;
       if (params.page * metadata.limit > metadata.totalItems) return undefined;

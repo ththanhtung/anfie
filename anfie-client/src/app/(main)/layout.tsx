@@ -2,8 +2,10 @@
 import { LayoutMain } from "@/components";
 import ConversationRequestModal from "@/components/ui/conversations/conversation-request-modal";
 import { useSocketContext } from "@/configs";
+import { queryKeys } from "@/constants";
 import { useMutationConversatinoRequest } from "@/hooks";
 import { userInfoStoreAtom } from "@/stores";
+import { useQueryClient } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
 import React, {
   PropsWithChildren,
@@ -14,6 +16,7 @@ import React, {
 } from "react";
 
 const ConversationLayout = ({ children }: PropsWithChildren) => {
+  const queryClient = useQueryClient();
   const socket = useSocketContext();
   const [conversationRequest, setConversationRequest] =
     useState<TConversationRequestResponse>();
@@ -72,6 +75,9 @@ const ConversationLayout = ({ children }: PropsWithChildren) => {
     });
 
     socket.on?.("onConversationCreated", (payload: any) => {
+      queryClient.invalidateQueries({
+        queryKey: [queryKeys.GET_LIST_INFINITE_CONVERSATIONS],
+      });
       conversationRequestModalref.current?.closeModal();
     });
 

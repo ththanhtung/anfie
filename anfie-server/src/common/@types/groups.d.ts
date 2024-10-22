@@ -6,6 +6,7 @@ type TCreateGroupParams = {
 	title: string;
 	users: Users[];
 	type?: string;
+	alleyId?: string;
 };
 
 type TAddGroupRecipientParams = {

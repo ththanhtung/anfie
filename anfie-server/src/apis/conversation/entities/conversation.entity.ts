@@ -1,5 +1,6 @@
 import { Message } from 'src/apis/message/entities';
 import { Users } from 'src/apis/user/entities';
+import { EConversationMode } from 'src/common';
 import { BaseEntity } from 'src/database';
 import { Column, Entity, Index, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 
@@ -22,6 +23,14 @@ export class Conversation extends BaseEntity<Conversation> {
 		nullable: true
 	})
 	lastMessageId: string;
+
+	@Column({
+		name: 'conversation_mode',
+		type: 'enum',
+		enum: EConversationMode,
+		default: EConversationMode.STRANGER
+	})
+	mode: EConversationMode;
 
 	@OneToMany(() => Message, (message) => message.conversation, {
 		nullable: true

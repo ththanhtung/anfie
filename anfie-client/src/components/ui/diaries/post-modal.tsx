@@ -9,8 +9,10 @@ import React, {
 } from "react";
 import UploadImage from "@/components/upload/upload-image";
 import { useMutationPost } from "@/hooks";
-
-const PostModal = (props: any, ref: Ref<TModalRef>) => {
+type TProps = {
+  groupId: string;
+};
+const PostModal = ({ groupId }: TProps, ref: Ref<TModalRef>) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { onCreatePost, isCreatePostPending } = useMutationPost();
 
@@ -36,6 +38,9 @@ const PostModal = (props: any, ref: Ref<TModalRef>) => {
     const { medias, content } = value;
     const formData = new FormData();
     formData.append("content", content);
+    formData.append("groupId", groupId);
+    console.log({groupId});
+    
     if (medias && medias?.length > 0) {
       medias?.forEach((media: any) => {
         formData.append("medias", media?.originFileObj);

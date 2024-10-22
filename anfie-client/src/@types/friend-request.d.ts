@@ -27,8 +27,7 @@ type TUserFriendRequest = {
 };
 
 type TFriendRequestForm = {
-  content: string;
-  confessionId: string;
+  receiverId: string;
 };
 
 type TCreateFriendRequestParams = {

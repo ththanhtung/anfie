@@ -8,8 +8,8 @@ import { useSocketContext } from "@/configs";
 import { EConversationTypes, queryKeys } from "@/constants";
 import {
   useListInfiniteConversations,
-  useMutationConfession,
   useMutationConversation,
+  useMutationFriendRequest,
   useMutationGroup,
 } from "@/hooks";
 import { userInfoStoreAtom } from "@/stores";
@@ -28,6 +28,8 @@ const ConversationPage = () => {
     React.useState<TConversation>();
   const { onCreateOrUpdateGroup } = useMutationGroup();
   const { onLeaveConversation } = useMutationConversation();
+  const { onCreateFriendRequest: onCreateFriendRequestMutation } =
+    useMutationFriendRequest();
 
   const onCreateGroup = useCallback(
     (title: string, userIds: string[]) => {
@@ -49,6 +51,19 @@ const ConversationPage = () => {
       },
     });
   }, [onLeaveConversation, selectedConversation?.id]);
+
+  const onCreateFriendRequest = useCallback(() => {
+    const receiverId =
+      selectedConversation?.recipientId === currentUser?.userId
+        ? selectedConversation?.creatorId
+        : selectedConversation?.recipientId;
+
+    onCreateFriendRequestMutation({
+      form: {
+        receiverId: receiverId ?? "",
+      },
+    });
+  }, [currentUser?.userId, onCreateFriendRequestMutation, selectedConversation?.creatorId, selectedConversation?.recipientId]);
 
   const socket = useSocketContext();
   useEffect(() => {
@@ -172,6 +187,7 @@ const ConversationPage = () => {
               id={Math.round(Math.random() * 100000000).toString()}
               value={valueChecked}
               onClick={() => {
+                console.log({ item });
                 setValueChecked(item?.id);
                 setSelectedConversation(item);
               }}
@@ -190,6 +206,7 @@ const ConversationPage = () => {
             type={EConversationTypes.PRIVATE}
             onCreate={onCreateGroup}
             onLeave={onLeave}
+            onCreateFriendRequest={onCreateFriendRequest}
           />
         </div>
       </LayoutConversation>

@@ -8,19 +8,25 @@ import {
   PostModal,
 } from "@/components";
 import { EConversationTypes } from "@/constants";
-import { useListInfiniteConversations, useListInfinitePosts } from "@/hooks";
+import {
+  useGetDetailsGroup,
+  useListInfiniteConversations,
+  useListInfinitePosts,
+} from "@/hooks";
 import { Divider, List } from "antd";
 import React, { useCallback, useRef } from "react";
 
-const DiaryPage = () => {
-  const { posts } = useListInfinitePosts();
+const GroupPage = ({ params }: TDetailPage) => {
+  const { posts } = useListInfinitePosts(params?.id);
   const { conversations } = useListInfiniteConversations();
   const [valueChecked, setValueChecked] = React.useState<string>();
   const [selectedConversation, setSelectedConversation] =
     React.useState<TConversation>();
   const ref = useRef<TModalRef>(null);
+  const { group } = useGetDetailsGroup(params?.id);
 
   console.log({ posts });
+
   const onAddPost = useCallback(() => {
     ref.current?.showModal();
   }, []);
@@ -36,7 +42,7 @@ const DiaryPage = () => {
               <ConversationItem
                 username={item?.recipient?.email}
                 lastMessage={item?.lastMessage}
-                id={Math.round(Math.random() * 100000000)}
+                id={Math.round(Math.random() * 100000000).toString()}
                 value={valueChecked}
                 onClick={() => {
                   setValueChecked(item?.id);
@@ -59,16 +65,22 @@ const DiaryPage = () => {
   const renderLeft = useCallback(() => {
     return (
       <div className="w-[80%] mx-auto">
-        <h1 className="text-center text-blue-600 my-4">Diary</h1>
+        <h1 className="text-center text-blue-600 my-4 capitalize">{`${
+          (group?.title ?? "").length > 20
+            ? group?.title.substring(0, 20) + "..."
+            : group?.title
+        } Group Page`}</h1>
         <PostForm onAddPost={onAddPost} />
-        <List dataSource={posts} renderItem={(item: TPost) => <PostItem />} />
-        <PostModal ref={ref} />
+        {posts.map((item: TPost) => {
+          return <PostItem key={item.id} post={item} />;
+        })}
+        <PostModal ref={ref} groupId={params?.id} />
       </div>
     );
-  }, [onAddPost, posts]);
+  }, [group?.title, onAddPost, params?.id, posts]);
   return (
     <LayoutDiary renderLeft={renderLeft()}>{recentConversations()}</LayoutDiary>
   );
 };
 
-export default DiaryPage;
+export default GroupPage;

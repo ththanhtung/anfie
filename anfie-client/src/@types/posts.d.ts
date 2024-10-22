@@ -11,6 +11,7 @@ type TPost = {
   totalLikes: number;
   groupId: string;
   id: string;
+  author: TUser;
   created_at: string;
   updated_at: string;
 };

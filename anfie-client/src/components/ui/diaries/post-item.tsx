@@ -4,8 +4,11 @@ import InteractionBar from "./interaction-bar";
 import { images } from "@/constants";
 import { UserOutlined } from "@ant-design/icons";
 import { TfiMoreAlt } from "react-icons/tfi";
-
-const PostItem = () => {
+import { _formatDay } from "@/utils";
+type TProps = {
+  post: TPost;
+};
+const PostItem = ({ post }: TProps) => {
   return (
     <Card className="mx-auto mb-4">
       <div
@@ -15,8 +18,8 @@ const PostItem = () => {
         <div className="user-info flex items-center">
           <Avatar icon={<UserOutlined />} size="large" />
           <div style={{ marginLeft: 10 }}>
-            <h3>John Doe</h3>
-            <p>20 minutes ago</p>
+            <h3>{post.author.lastName + " " + post.author.firstName}</h3>
+            <p>{_formatDay.formatDDMMYYYYHH(post.created_at)}</p>
           </div>
         </div>
         <Tooltip title="more">
@@ -28,10 +31,10 @@ const PostItem = () => {
           />
         </Tooltip>
       </div>
-      <p className="my-4">Lorem ipsum dolor sit amet</p>
+      <p className="my-4">{post.content}</p>
       <img
         src={images.LOGO}
-        alt="jj"
+        alt="post image"
         style={{ width: "100%", height: "100%" }}
       />
       <InteractionBar />

@@ -24,12 +24,7 @@ export class AlleyController {
 	}
 
 	@Get('/')
-	async getFirstAlley() {
-		return this.alleyService.getFirstAlley();
-	}
-
-	@Get('/:id/groups')
-	async findGroupsByAlleyId(@Param('id') id: string) {
-		return this.alleyService.findGroupsByAlleyId(id);
+	async getFirstAlley(@GetCurrentUser() user: TUserJwt) {
+		return this.alleyService.getFirstAlley(user);
 	}
 }

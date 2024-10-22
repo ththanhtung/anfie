@@ -18,6 +18,9 @@ export const useMutationPost = () => {
         { form },
         {
           onSuccess: () => {
+            queryClient.invalidateQueries({
+              queryKey: [queryKeys.GET_LIST_INFINITE_POSTS],
+            });
             cb?.();
           },
           onError: (error) => {
@@ -26,7 +29,7 @@ export const useMutationPost = () => {
         }
       );
     },
-    [mutationCreatePost]
+    [mutationCreatePost, queryClient]
   );
 
   return {

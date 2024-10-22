@@ -1,7 +1,7 @@
-import { Body, Controller, HttpCode, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { UserService } from './services';
 import { AtGuard, GetCurrentUser } from 'src/common';
-import { UpdateUserProfileDto } from './dto';
+import { GetMyGroupsDto, UpdateUserProfileDto } from './dto';
 
 @Controller('user')
 @UseGuards(AtGuard)
@@ -24,5 +24,14 @@ export class UserController {
 
 		// return;
 		return this.userService.toggleFindingFriend(userId);
+	}
+
+	@Get('me/groups')
+	@HttpCode(200)
+	async getMyGroups(@GetCurrentUser('userId') userId: string, @Query() query: GetMyGroupsDto) {
+		console.log({ userId });
+
+		// return;
+		return this.userService.getMyGroups(userId, query);
 	}
 }

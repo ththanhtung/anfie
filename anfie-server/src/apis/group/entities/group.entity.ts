@@ -3,6 +3,8 @@ import { BaseEntity } from 'src/database';
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne } from 'typeorm';
 import { GroupMessage } from './group-message.entity';
 import { EGroupType } from 'src/common';
+import { Alley } from 'src/apis/alley/entities';
+import { Post } from 'src/apis/post/entities';
 
 @Entity()
 export class Group extends BaseEntity<Group> {
@@ -28,6 +30,12 @@ export class Group extends BaseEntity<Group> {
 		nullable: true
 	})
 	lastMessageId: string;
+
+	@Column({
+		name: 'group_alley_id',
+		nullable: true
+	})
+	alleyId: string;
 
 	@OneToOne(() => Users, { createForeignKeyConstraints: false })
 	@JoinColumn({
@@ -81,4 +89,14 @@ export class Group extends BaseEntity<Group> {
 		name: 'group_last_message_id'
 	})
 	lastMessage: GroupMessage;
+
+	@OneToOne(() => Alley, (alley) => alley.group, { cascade: true, onDelete: 'CASCADE' })
+	@JoinColumn({
+		name: 'group_alley_id'
+	})
+	alley: Alley;
+
+	@OneToMany(() => Post, (post) => post.group)
+	@JoinColumn()
+	posts: Post[];
 }

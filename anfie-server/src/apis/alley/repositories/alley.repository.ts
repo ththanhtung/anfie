@@ -58,13 +58,11 @@ export class AlleyRepository extends Repository<Alley> {
 		});
 	}
 
-	async createOne({ parentId, left, right, groupId, title }: TCreateAlleyParams) {
-		console.log({ parentId, left, right, groupId });
+	async createOne({ parentId, left, right, title }: TCreateAlleyParams) {
 		return this.save({
 			parentId: parentId ? parentId : null,
 			alleyLeft: left,
 			alleyRight: right,
-			groupId,
 			title
 		});
 	}
@@ -129,16 +127,5 @@ export class AlleyRepository extends Repository<Alley> {
 				alleyLeft: 1
 			}
 		});
-	}
-
-	async findGroupsByAlleyId(alleyId: string) {
-		const alley = await this.findOne({
-			where: {
-				id: alleyId
-			},
-			relations: ['group']
-		});
-
-		return alley.group;
 	}
 }

@@ -41,7 +41,7 @@ export class GroupMessage extends BaseEntity<GroupMessage> {
 	})
 	user: Users;
 
-	@ManyToOne(() => Group)
+	@ManyToOne(() => Group, { onDelete: 'CASCADE' })
 	@JoinColumn({
 		name: 'group_id'
 	})

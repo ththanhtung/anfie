@@ -14,6 +14,7 @@ export class PostRepository extends Repository<Post> {
 		post.content = createPostParams.content;
 		post.authorId = createPostParams.authorId;
 		post.totalLikes = createPostParams.totalLikes;
+		post.groupId = createPostParams.groupId;
 		return this.save(post);
 	}
 
@@ -57,6 +58,13 @@ export class PostRepository extends Repository<Post> {
 	async getPostsByUserId(userId: string, query: GetPostsDto) {
 		return pagination(this, query, {
 			where: { authorId: userId }
+		});
+	}
+
+	async getPostsByGroupId(groupId: string, query: GetPostsDto) {
+		return pagination(this, query, {
+			where: { groupId: groupId },
+			relations: ['author']
 		});
 	}
 }

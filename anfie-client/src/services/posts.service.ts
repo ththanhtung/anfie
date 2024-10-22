@@ -5,9 +5,9 @@ export class PostServiceApis extends HttpClient {
     super();
   }
 
-  public async getListPosts(params: TPostParams) {
+  public async getListPosts(groupId: string, params: TPostParams) {
     const { data } = await this.instance.get<TResultResponse<TPost[]>>(
-      `${ENDPOINT_APIS.posts.list}`,
+      `${ENDPOINT_APIS.groups.list}/${groupId}/posts`,
       {
         params,
       }
@@ -16,7 +16,10 @@ export class PostServiceApis extends HttpClient {
   }
 
   public async postCreatePost(form: TPostForm) {
-    const { data } = await this.instance.postForm(ENDPOINT_APIS.posts.list, form);
+    const { data } = await this.instance.postForm(
+      ENDPOINT_APIS.posts.list,
+      form
+    );
     return data;
   }
 }

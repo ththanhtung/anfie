@@ -26,8 +26,11 @@ export class AlleysServiceApis extends HttpClient {
 
   public async getGroupByAlleyId(id: string) {
     const { data } = await this.instance.get<TResultResponse<TGroup>>(
-      `${ENDPOINT_APIS.alleys.list}/${id}/groups`
+      `${ENDPOINT_APIS.groups.list}/alley/${id}/groups`
     );
+
+    console.log({ groups: data });
+    
     return data;
   }
 

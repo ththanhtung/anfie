@@ -3,8 +3,8 @@ import { In, Repository } from 'typeorm';
 import { Users } from '../entities';
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateUserDto } from '../dto';
-import { EGroupType } from 'src/common';
+import { CreateUserDto, GetMyGroupsDto } from '../dto';
+import { EGroupType, pagination } from 'src/common';
 
 @Injectable()
 export class UserRepository extends Repository<Users> {
@@ -38,7 +38,7 @@ export class UserRepository extends Repository<Users> {
 	}
 
 	async findOneById(id: string) {
-		const user = await this.findOne({ where: { id: id }});
+		const user = await this.findOne({ where: { id: id } });
 		if (!user) {
 			throw new ConflictException([
 				{
@@ -158,5 +158,24 @@ export class UserRepository extends Repository<Users> {
 
 		// Lưu lại để cập nhật các liên kết
 		return this.save(user);
+	}
+
+	async getMyGroups(id: string, query: GetMyGroupsDto) {
+		const user = await this.findOne({ where: { id: id } });
+
+		if (!user) {
+			throw new NotFoundException([
+				{
+					message: 'user not found'
+				}
+			]);
+		}
+
+		return pagination(this, query, {
+			where: {
+				id
+			},
+			relations: ['groups']
+		});
 	}
 }

@@ -29,6 +29,7 @@ type TUserProfile = {
   bio: string;
   strangerConversationSlots: number;
   userId: string;
+  user?: TUser;
 };
 
 type TGetTUserProfileResponse = {

@@ -12,6 +12,10 @@ export class CreateGroupDto {
 	@IsEnum(EGroupType)
 	@IsOptional()
 	type?: EGroupType;
+
+	@IsString()
+	@IsOptional()
+	alleyId?: string;
 }
 
 export class CreateGroupAdminDto {

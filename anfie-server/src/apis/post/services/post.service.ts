@@ -41,4 +41,8 @@ export class PostService {
 	async GetPostsByUserId(userId: string, query: GetPostsDto) {
 		return this.postRepository.getPostsByUserId(userId, query);
 	}
+
+	async getPostsByGroupId(groupId: string, query: GetPostsDto) {
+		return this.postRepository.getPostsByGroupId(groupId, query);
+	}
 }

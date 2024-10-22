@@ -30,15 +30,16 @@ export class AlleyService {
 			}
 		}
 
-		const group = await this.groupService.create(user, { title, users: [], type: EGroupType.PUBLIC });
-
-		return this.alleyRepository.createOne({
+		const alley = await this.alleyRepository.createOne({
 			parentId,
 			left: rightValue,
 			right: rightValue + 1,
-			title,
-			groupId: group.id
+			title
 		});
+
+		await this.groupService.create(user, { title, users: [], type: EGroupType.PUBLIC, alleyId: alley.id });
+
+		return alley;
 	}
 
 	async getAlleyByParentId(parentId: string, query: GetAlleysDto) {
@@ -75,11 +76,15 @@ export class AlleyService {
 		return alley;
 	}
 
-	async getFirstAlley() {
-		return this.alleyRepository.findFirstAlley();
-	}
+	async getFirstAlley(user: TUserJwt) {
+		const data = await this.alleyRepository.findFirstAlley();
 
-	async findGroupsByAlleyId(alleyId: string) {
-		return this.alleyRepository.findGroupsByAlleyId(alleyId);
+		if (!data) {
+			return await this.createAlley(user, {
+				title: 'Anfie'
+			});
+		}
+
+		return data;
 	}
 }

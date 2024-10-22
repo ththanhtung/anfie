@@ -3,7 +3,7 @@ import { Conversation } from '../entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateConversationDto } from '../dto';
-import { PaginationDto, pagination } from 'src/common';
+import { EConversationMode, PaginationDto, pagination } from 'src/common';
 @Injectable()
 export class ConversationRepository extends Repository<Conversation> {
 	constructor(@InjectRepository(Conversation) repository: Repository<Conversation>) {
@@ -89,5 +89,11 @@ export class ConversationRepository extends Repository<Conversation> {
 
 		console.log(conversation);
 		return conversation;
+	}
+
+	async toggleConversationMode(id: string) {
+		const conversation = await this.findOneById(id);
+		conversation.mode = conversation.mode === EConversationMode.FRIEND ? EConversationMode.STRANGER : EConversationMode.FRIEND;
+		return this.save(conversation);
 	}
 }

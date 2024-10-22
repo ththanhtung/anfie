@@ -1,3 +1,3 @@
 export const getName = (userProfile?: TUserProfile) => {
-  return `${userProfile?.firstName} ${userProfile?.lastName}`;
+  return `${userProfile?.user?.firstName} ${userProfile?.user?.lastName}`;
 };

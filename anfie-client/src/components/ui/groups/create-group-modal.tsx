@@ -56,8 +56,11 @@ const CreateGroupModal = (
       currentConversation?.recipientId === currentUser.userId
         ? currentConversation?.creatorId.toString()
         : currentConversation?.recipientId.toString() || "";
-        
-    onCreate?.(value.title, [...(value?.friends ?? []), currentRecipientId]);
+
+    onCreate?.(value.title, [
+      ...(value?.friends ?? []),
+      currentRecipientId
+    ]);
   };
 
   return (

@@ -55,6 +55,13 @@ export class GroupsServiceApis extends HttpClient {
     >(`${ENDPOINT_APIS.groups.list}/public/${groupId}`);
     return data;
   }
+
+  public async getDetailsGroup(groupId: string) {
+    const { data } = await this.instance.get<
+      TResultResponse<TGroup>
+    >(`${ENDPOINT_APIS.groups.list}/${groupId}`);
+    return data;
+  }
 }
 
 export const groupsService = new GroupsServiceApis();

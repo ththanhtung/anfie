@@ -13,42 +13,47 @@ const FriendRequestPage = () => {
   const [selectedFriendRequest, setSelectedFriendRequest] =
     React.useState<TFriendRequest>();
 
-  const { onAcceptFriendRequest, onRejectFriendRequest } =
-    useMutationFriendRequest();
-
-  const onShowFriendRequestModal = useCallback(() => {
-    ref.current?.showModal();
-  }, []);
+  const {
+    onAcceptFriendRequest,
+    onRejectFriendRequest,
+    onCancelFriendRequest,
+  } = useMutationFriendRequest();
 
   const onAccept = useCallback(() => {
+    console.log(selectedFriendRequest);
+
     onAcceptFriendRequest({
       requestId: selectedFriendRequest?.id.toString() || "",
     });
-  }, [onAcceptFriendRequest, selectedFriendRequest?.id]);
+  }, [onAcceptFriendRequest, selectedFriendRequest]);
 
   const onReject = useCallback(() => {
     onRejectFriendRequest({
       requestId: selectedFriendRequest?.id.toString() || "",
     });
-  }, [onRejectFriendRequest, selectedFriendRequest?.id]);
+  }, [onRejectFriendRequest, selectedFriendRequest]);
+
+  const onCancel = useCallback(() => {
+    onCancelFriendRequest({
+      requestId: selectedFriendRequest?.id.toString() || "",
+    });
+  }, [onCancelFriendRequest, selectedFriendRequest]);
 
   return (
     <div className="w-[calc(100%-250px)] flex items-center justify-center flex-col">
       <h1 className="text-center text-blue-600 my-4">Friend Requests</h1>
-      <List
-        dataSource={friendRequests}
-        renderItem={(message) => (
-          <FriendRequestItem
-            friendRequest={message}
-            onClick={() => {
-              setSelectedFriendRequest(message);
-            }}
-            onShowFriendRequestModal={onShowFriendRequestModal}
-            onAccept={onAccept}
-            onReject={onReject}
-          />
-        )}
-      />
+      {friendRequests.map((friendRequest) => (
+        <FriendRequestItem
+          key={friendRequest.id}
+          friendRequest={friendRequest}
+          onClick={() => {
+            setSelectedFriendRequest(friendRequest);
+          }}
+          onAccept={onAccept}
+          onReject={onReject}
+          onCancel={onCancel}
+        />
+      ))}
     </div>
   );
 };

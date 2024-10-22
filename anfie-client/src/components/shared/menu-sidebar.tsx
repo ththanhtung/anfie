@@ -49,11 +49,11 @@ const MenuSidebar = ({ href }: TProps) => {
   const remainingConversations = userProfile?.strangerConversationSlots ?? 0;
 
   const items: MenuProps["items"] = [
-    {
-      key: "diary",
-      icon: <IoBookOutline />,
-      label: "Group Page",
-    },
+    // {
+    //   key: "page",
+    //   icon: <IoBookOutline />,
+    //   label: "Group Page",
+    // },
     {
       key: "conversations",
       icon: <MessageOutlined />,

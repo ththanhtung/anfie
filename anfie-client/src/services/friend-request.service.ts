@@ -9,9 +9,10 @@ export class FriendRequestServiceApis extends HttpClient {
     params: TFriendRequestParams,
     FriendRequestId: string = ""
   ) {
-    const { data } = await this.instance.get<
-      TResultResponse<TFriendRequest[]>
-    >(`${ENDPOINT_APIS.friendRequests.list}/${FriendRequestId}`, { params });
+    const { data } = await this.instance.get<TResultResponse<TFriendRequest[]>>(
+      `${ENDPOINT_APIS.friendRequests.list}/${FriendRequestId}`,
+      { params }
+    );
     return data;
   }
 
@@ -32,7 +33,14 @@ export class FriendRequestServiceApis extends HttpClient {
 
   public async rejectRequest(requestId: string) {
     const { data } = await this.instance.patch(
-      `${ENDPOINT_APIS.friendRequests.list}/${requestId}/reject` 
+      `${ENDPOINT_APIS.friendRequests.list}/${requestId}/reject`
+    );
+    return data;
+  }
+
+  public async cancelRequest(requestId: string) {
+    const { data } = await this.instance.delete(
+      `${ENDPOINT_APIS.friendRequests.list}/${requestId}/cancel`
     );
     return data;
   }

@@ -1,19 +1,24 @@
+import { userInfoStoreAtom } from "@/stores";
 import { Avatar, Button } from "antd";
+import { useAtomValue } from "jotai";
 import React from "react";
 import { FaEnvelopeOpenText } from "react-icons/fa6";
 type TProps = {
   friendRequest: TFriendRequest;
-  onShowFriendRequestModal?: () => void;
   onClick?: () => void;
   onAccept?: () => void;
   onReject?: () => void;
+  onCancel?: () => void;
 };
 const FriendRequestItem = ({
   friendRequest,
   onClick,
   onAccept,
   onReject,
+  onCancel,
 }: TProps) => {
+  const currentUser = useAtomValue(userInfoStoreAtom);
+
   return (
     <div
       className={`conversation-item hover: shadow-md hover:scale-[1.02] w-[800px]`}
@@ -31,28 +36,41 @@ const FriendRequestItem = ({
           </p>
         </div>
       </div>
-      <div className="flex flex-col gap-4 ml-4">
+      {currentUser.userId !== friendRequest.senderId ? (
+        <div className="flex gap-4 ml-4">
+          <Button
+            className=""
+            type="primary"
+            shape="round"
+            style={{ backgroundColor: "#87d068" }}
+            size="large"
+            onClick={onAccept}
+          >
+            accept
+          </Button>
+          <Button
+            className=""
+            type="primary"
+            shape="round"
+            style={{ backgroundColor: "red" }}
+            size="large"
+            onClick={onReject}
+          >
+            reject
+          </Button>
+        </div>
+      ) : (
         <Button
-          className=""
-          type="primary"
-          shape="round"
-          style={{ backgroundColor: "#87d068" }}
-          size="large"
-          onClick={onAccept}
-        >
-          accept
-        </Button>
-        <Button
-          className=""
+          className="ml-4"
           type="primary"
           shape="round"
           style={{ backgroundColor: "red" }}
           size="large"
-          onClick={onReject}
+          onClick={onCancel}
         >
-          reject
+          cancel
         </Button>
-      </div>
+      )}
     </div>
   );
 };

@@ -17,12 +17,12 @@ export const useMutationAlley = () => {
       mutationCreateAlley(
         { form },
         {
-          onSuccess: () => {
+          onSuccess: (data) => {
             queryClient.invalidateQueries({
               queryKey: [queryKeys.GET_ALLEYS_BY_PARENT],
             });
 
-            cb?.();
+            cb?.(data);
           },
           onError: (error) => {
             message.error(error.response.data.errors[0].message);

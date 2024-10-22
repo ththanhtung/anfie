@@ -6,19 +6,26 @@ import { UserService } from 'src/apis/user/services';
 import { FriendService } from 'src/apis/friend/services';
 import { TUpdateLastGroupMessageParams } from 'src/common/@types/groups';
 import { EGroupType } from 'src/common';
+import { PostService } from 'src/apis/post/services';
+import { GetPostsDto } from 'src/apis/post/dto';
 
 @Injectable()
 export class GroupService {
 	constructor(
 		private readonly groupRepository: GroupRepository,
 		private readonly userService: UserService,
-		private readonly friendService: FriendService
+		private readonly friendService: FriendService,
+		private readonly postService: PostService
 	) {}
 
 	async create(user: TUserJwt, createGroupDto: CreateGroupDto) {
-		const users = await this.userService.findUsersByIds(createGroupDto.users);
+		console.log({ createGroupDto });
 
-		for (const requestedUser of users) {
+		const users = await this.userService.findUsersByIds([...createGroupDto.users, user.userId]);
+		const groupMembers = users.filter((u) => u.id !== user.userId);
+		const groupOwner = users.find((u) => u.id === user.userId);
+
+		for (const requestedUser of groupMembers) {
 			const isFriend = await this.friendService.isFriend(user.userId.toString(), requestedUser.id.toString());
 			if (!isFriend) {
 				throw new BadRequestException([
@@ -31,9 +38,10 @@ export class GroupService {
 
 		return this.groupRepository.createOne({
 			...(user.userId && { adminId: user.userId.toString(), creatorId: user.userId.toString() }),
-			users: users,
+			users: [...groupMembers, groupOwner],
 			title: createGroupDto.title,
-			type: createGroupDto.type
+			type: createGroupDto.type,
+			alleyId: createGroupDto.alleyId
 		});
 	}
 
@@ -94,14 +102,27 @@ export class GroupService {
 		return this.groupRepository.findPublicGroupById(id);
 	}
 
-	async removeUserFromAllPublicGroup(userId: string) {
-		const groups = await this.groupRepository.find({
-			where: {
-				type: EGroupType.PUBLIC,
-				users: {
-					id: userId
+	async findGroupsByAlleyId(alleyId: string) {
+		return this.groupRepository.findGroupsByAlleyId(alleyId);
+	}
+
+	async findGroupById(user: TUserJwt, id: string) {
+		const group = await this.groupRepository.findOneById(id);
+
+		const isInGroup = group.users.find((u) => u.id === user.userId);
+		if (!isInGroup) {
+			throw new ForbiddenException([
+				{
+					message: 'you are not in this group'
 				}
-			}
-		});
+			]);
+		}
+
+		delete group.users;
+		return group;
+	}
+
+	async findGroupPosts(groupId: string, query: GetPostsDto) {
+		return this.postService.getPostsByGroupId(groupId, query);
 	}
 }

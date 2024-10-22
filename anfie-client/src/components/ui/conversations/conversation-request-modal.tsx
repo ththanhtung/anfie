@@ -50,7 +50,7 @@ const ConversationRequestModal = (
       modalRender={(modal) => {
         return React.cloneElement(modal, {
           style: {
-            ...modal.props.style,
+            ...modal?.props.style,
             ...{ borderRadius: 0, padding: 0 },
             borderRadius: "15px",
           },

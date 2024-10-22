@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { UserRepository } from '../repositories';
-import { CreateUserDto, UpdateUserProfileDto } from '../dto';
+import { CreateUserDto, GetMyGroupsDto, UpdateUserProfileDto } from '../dto';
 import { UserProfileService } from './user-profile.service';
 import { PreferencesService } from 'src/apis/preferences/services';
 import { LocationsService } from 'src/apis/locations/services';
@@ -125,5 +125,9 @@ export class UserService {
 
 	async increaseConversationSlot(id: string) {
 		return this.userProfileService.increaseStrangerConversationSlotByOne(id);
+	}
+
+	async getMyGroups(userId: string, query: GetMyGroupsDto) {
+		return this.userRepository.getMyGroups(userId, query);
 	}
 }

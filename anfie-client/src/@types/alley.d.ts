@@ -17,5 +17,5 @@ type TAlleyForm = {
 
 type TCreateAlleyParams = {
   form: TAlleyForm;
-  cb?: () => void;
+  cb?: (data: any) => void;
 };

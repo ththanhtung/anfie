@@ -9,9 +9,10 @@ import { GroupMessageRepository, GroupRepository } from './repositories';
 import { FriendModule } from '../friend/friend.module';
 import { GroupAdminService, GroupMessageService } from './services';
 import { MessageMediaModule } from '../message-media/message-media.module';
+import { PostModule } from '../post/post.module';
 
 @Module({
-	imports: [TypeOrmModule.forFeature([Group, GroupMessage]), UserModule, FriendModule, MessageMediaModule],
+	imports: [TypeOrmModule.forFeature([Group, GroupMessage]), UserModule, FriendModule, MessageMediaModule, PostModule],
 	controllers: [GroupController, GroupRecipientController, GroupAdminController, GroupMessagesController],
 	providers: [GroupService, GroupRepository, GroupAdminService, GroupMessageRepository, GroupMessageService],
 	exports: [GroupService]

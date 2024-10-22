@@ -17,14 +17,15 @@ export class GroupRepository extends Repository<Group> {
 	}
 
 	async createOne(params: TCreateGroupParams) {
-		const { creatorId, title, users, type } = params;
+		const { creatorId, title, users, type, alleyId } = params;
 
 		const groupParams = {
 			adminId: creatorId,
 			creatorId: creatorId,
 			title,
 			users,
-			type: type as EGroupType
+			type: type as EGroupType,
+			alleyId
 		};
 
 		return this.save(groupParams);
@@ -94,6 +95,8 @@ export class GroupRepository extends Repository<Group> {
 	}
 
 	async getMyGroups(userId: string, query: GetGroupsDto) {
+		console.log({ userId });
+
 		return pagination(this, query, {
 			where: { users: { id: userId } },
 			relations: ['creator', 'admin', 'lastMessage', 'users']
@@ -118,5 +121,28 @@ export class GroupRepository extends Repository<Group> {
 			]);
 		}
 		return group;
+	}
+
+	async findGroupsByAlleyId(alleyId: string) {
+		return this.findOne({
+			where: {
+				alleyId
+			}
+		});
+	}
+
+	async findGroupPosts(groupId: string) {
+		const group = await this.findOne({ where: { id: groupId }, relations: ['posts'] });
+
+		if (!group) {
+			throw new ConflictException([
+				{
+					field: 'id',
+					message: 'group not found'
+				}
+			]);
+		}
+
+		return group.posts;
 	}
 }

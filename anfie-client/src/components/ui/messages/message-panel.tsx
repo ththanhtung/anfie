@@ -28,6 +28,7 @@ type TProps = {
   onCreate?: (title: string, userIds: string[]) => void;
   onLeave?: () => void;
   onAddRecipients?: (params: TAddRecipientsToGroupParams) => void;
+  onCreateFriendRequest?: () => void;
 };
 const MessagePanel = ({
   conversation,
@@ -36,8 +37,9 @@ const MessagePanel = ({
   onCreate,
   onLeave,
   onAddRecipients,
+  onCreateFriendRequest,
 }: TProps) => {
-  console.log({ conversation, group, type });
+  // console.log({ conversation, group, type });
 
   const currentUser = useAtomValue(userInfoStoreAtom);
   const createGroupRef = useRef<TModalRef>(null);
@@ -106,15 +108,23 @@ const MessagePanel = ({
     }
   };
 
+  const recipient =
+    conversation?.creatorId === currentUser.userId
+      ? conversation?.recipient
+      : conversation?.creator;
+
   return (
     <>
       <div className="w-full h-full bg-white rounded-md flex flex-col justify-between">
         <MessagePanelHeader
+          conversation={conversation}
+          recipient={recipient ?? ({} as TUser)}
           onCreate={onCreateGroup}
           onLeave={onLeaveGroup}
           onAddRecipients={onShowAddRecipientsModal}
           onShowAvatar={onShowAvatar}
           onEndConversation={onEndConversation}
+          onCreateFriendRequest={onCreateFriendRequest}
           type={type}
           recipientName={
             type === EConversationTypes.PRIVATE
@@ -125,6 +135,7 @@ const MessagePanel = ({
                 )
               : group?.title || ""
           }
+          group={group}
         />
         <MessageContainer
           messages={

@@ -1,4 +1,5 @@
 import { Comment } from 'src/apis/comment/entities';
+import { Group } from 'src/apis/group/entities';
 import { PostMedia } from 'src/apis/post-media/entities';
 import { Users } from 'src/apis/user/entities';
 import { BaseEntity } from 'src/database';
@@ -44,4 +45,10 @@ export class Post extends BaseEntity<Post> {
 	@OneToMany(() => PostMedia, (postMedia) => postMedia.post, { cascade: true, onDelete: 'CASCADE' })
 	@JoinColumn()
 	medias: PostMedia[];
+
+	@ManyToOne(() => Group, { onDelete: 'CASCADE' })
+	@JoinColumn({
+		name: 'group_id'
+	})
+	group: Group;
 }
