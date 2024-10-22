@@ -19,7 +19,11 @@ export class ConfessionRepository extends Repository<Confession> {
 	async getConfestionsRandom(query: GetConfestionsDto) {
 		const limit = query.limit ? +query.limit : 10;
 
-		if (!query.tagIds) {
+		const tagIds = JSON.parse(query.tagIds);
+
+		console.log({ tagIds });
+
+		if (tagIds.length === 0) {
 			return await this.createQueryBuilder('confession')
 				.select()
 				.leftJoinAndSelect('confession.tags', 'tag')
@@ -28,8 +32,6 @@ export class ConfessionRepository extends Repository<Confession> {
 				.getManyAndCount();
 		}
 
-		const ids = JSON.parse(query.tagIds);
-		const tagIds = ids.map((item) => +item);
 		return await this.createQueryBuilder('confession')
 			.innerJoinAndSelect('confession.tags', 'tag')
 			.where('tag.id IN (:...tagIds)', {

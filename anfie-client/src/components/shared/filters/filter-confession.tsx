@@ -29,11 +29,9 @@ const FilterConfession = ({ setParams }: TProps) => {
           className="!w-[800px]"
           onChange={(value: number[]) => {
             const tagIds = value.map((item) => item.toString());
-            console.log({ tagIds });
-            
             setParams((prev) => ({
               ...prev,
-              ...(value.length > 0 && { tagIds: `[${tagIds.join()}]` }),
+              tagIds: JSON.stringify(tagIds),
             }));
           }}
         />

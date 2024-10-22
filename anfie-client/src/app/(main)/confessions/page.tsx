@@ -26,7 +26,9 @@ const ConfessionPage = () => {
     setCarouselLength(confessions.length);
   }, [confessions]);
 
+  console.log({ confessions });
   const handleAfterChange = (current: number) => {
+    if (!confessions[current]) return;
     setCurrentItemId(confessions[current].id);
 
     setCarouselCurrent(current);
