@@ -1,0 +1,15 @@
+.message-container-mine{
+    @apply justify-end
+}
+
+.message-container-mine{
+    .message-item-details{
+        display: flex;
+        justify-content: end;
+        align-items: end;
+    }
+
+    .message-item-container-body{
+        background-color: #BAE7FF;
+    }
+}
