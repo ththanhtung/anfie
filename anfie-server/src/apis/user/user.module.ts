@@ -8,9 +8,10 @@ import { PreferencesModule } from '../preferences/preferences.module';
 import { UserProfileController } from './user-profile.controller';
 import { LocationsModule } from '../locations/locations.module';
 import { PreferGenderModule } from '../prefer-gender/prefer-gender.module';
+import { UserAdminController } from './user.admin.controller';
 
 @Module({
-	controllers: [UserController, UserProfileController],
+	controllers: [UserController, UserProfileController, UserAdminController],
 	imports: [TypeOrmModule.forFeature([Users, UserProfiles]), PreferencesModule, LocationsModule, PreferGenderModule],
 	providers: [UserService, UserRepository, UserProfileService, UserProfileRepository],
 	exports: [UserService, UserProfileService]

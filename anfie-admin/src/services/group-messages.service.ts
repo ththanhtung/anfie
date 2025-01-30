@@ -17,7 +17,7 @@ export class GroupMessagesServiceApis extends HttpClient {
   }
 
   public async postCreateGroupMessage(
-    form: FormData,
+    form: TGroupMessageForm,
     groupId: string = ""
   ) {
     const { data } = await this.instance.post(

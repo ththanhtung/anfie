@@ -9,6 +9,10 @@ export class UpdateUserProfileDto extends PartialType(CreateUserProfileDto) {
 
 	@IsArray()
 	@IsOptional()
+	selfDescribed: string[];
+
+	@IsArray()
+	@IsOptional()
 	locations: string[];
 
 	@IsArray()

@@ -1,11 +1,10 @@
-import { mutationKeys, queryKeys } from "@/constants";
+import { mutationKeys } from "@/constants";
 import { messageRequestsService } from "@/services";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { message } from "antd";
 import { useCallback } from "react";
 
 export const useMutationMessageRequest = () => {
-  const queryClient = useQueryClient();
   const {
     mutate: mutationCreateMessageRequest,
     isPending: isCreateMessageRequestPending,
@@ -51,10 +50,6 @@ export const useMutationMessageRequest = () => {
         { requestId },
         {
           onSuccess: () => {
-            queryClient.invalidateQueries({
-              queryKey: [queryKeys.GET_LIST_INFINITE_MESSAGES_REQUEST],
-            });
-            message.success("Friend request accepted successfully");
             cb?.();
           },
           onError: (error) => {
@@ -63,7 +58,7 @@ export const useMutationMessageRequest = () => {
         }
       );
     },
-    [mutationAcceptMessageRequest, queryClient]
+    [mutationAcceptMessageRequest]
   );
 
   const onRejectMessageRequest = useCallback(
@@ -72,10 +67,6 @@ export const useMutationMessageRequest = () => {
         { requestId },
         {
           onSuccess: () => {
-            queryClient.invalidateQueries({
-              queryKey: [queryKeys.GET_LIST_INFINITE_MESSAGES_REQUEST],
-            });
-            message.success("Friend request rejected successfully");
             cb?.();
           },
           onError: (error) => {
@@ -84,7 +75,7 @@ export const useMutationMessageRequest = () => {
         }
       );
     },
-    [mutationRejectMessageRequest, queryClient]
+    [mutationRejectMessageRequest]
   );
 
   return {

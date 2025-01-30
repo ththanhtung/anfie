@@ -23,6 +23,6 @@ type TGroupMessageForm = {
 
 type TCreateGroupMessageParams = {
   groupId: string;
-  form: FormData;
+  form: TGroupMessageForm;
   cb?: () => void;
 };

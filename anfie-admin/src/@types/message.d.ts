@@ -24,6 +24,6 @@ type TMessageForm = {
 
 type TCreateMessageParams = {
   conversationId: string;
-  form: FormData;
+  form: TMessageForm;
   cb?: () => void;
 };

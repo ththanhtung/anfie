@@ -17,3 +17,13 @@ export enum EDropdownAction {
   MEMBERS = "members",
   GO_TO_GROUP_PAGE = "go-to-group-page",
 }
+
+export enum EUserStatus {
+  BANNED = "banned",
+  ACTIVE = "active",
+}                
+
+export enum EArrow {
+  NEXT = "next",
+  PREV = "prev",
+}

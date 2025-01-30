@@ -1,11 +1,10 @@
-import { mutationKeys, queryKeys } from "@/constants";
+import { mutationKeys } from "@/constants";
 import { confessionsService } from "@/services";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { message } from "antd";
 import { useCallback } from "react";
 
 export const useMutationConfession = () => {
-  const queryClient = useQueryClient();
   const {
     mutate: mutationCreateConfession,
     isPending: isCreateConfessionPending,
@@ -20,9 +19,12 @@ export const useMutationConfession = () => {
         { form },
         {
           onSuccess: () => {
-            queryClient.invalidateQueries({
-              queryKey: [queryKeys.GET_LIST_INFINITE_CONFESSIONS],
-            });
+            // queryClient.invalidateQueries({
+            //   queryKey: [queryKeys.GET_LIST_INFINITE_MESSAGES],
+            // });
+            // queryClient.invalidateQueries({
+            //   queryKey: [queryKeys.GET_LIST_INFINITE_CONVERSATIONS],
+            // });
             cb?.();
           },
           onError: (error) => {
@@ -31,7 +33,7 @@ export const useMutationConfession = () => {
         }
       );
     },
-    [mutationCreateConfession, queryClient]
+    [mutationCreateConfession]
   );
 
   return {

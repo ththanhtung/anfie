@@ -62,9 +62,6 @@ const ProfilePage = () => {
       email: userProfile?.user?.email,
       dateOfBirth: userProfile?.user?.dob ? dayjs(userProfile?.user?.dob) : "",
       gender: userProfile?.gender,
-      selfDescribed: userProfile?.selfDescribed?.map(
-        (selfDescribed: TPreference) => selfDescribed?.name
-      ),
       preferences: userProfile?.preferences?.map(
         (preference: TPreference) => preference?.name
       ),
@@ -141,46 +138,6 @@ const ProfilePage = () => {
       setCurrentProfile((prevProfile: any) => ({
         ...prevProfile,
         preferences: tags,
-      }));
-    },
-
-    [preferenceOptions, onCreateOrUpdatePreference]
-  );
-
-  const handleSelectSelfDescribed = useCallback(
-    (value: any, options: DefaultOptionType | DefaultOptionType[]) => {
-      console.log({ value, options });
-
-      const existedTagOptionValues: string[] = preferenceOptions.map(
-        (option) => option.value
-      );
-
-      const existedTagOptionLables: string[] = preferenceOptions.map(
-        (option) => option.label
-      );
-
-      let tags: string[] = value.map(
-        (tag: string) => findLabels(tag, preferenceOptions)[0]
-      );
-
-      const newTags = value.filter(
-        (element: string) =>
-          !existedTagOptionValues.includes(element) &&
-          !existedTagOptionLables.includes(element)
-      );
-
-      if (newTags.length > 0) {
-        tags = [...tags, ...newTags].filter((tag) => Boolean(tag));
-
-        onCreateOrUpdatePreference({
-          form: {
-            name: newTags[0],
-          },
-        });
-      }
-      setCurrentProfile((prevProfile: any) => ({
-        ...prevProfile,
-        selfDescribed: tags,
       }));
     },
 
@@ -385,20 +342,6 @@ const ProfilePage = () => {
                 onChange={(e) =>
                   handleChange("dob", dayjs(e).format("YYYY-MM-DD"))
                 }
-              />
-            </Form.Item>
-          </BlockFormItem>
-          <BlockFormItem label="Keywords to Describe yourself">
-            <Form.Item name="selfDescribed">
-              <AFSelectInfinite
-                allowClear
-                options={preferenceOptions}
-                loadMore={fetchNextPagePreferences}
-                hasMore={preferenceOptions.length < totalPreferences!}
-                loading={isFetchingNextPagePreferences || isLoadingPreferences}
-                placeholder="Preferences"
-                className="!mr-3 !w-full"
-                onChange={handleSelectSelfDescribed}
               />
             </Form.Item>
           </BlockFormItem>

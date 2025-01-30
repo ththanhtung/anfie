@@ -12,7 +12,7 @@ export const useListInfiniteMessageRequests = () => {
   });
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage, isLoading } =
     useInfiniteQuery({
-      queryKey: [queryKeys.GET_LIST_INFINITE_MESSAGES_REQUEST, params],
+      queryKey: [queryKeys.GET_LIST_INFINITE_CONFESSIONS, params],
       queryFn: ({ pageParam }) =>
         messageRequestsService.getListMessageRequests({
           ...params,

@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { UserRepository } from '../repositories';
-import { CreateUserDto, GetMyGroupsDto, UpdateUserProfileDto } from '../dto';
+import { CreateUserDto, GetMyGroupsDto, GetUsersDto, UpdateUserProfileDto } from '../dto';
 import { UserProfileService } from './user-profile.service';
 import { PreferencesService } from 'src/apis/preferences/services';
 import { LocationsService } from 'src/apis/locations/services';
@@ -39,10 +39,9 @@ export class UserService {
 	async updateOne(userId: string, dto: UpdateUserProfileDto) {
 		const preferences = await this.preferencesService.findByNames(dto.preferences ?? []);
 		const preferGenfers = await this.preferGendersService.findByNames(dto.preferGenders ?? []);
+		const selfDescribed = await this.preferencesService.findByNames(dto.selfDescribed ?? []);
 		const locations = await this.locationService.findByNames(dto.locations ?? []);
 		const profile = await this.userProfileService.getProfileByUserId(userId);
-
-		console.log({ dto, profile });
 
 		const updatedProfile: UserProfiles = await this.userProfileService.updateUserProfile({
 			...profile,
@@ -51,7 +50,10 @@ export class UserService {
 			...(dto.preferences && dto.preferences.length > 0 ? { preferences: preferences } : { preferences: profile.preferences }),
 			...(dto.preferGenders && dto.preferGenders.length > 0
 				? { preferGenders: preferGenfers }
-				: { preferGenders: profile.preferGenders })
+				: { preferGenders: profile.preferGenders }),
+			...(dto.selfDescribed && dto.selfDescribed.length > 0
+				? { selfDescribed: selfDescribed }
+				: { selfDescribed: profile.selfDescribed })
 		});
 
 		const updatedUser = await this.userRepository.updateUserInfo({ ...dto, id: userId });
@@ -129,5 +131,9 @@ export class UserService {
 
 	async getMyGroups(userId: string, query: GetMyGroupsDto) {
 		return this.userRepository.getMyGroups(userId, query);
+	}
+
+	findAllUsers(query: GetUsersDto) {
+		return this.userRepository.findAllUsers(query);
 	}
 }

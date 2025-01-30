@@ -110,7 +110,7 @@ const MessagePanelHeader = ({
           {recipientName}
         </p>
       </div>
-      <div className="flex justify-center items-center gap-4 sm:hidden">
+      <div className="flex justify-center items-center gap-4">
         {type !== EConversationTypes.GROUP &&
         recipientName &&
         conversation?.mode !== "friend" ? (

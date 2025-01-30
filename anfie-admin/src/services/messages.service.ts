@@ -17,7 +17,7 @@ export class MessagesServiceApis extends HttpClient {
   }
 
   public async postCreateMessage(
-    form: FormData,
+    form: TMessageForm,
     conversationId: string = ""
   ) {
     const { data } = await this.instance.post(

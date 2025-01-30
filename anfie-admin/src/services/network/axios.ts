@@ -118,7 +118,7 @@ export default abstract class HttpClient {
         { token: refreshToken },
         { headers: { Authorization: "" } }
       );
-      // console.log({ response });
+      console.log({ response });
 
       const data = response?.data?.data;
       return data;

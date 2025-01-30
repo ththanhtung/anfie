@@ -37,7 +37,6 @@ const CreateMessageRequestModal = ({ confession }: TProps, ref: Ref<TModalRef>) 
   };
 
   const onFinish = (value: any) => {
-    console.log({ confession });
     onCreateMessageRequest({
       form: { ...value, confessionId: confession.id.toString() },
       cb: closeModal,

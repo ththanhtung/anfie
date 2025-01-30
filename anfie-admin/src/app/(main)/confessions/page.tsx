@@ -20,24 +20,18 @@ const ConfessionPage = () => {
   const [carouselCurrent, setCarouselCurrent] = useState(0);
   const [carouselLength, setCarouselLength] = useState(0);
   const [currentItemId, setCurrentItemId] = useState(confessions[0]?.id);
-  // const currentItem = confessions.find((item) => item.id === currentItemId);
-  const [currentItem, setCurrentItem] = useState<TConfession>(
-    confessions.find((item) => item.id === currentItemId)!
-  );
-
-  console.log({ currentItem });
+  const currentItem = confessions.find((item) => item.id === currentItemId);
 
   useEffect(() => {
     setCarouselLength(confessions.length);
-    setCurrentItem(confessions[0]);
   }, [confessions]);
 
+  console.log({ confessions });
   const handleAfterChange = (current: number) => {
     if (!confessions[current]) return;
     setCurrentItemId(confessions[current].id);
 
     setCarouselCurrent(current);
-    setCurrentItem(confessions[current]);
 
     if (current === carouselLength - 1 && confessions.length !== total) {
       fetchNextPageConfessions();

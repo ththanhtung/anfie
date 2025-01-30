@@ -69,8 +69,6 @@ const CreateConfessionModal = (props: any, ref: Ref<TModalRef>) => {
     const tags = tagOptions
       .filter((tag) => value.tags.includes(tag.value))
       .map((tag) => tag.label);
-    
-    console.log({ tags });
     onCreateConfession({ form: { ...value, tags }, cb: closeModal });
   };
 

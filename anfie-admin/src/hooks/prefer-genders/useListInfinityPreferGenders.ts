@@ -12,7 +12,7 @@ export const useListInfinityPreferGenders = () => {
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage, isLoading } =
     useInfiniteQuery({
       queryKey: [queryKeys.GET_LIST_INFINITE_PREFER_GENDERS, params],
-      queryFn: ({ pageParam }) =>
+      queryFn: ({ pageParam }: { pageParam: number }) =>
         preferGendersService.getListPreferGenders({
           ...params,
           page: pageParam,

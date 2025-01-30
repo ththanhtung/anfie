@@ -1,9 +1,9 @@
 /* eslint-disable prettier/prettier */
-import { In, Repository } from 'typeorm';
+import { Between, ILike, In, Repository } from 'typeorm';
 import { Users } from '../entities';
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateUserDto, GetMyGroupsDto } from '../dto';
+import { CreateUserDto, GetMyGroupsDto, GetUsersDto } from '../dto';
 import { EGroupType, pagination } from 'src/common';
 
 @Injectable()
@@ -177,5 +177,51 @@ export class UserRepository extends Repository<Users> {
 			},
 			relations: ['groups']
 		});
+	}
+
+	async findAllUsers(query: GetUsersDto) {
+		const {
+			firstname,
+			lastname,
+			ageRange: ageRangeString,
+			gender: genderString,
+			preferences: preferencesString,
+			isBanned: isBannedString,
+			location: locationString
+		} = query;
+
+		const preferences = JSON.parse(preferencesString === undefined ? '[]' : preferencesString === '' ? '[]' : preferencesString);
+		const gender = genderString ? JSON.parse(genderString) : [];
+		const isBanned = isBannedString ? JSON.parse(isBannedString) : [];
+		const location = locationString ? JSON.parse(locationString) : [];
+
+		const [ageMin, ageMax] = ageRangeString ? JSON.parse(ageRangeString) : [undefined, undefined];
+
+		// Remove extra spaces and split the full name into searchable parts
+		const firstnameParts = firstname?.trim().split(/\s+/);
+		const lastnameParts = lastname?.trim().split(/\s+/);
+
+		const filter = {
+			relations: ['profile'],
+			where: {
+				...(firstname && { firstName: ILike(`%${firstnameParts.join('%')}%`) }),
+				...(lastname && { lastName: ILike(`%${lastnameParts.join('%')}%`) }),
+				profile: {
+					...(gender.length > 0 && { gender: In(gender) }),
+					...(location.length > 0 && { userLocation: In(location)}),
+					...(isBanned.length > 0 && { isBanned: In(isBanned) }),
+					...(preferences.length > 0 && { preferences: { name: In(preferences) } })
+				},
+				...(ageMin &&
+					ageMax && {
+						dob: Between(
+							new Date(new Date().getFullYear() - ageMax, new Date().getMonth(), new Date().getDate()),
+							new Date(new Date().getFullYear() - ageMin, new Date().getMonth(), new Date().getDate())
+						)
+					})
+			}
+		};
+
+		return pagination(this, query, filter);
 	}
 }

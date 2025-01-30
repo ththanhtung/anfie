@@ -56,6 +56,12 @@ export class UserProfiles extends BaseEntity<UserProfiles> {
 	bio: string;
 
 	@Column({
+		name: 'user_location',
+		nullable: true
+	})
+	userLocation: string;
+
+	@Column({
 		name: 'user_stranger_conversation_slots',
 		default: 3
 	})
@@ -105,6 +111,20 @@ export class UserProfiles extends BaseEntity<UserProfiles> {
 		}
 	})
 	preferences: Preference[];
+
+	@ManyToMany(() => Preference, (preference) => preference.userProfiles)
+	@JoinTable({
+		name: 'user_self_described',
+		joinColumn: {
+			name: 'user_profile_id',
+			referencedColumnName: 'id'
+		},
+		inverseJoinColumn: {
+			name: 'preference_id',
+			referencedColumnName: 'id'
+		}
+	})
+	selfDescribed: Preference[];
 
 	@ManyToMany(() => Location, (location) => location.userProfiles)
 	@JoinTable({
