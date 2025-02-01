@@ -4,14 +4,14 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { useLogin } from "@/hooks";
 
 const FormLogin = () => {
-  const { onLoginUser, isPending } = useLogin();
+  const { onLoginAdmin, isPendingAdmin } = useLogin();
   const onFinish = useCallback(
-    (value: TFormLogin) => {
-      onLoginUser({
+    (value: TFormLoginAdmin) => {
+      onLoginAdmin({
         ...value,
       });
     },
-    [onLoginUser]
+    [onLoginAdmin]
   );
   return (
     <Form
@@ -21,7 +21,7 @@ const FormLogin = () => {
       layout="vertical"
     >
       <Form.Item
-        name="email"
+        name="username"
         rules={[
           { required: true, message: "please input your email!" },
           {
@@ -47,7 +47,7 @@ const FormLogin = () => {
           allowClear
         />
       </Form.Item>
-      <Button type="primary" htmlType="submit" loading={isPending}>
+      <Button type="primary" htmlType="submit" loading={isPendingAdmin}>
         Login
       </Button>
     </Form>

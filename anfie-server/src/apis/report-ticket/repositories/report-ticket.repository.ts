@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { ReportTicket } from '../entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { pagination } from 'src/common';
@@ -14,6 +14,7 @@ export class ReportTicketRepository extends Repository<ReportTicket> {
 		return this.save({
 			postId: params.postId ? params.postId : null,
 			confessionId: params.confessionId ? params.confessionId : null,
+			conversationId: params.conversationId ? params.conversationId : null,
 			commentId: params.commentId ? params.commentId : null,
 			messages: params.messages,
 			reporterId: params.reporterId ? params.reporterId : null,
@@ -92,12 +93,35 @@ export class ReportTicketRepository extends Repository<ReportTicket> {
 	}
 
 	async getReportTicketsAdmin(query: GetReportTicketsAdminDto) {
-		const options = {};
-		if (query.status) {
-			options['status'] = query.status;
-		}
+		const { status: statusString, reporteeEmail, reporterEmail, ticketId } = query;
+
+		const status = statusString ? JSON.parse(statusString) : [];
+
 		return pagination(this, query, {
-			where: options
+			relations: ['reporter', 'reportee', 'reporter.user', 'reportee.user'],
+			where: {
+				...(status.length > 0 && { status: In(status) }),
+				...(reporteeEmail && {
+					reportee: {
+						user: { email: reporteeEmail }
+					}
+				}),
+				...(reporterEmail && {
+					reporter: {
+						user: { email: reporterEmail }
+					}
+				}),
+				...(ticketId && { id: ticketId })
+			}
+		});
+	}
+
+	async getDetailTicketById(id: string) {
+		return this.findOne({
+			relations: ['reporter', 'reportee', 'reporter.user', 'reportee.user', 'confession', 'post', 'comment', 'conversation'],
+			where: {
+				id: id
+			}
 		});
 	}
 }

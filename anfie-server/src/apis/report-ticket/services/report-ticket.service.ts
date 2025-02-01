@@ -8,6 +8,7 @@ import { PostService } from 'src/apis/post/services';
 import { CommentService } from 'src/apis/comment/services';
 import { ConfessionsService } from 'src/apis/confessions/services';
 import { Message } from 'src/apis/message/entities';
+import { ConversationService } from 'src/apis/conversation/services';
 
 @Injectable()
 export class ReportTicketService {
@@ -17,13 +18,15 @@ export class ReportTicketService {
 		private readonly messageService: MessageService,
 		private readonly postService: PostService,
 		private readonly commentService: CommentService,
-		private readonly confessionService: ConfessionsService
+		private readonly confessionService: ConfessionsService,
+		private readonly conversationService: ConversationService
 	) {}
 	async createOne(user: TUserJwt, dto: CreateReportTicketDto) {
 		if (
 			Number(Boolean(dto.confessionId)) +
 				Number(Boolean(dto.postId)) +
 				Number(Boolean(dto.commentId)) +
+				Number(Boolean(dto.conversationId)) +
 				Number(Boolean(dto.messageIds)) !==
 			1
 		)
@@ -39,6 +42,16 @@ export class ReportTicketService {
 				throw new NotFoundException([
 					{
 						message: 'post not found'
+					}
+				]);
+		}
+
+		if (dto.conversationId) {
+			const conversation = await this.conversationService.findOneById(dto.confessionId);
+			if (!conversation)
+				throw new NotFoundException([
+					{
+						message: 'conversation not found'
 					}
 				]);
 		}
@@ -64,7 +77,7 @@ export class ReportTicketService {
 		}
 
 		const reporterId = user.userId.toString();
-		const reportedUser = await this.userService.findOneById(dto.reporteeId);
+		const reportedUser = await this.userService.findOneById(dto.reporteeId, true);
 		if (!reportedUser)
 			throw new NotFoundException([
 				{
@@ -87,6 +100,14 @@ export class ReportTicketService {
 				}
 			]);
 
+		const reporteeUser = await this.userService.findOneById(dto.reporteeId, true);
+		if (!reporteeUser)
+			throw new NotFoundException([
+				{
+					message: 'reportee user not found'
+				}
+			]);
+
 		let messages: Message[] = [];
 		if (dto.messageIds) {
 			messages = await this.messageService.getMessagesByIds(dto.messageIds);
@@ -96,9 +117,10 @@ export class ReportTicketService {
 			postId: dto.postId,
 			confessionId: dto.confessionId,
 			commentId: dto.commentId,
+			conversationId: dto.conversationId,
 			messages: messages,
-			reporterId: reporterId,
-			reporteeId: dto.reporteeId,
+			reporterId: reportedUser.profile.id,
+			reporteeId: reporteeUser.profile.id,
 			content: dto.content,
 			type: dto.type
 		});

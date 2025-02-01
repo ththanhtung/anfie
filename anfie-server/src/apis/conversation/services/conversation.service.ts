@@ -28,15 +28,15 @@ export class ConversationService {
 
 	async deleteOneById(id: string) {
 		const conversation = await this.conversationRepository.findOneById(id);
-		// const conversationDuration = Date.now() - conversation.created_at.getTime();
+		const conversationDuration = Date.now() - conversation.created_at.getTime();
 
-		// if (conversationDuration <= FIFTEEN_MINUTES) {
-		// 	throw new BadRequestException([
-		// 		{
-		// 			message: 'conversation must be at least 15 minutes'
-		// 		}
-		// 	]);
-		// }
+		if (conversationDuration <= FIFTEEN_MINUTES) {
+			throw new BadRequestException([
+				{
+					message: 'conversation must be at least 15 minutes'
+				}
+			]);
+		}
 
 		await this.userServies.increaseConversationSlot(conversation.creatorId);
 		await this.userServies.increaseConversationSlot(conversation.recipientId);

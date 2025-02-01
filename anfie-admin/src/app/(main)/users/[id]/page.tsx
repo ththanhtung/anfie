@@ -1,63 +1,471 @@
 "use client";
-
-import AlleyItem from "@/components/ui/alley/alley-item";
-import CreateAlleyModal from "@/components/ui/alley/create-alley-modal";
-import GroupItem from "@/components/ui/alley/group-item";
+import { AFDatePicker, AFSelectInfinite, BlockFormItem } from "@/components";
 import {
-  useGetAlleyByParentId,
-  useGetDetailsAlley,
-  useGetGroupByAlleyId,
+  useDebounce,
+  useListInfinityLocations,
+  useListInfinityPreferGenders,
+  useListInfinityPreferences,
+  useMutationPreferGender,
+  useMutationPreference,
+  useMutationUserProfile,
+  useUserProfileById,
 } from "@/hooks";
 import { _common } from "@/utils";
-import { Button, Input, Typography } from "antd";
-import { useRouter } from "next/navigation";
-import React, { useCallback, useRef } from "react";
-
-const AlleyDetailPage = ({ params }: TDetailPage) => {
-  const { alleyChildren } = useGetAlleyByParentId(params.id);
-  const { group } = useGetGroupByAlleyId(params.id);
-  const { alley } = useGetDetailsAlley(params.id);
+import { Button, Form, Input, InputNumber, message } from "antd";
+import { DefaultOptionType } from "antd/es/select";
+import dayjs from "dayjs";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+const ProfilePage = ({ params }: TDetailPage) => {
   const ref = useRef<TModalRef>(null);
-  const router = useRouter();
+  const { userProfile } = useUserProfileById(params?.id);
 
-  const onAddAlley = useCallback(() => {
-    ref.current?.showModal();
-  }, []);
+  const [currentProlfile, setCurrentProfile] =
+    useState<TUpdateUserProfileForm>();
 
-  const goBack = useCallback(() => {
-    if (!alley?.parentId) {
-      return;
+  const debounceProfile: TUpdateUserProfileForm = useDebounce(
+    currentProlfile,
+    500
+  );
+
+  const { onUpdateUserProfile } = useMutationUserProfile();
+
+  useEffect(() => {
+    console.log({ debounceProfile });
+    onUpdateUserProfile({
+      form: _common.removeEmptyProperties({
+        firstName: debounceProfile?.firstName!,
+        lastName: debounceProfile?.lastName!,
+        user: debounceProfile?.user!,
+        dob: debounceProfile?.dob!,
+        gender: debounceProfile?.gender!,
+        preferences: debounceProfile?.preferences!,
+        preferGenders: debounceProfile?.preferGenders!,
+        locations: debounceProfile?.locations!,
+        minAge: debounceProfile?.minAge!,
+        maxAge: debounceProfile?.maxAge!,
+      }) as TUpdateUserProfileForm,
+    });
+  }, [debounceProfile, onUpdateUserProfile]);
+
+  const [form] = Form.useForm();
+
+  const initialValues = useMemo(() => {
+    return {
+      firstName: userProfile?.user?.firstName,
+      lastName: userProfile?.user?.lastName,
+      email: userProfile?.user?.email,
+      dateOfBirth: userProfile?.user?.dob ? dayjs(userProfile?.user?.dob) : "",
+      gender: userProfile?.gender,
+      preferences: userProfile?.preferences?.map(
+        (preference: TPreference) => preference?.name
+      ),
+      preferGender: userProfile?.preferGenders?.map(
+        (preferGender: TPreferGender) => preferGender?.name
+      ),
+      locations: userProfile?.locations?.map(
+        (location: TLocation) => location?.name
+      ),
+      minAge: userProfile?.minAge,
+      maxAge: userProfile?.maxAge,
+      reportedCount: userProfile?.reportedCount,
+      isBanned: userProfile?.isBanned,
+      bio: userProfile?.bio,
+    };
+  }, [userProfile]);
+  useEffect(() => {
+    form.setFieldsValue(initialValues);
+  }, [form, initialValues]);
+
+  const {
+    preferGenderOptions,
+    fetchNextPage: fetchNextPagePreferGenders,
+    isLoading: isLoadingPreferGenders,
+    total: totalPreferGenders,
+    isFetchingNextPage: isFetchingNextPagePreferGenders,
+  } = useListInfinityPreferGenders();
+  const {
+    preferenceOptions,
+    fetchNextPage: fetchNextPagePreferences,
+    total: totalPreferences,
+    isFetchingNextPage: isFetchingNextPagePreferences,
+    isLoading: isLoadingPreferences,
+  } = useListInfinityPreferences();
+  const {
+    locationOptions,
+    fetchNextPage: fetchNextPageLocations,
+    total: totalLocations,
+    isFetchingNextPage: isFetchingNextPageLocations,
+    isLoading: isLoadingLocations,
+  } = useListInfinityLocations();
+
+  const { onCreateOrUpdatePreference } = useMutationPreference();
+  const { onCreateOrUpdatePreferGender } = useMutationPreferGender();
+
+  const handleSelectPreference = useCallback(
+    (value: any, options: DefaultOptionType | DefaultOptionType[]) => {
+      console.log({ value, options });
+
+      const existedTagOptionValues: string[] = preferenceOptions.map(
+        (option) => option.value
+      );
+
+      const existedTagOptionLables: string[] = preferenceOptions.map(
+        (option) => option.label
+      );
+
+      let tags: string[] = value.map(
+        (tag: string) => findLabels(tag, preferenceOptions)[0]
+      );
+
+      const newTags = value.filter(
+        (element: string) =>
+          !existedTagOptionValues.includes(element) &&
+          !existedTagOptionLables.includes(element)
+      );
+
+      if (newTags.length > 0) {
+        tags = [...tags, ...newTags].filter((tag) => Boolean(tag));
+
+        onCreateOrUpdatePreference({
+          form: {
+            name: newTags[0],
+          },
+        });
+      }
+      setCurrentProfile((prevProfile: any) => ({
+        ...prevProfile,
+        preferences: tags,
+      }));
+    },
+
+    [preferenceOptions, onCreateOrUpdatePreference]
+  );
+
+  const handleSelectPreferGenders = useCallback(
+    (value: any, options: DefaultOptionType | DefaultOptionType[]) => {
+      console.log({ value, options });
+
+      const existedTagOptionValues: string[] = preferGenderOptions.map(
+        (option) => option.value
+      );
+
+      const existedTagOptionLables: string[] = preferGenderOptions.map(
+        (option) => option.label
+      );
+
+      let tags: string[] = value.map(
+        (tag: string) => findLabels(tag, preferGenderOptions)[0]
+      );
+
+      const newTags = value.filter(
+        (element: string) =>
+          !existedTagOptionValues.includes(element) &&
+          !existedTagOptionLables.includes(element)
+      );
+
+      if (newTags.length > 0) {
+        tags = [...tags, ...newTags].filter((tag) => Boolean(tag));
+
+        onCreateOrUpdatePreferGender({
+          form: {
+            name: newTags[0],
+          },
+        });
+      }
+      setCurrentProfile((prevProfile: any) => ({
+        ...prevProfile,
+        preferGenders: tags,
+      }));
+    },
+
+    [preferGenderOptions, onCreateOrUpdatePreferGender]
+  );
+
+  const handleSelectGenders = useCallback(
+    (value: any, options: DefaultOptionType | DefaultOptionType[]) => {
+      console.log({ value, options });
+
+      if (value.length > 1) {
+        value.pop();
+      }
+
+      const existedTagOptionValues: string[] = preferGenderOptions.map(
+        (option) => option.value
+      );
+
+      const existedTagOptionLables: string[] = preferGenderOptions.map(
+        (option) => option.label
+      );
+
+      let tags: string[] = value.map(
+        (tag: string) => findLabels(tag, preferGenderOptions)[0]
+      );
+
+      const newTags = value.filter(
+        (element: string) =>
+          !existedTagOptionValues.includes(element) &&
+          !existedTagOptionLables.includes(element)
+      );
+
+      if (newTags.length > 0) {
+        tags = [...tags, ...newTags].filter((tag) => Boolean(tag));
+
+        onCreateOrUpdatePreferGender({
+          form: {
+            name: newTags[0],
+          },
+        });
+      }
+      setCurrentProfile((prevProfile: any) => ({
+        ...prevProfile,
+        gender: tags[0],
+      }));
+    },
+
+    [preferGenderOptions, onCreateOrUpdatePreferGender]
+  );
+
+  const handleSelectLocations = useCallback(
+    (value: any, options: DefaultOptionType | DefaultOptionType[]) => {
+      console.log({ value, options });
+
+      let tags: string[] = value.map((tag: string) => {
+        const label = findLabels(tag, locationOptions)[0];
+        if (!label) {
+          message.error(`Location ${tag} not found!`);
+        }
+        return label;
+      });
+
+      setCurrentProfile((prevProfile: any) => ({
+        ...prevProfile,
+        locations: tags.filter((tag) => Boolean(tag)),
+      }));
+    },
+
+    [locationOptions]
+  );
+
+  const handleChange = (field: string, value: any) => {
+    setCurrentProfile((prevProfile: any) => {
+      const updatedProfile = {
+        ...prevProfile,
+        [field]: value,
+      };
+
+      return updatedProfile;
+    });
+  };
+
+  function findLabels(valueOrLabel: string, options: TOption[]): string[] {
+    const labels: string[] = [];
+
+    for (const option of options) {
+      if (option.value === valueOrLabel || option.label === valueOrLabel) {
+        labels.push(option.label);
+      }
     }
-    router.push(`/alleys/${alley?.parentId}`);
-  }, [alley?.parentId, router]);
+
+    return labels;
+  }
 
   return (
-    <>
-      <div className="w-[calc(100%-250px)]">
-        <h1 className="text-center text-blue-600 my-4">Alley</h1>
-        <div className="flex items-end justify-between">
-          <Button className="ml-4" onClick={goBack}>
-            Go Back
-          </Button>
-          <div className="flex items-end gap-2 justify-end mr-4">
-            <Button onClick={onAddAlley}>Create New Alley</Button>
-            <div>
-              <Typography.Title level={5}>Find Alley</Typography.Title>
-              <Input placeholder="Alley ID" />
+    <div className="w-[calc(100%-250px)] flex items-center justify-center flex-col">
+      <h1 className="text-center text-blue-600 my-4">User Details</h1>
+      <div className="w-[500px]">
+        <Form form={form} initialValues={initialValues}>
+          <BlockFormItem label="Full Name" required>
+            <div className="grid grid-cols-2 gap-4">
+              <Form.Item
+                name="firstName"
+                rules={[
+                  {
+                    required: true,
+                    message: "First name is required",
+                  },
+                ]}
+              >
+                <Input
+                  placeholder="First Name"
+                  onChange={(e) => handleChange("firstName", e.target.value)}
+                />
+              </Form.Item>
+              <Form.Item
+                name="lastName"
+                rules={[
+                  {
+                    required: true,
+                    message: "Last name is required",
+                  },
+                ]}
+              >
+                <Input
+                  placeholder="Last Name"
+                  onChange={(e) => handleChange("lastName", e.target.value)}
+                />
+              </Form.Item>
             </div>
-          </div>
-        </div>
-        <div className="p-4 w-full grid grid-cols-4 gap-4">
-          <GroupItem item={group!} />
-          {alleyChildren?.map((item) => (
-            <AlleyItem key={item.id} alley={item} />
-          ))}
-        </div>
+          </BlockFormItem>
+          <BlockFormItem label="Email">
+            <Form.Item name="email">
+              <Input
+                placeholder="Email"
+                className="w-full"
+                onChange={(e) => handleChange("title", e.target.value)}
+                disabled
+              />
+            </Form.Item>
+          </BlockFormItem>
+          <BlockFormItem label="Gender">
+            <Form.Item name="gender">
+              <AFSelectInfinite
+                allowClear
+                options={preferGenderOptions}
+                loadMore={fetchNextPagePreferGenders}
+                hasMore={preferGenderOptions.length < totalPreferGenders!}
+                loading={
+                  isFetchingNextPagePreferGenders || isLoadingPreferGenders
+                }
+                placeholder="Gender"
+                className="!mr-3 !w-full"
+                onChange={handleSelectGenders}
+              />
+            </Form.Item>
+          </BlockFormItem>
+          <BlockFormItem label="Date of Birth">
+            <Form.Item name="dateOfBirth">
+              <AFDatePicker
+                placeholder="Date of Birth"
+                onChange={(e) =>
+                  handleChange("dob", dayjs(e).format("YYYY-MM-DD"))
+                }
+              />
+            </Form.Item>
+          </BlockFormItem>
+          <BlockFormItem label="preferences">
+            <Form.Item name="preferences">
+              <AFSelectInfinite
+                allowClear
+                options={preferenceOptions}
+                loadMore={fetchNextPagePreferences}
+                hasMore={preferenceOptions.length < totalPreferences!}
+                loading={isFetchingNextPagePreferences || isLoadingPreferences}
+                placeholder="Preferences"
+                className="!mr-3 !w-full"
+                onChange={handleSelectPreference}
+              />
+            </Form.Item>
+          </BlockFormItem>
+          <BlockFormItem label="Prefer Partner Gender">
+            <Form.Item name="preferGender">
+              <AFSelectInfinite
+                allowClear
+                options={preferGenderOptions}
+                loadMore={fetchNextPagePreferGenders}
+                hasMore={preferGenderOptions.length < totalPreferGenders!}
+                loading={
+                  isFetchingNextPagePreferGenders || isLoadingPreferGenders
+                }
+                placeholder="Preferences"
+                className="!mr-3 !w-full"
+                onChange={handleSelectPreferGenders}
+              />
+            </Form.Item>
+          </BlockFormItem>
+          <BlockFormItem label="Prefer Partner Locations">
+            <Form.Item name="locations">
+              <AFSelectInfinite
+                allowClear
+                options={locationOptions}
+                loadMore={fetchNextPageLocations}
+                hasMore={locationOptions.length < totalLocations!}
+                loading={isFetchingNextPageLocations || isLoadingLocations}
+                placeholder="locations"
+                className="!mr-3 !w-full"
+                onChange={handleSelectLocations}
+              />
+            </Form.Item>
+          </BlockFormItem>
+          <BlockFormItem label="Partner Age Range">
+            <div className="grid grid-cols-2 gap-4">
+              <Form.Item name="minAge">
+                <InputNumber
+                  placeholder="Min Age"
+                  className="w-full"
+                  min={16}
+                  onChange={(e) => handleChange("minAge", e)}
+                />
+              </Form.Item>
+              <Form.Item className="!mb-0">
+                <Form.Item name="maxAge">
+                  <InputNumber
+                    placeholder="Max Age"
+                    className="w-full"
+                    min={17}
+                    onChange={(e) => handleChange("maxAge", e)}
+                  />
+                </Form.Item>
+              </Form.Item>
+            </div>
+          </BlockFormItem>
+          <BlockFormItem label="Reported Count">
+            <Form.Item
+              name="reportedCount"
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <Input
+                placeholder="Reported count"
+                onChange={(e) => handleChange("reportedCount", e.target.value)}
+              />
+            </Form.Item>
+          </BlockFormItem>
+          <BlockFormItem label="Is User Banned" required>
+            <Form.Item
+              name="isBanned"
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <Input
+                placeholder="is banned"
+                onChange={(e) => handleChange("isBanned", e.target.value)}
+              />
+            </Form.Item>
+          </BlockFormItem>
+          <BlockFormItem label="User Bio" required>
+            <Form.Item
+              name="bio"
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <Input
+                placeholder="User bio"
+                onChange={(e) => handleChange("bio", e.target.value)}
+              />
+            </Form.Item>
+          </BlockFormItem>
+          <Button type="primary" className="w-full capitalize">
+            change password
+          </Button>
+        </Form>
       </div>
-
-      <CreateAlleyModal ref={ref} parentId={params.id} />
-    </>
+    </div>
   );
 };
 
-export default AlleyDetailPage;
+export default ProfilePage;

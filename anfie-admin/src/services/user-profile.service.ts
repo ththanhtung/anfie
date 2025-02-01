@@ -28,6 +28,13 @@ export class UserProfilesServiceApis extends HttpClient {
     );
     return data;
   }
+
+  public async getUserProfileById(id: string) {
+    const { data } = await this.instance.get<
+      TResultResponse<TGetTUserProfileResponse>
+    >(`${ENDPOINT_APIS.userProfiles.list}/${id}`);
+    return data;
+  }
 }
 
 export const userProfilesService = new UserProfilesServiceApis();

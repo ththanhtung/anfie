@@ -1,4 +1,4 @@
-import { IsEnum, IsOptional } from 'class-validator';
+import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { EReportTicketStatus, PaginationDto } from 'src/common';
 
 export class GetReportTicketsDto extends PaginationDto {
@@ -9,6 +9,18 @@ export class GetReportTicketsDto extends PaginationDto {
 
 export class GetReportTicketsAdminDto extends PaginationDto {
 	@IsOptional()
-	@IsEnum(EReportTicketStatus)
-	status: EReportTicketStatus;
+	@IsString({ each: true })
+	status: string;
+
+	@IsOptional()
+	@IsString()
+	reporteeEmail: string;
+
+	@IsOptional()
+	@IsString()
+	reporterEmail: string;
+
+	@IsOptional()
+	@IsString()
+	ticketId: string;
 }

@@ -21,9 +21,15 @@ export enum EDropdownAction {
 export enum EUserStatus {
   BANNED = "banned",
   ACTIVE = "active",
-}                
+}
 
 export enum EArrow {
   NEXT = "next",
   PREV = "prev",
+}
+
+export enum EReportTicketStatus {
+  PENDING = "pending",
+  ACCEPTED = "accepted",
+  REJECTED = "rejected",
 }

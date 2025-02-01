@@ -61,6 +61,9 @@ const MessagePanel = ({
     fetchNextPage: fetchNextPageGroupMessages,
   } = useListInfiniteGroupMessages(group?.id?.toString());
 
+
+  console.log({conversationMessages});
+
   const { onCreateMessage } = useMutationMessage();
   const { onCreateGroupMessage } = useMutationGroupMessage();
 
@@ -116,7 +119,7 @@ const MessagePanel = ({
   return (
     <>
       <div className="w-full h-full bg-white rounded-md flex flex-col justify-between">
-        <MessagePanelHeader
+        {/* <MessagePanelHeader
           conversation={conversation}
           recipient={recipient ?? ({} as TUser)}
           onCreate={onCreateGroup}
@@ -136,7 +139,7 @@ const MessagePanel = ({
               : group?.title || ""
           }
           group={group}
-        />
+        /> */}
         <MessageContainer
           messages={
             type === EConversationTypes.PRIVATE
@@ -159,9 +162,9 @@ const MessagePanel = ({
               : fetchNextPageGroupMessages
           }
         />
-        <div className="px-6">
+        {/* <div className="px-6">
           <MessagePanelFooter sendMessage={sentMessage} />
-        </div>
+        </div> */}
       </div>
       <CreateGroupModal
         ref={createGroupRef}

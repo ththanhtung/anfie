@@ -2,9 +2,12 @@ export const ENDPOINT_APIS = {
   auth: {
     login: "api/auth/login",
     signup: "api/auth/signup",
+    admin: {
+      login: "api/admin/login",
+    },
   },
   conversation: {
-    list: "api/conversations",
+    list: "api/conversations/admin",
   },
   conversationRequest: {
     list: "api/conversation-request",
@@ -56,5 +59,11 @@ export const ENDPOINT_APIS = {
   },
   alleys: {
     list: "api/alleys",
+  },
+  reportTicket: {
+    list: 'api/report-ticket',
+    admin: {
+      list: 'api/report-ticket/admin'
+    }
   }
 };

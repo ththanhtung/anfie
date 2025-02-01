@@ -9,6 +9,7 @@ type TCreateReportTicketParams = {
 	postId: string;
 	commentId: string;
 	confessionId: string;
+	conversationId: string;
 	messages: Message[];
 	reporterId: string;
 	reporteeId: string;

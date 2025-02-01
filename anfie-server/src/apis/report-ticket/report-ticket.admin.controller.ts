@@ -23,4 +23,9 @@ export class ReportTicketAdminController {
 	async rejectReportTicket(@Param('id') id: string, @GetCurrentUser('id') adminId: string) {
 		return this.reportTiketAdminService.rejectReportTicket(id, adminId);
 	}
+
+	@Get(':id')
+	async getOneById(@Param('id') id: string) {
+		return this.reportTiketAdminService.findOneById(id);
+	}
 }

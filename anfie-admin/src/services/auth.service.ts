@@ -18,6 +18,16 @@ export class AuthServiceApis extends HttpClient {
     });
     return data;
   }
+
+  public async postLoginAdmin(form: TFormLogin) {
+    const { data } = await this.instance.post(ENDPOINT_APIS.auth.admin.login, {
+      ...form,
+    });
+
+    console.log({ data }); 
+    
+    return data;
+  }
 }
 
 export const authService = new AuthServiceApis();

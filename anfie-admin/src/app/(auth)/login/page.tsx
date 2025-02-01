@@ -1,5 +1,5 @@
 "use client";
-import { FormLogin, FormSignup } from "@/components";
+import { FormLogin } from "@/components";
 import { EActionTabs } from "@/constants";
 import { Tabs, TabsProps } from "antd";
 import React, { useRef } from "react";
@@ -14,7 +14,7 @@ const LoginPage = () => {
       children: <FormLogin />,
     },
   ];
-  return (
+  return ( 
     <div ref={refTab}>
       <Tabs
         className="w-full"

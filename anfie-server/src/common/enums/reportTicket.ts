@@ -2,5 +2,6 @@ export enum EReportTicketType {
 	CONFESSION = 'confession',
 	MESSAGE = 'message',
 	COMMENT = 'comment',
-	DIARY = 'diary'
+	DIARY = 'diary',
+	CONVERSATION = 'conversation'
 }

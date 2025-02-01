@@ -11,10 +11,19 @@ import { MessageModule } from '../message/message.module';
 import { PostModule } from '../post/post.module';
 import { ConfessionsModule } from '../confessions/confessions.module';
 import { CommentModule } from '../comment/comment.module';
+import { ConversationModule } from '../conversation/conversation.module';
 
 @Module({
 	controllers: [ReportTicketController, ReportTicketAdminController],
 	providers: [ReportTicketService, ReportTicketRepository, ReportTicketAdminService],
-	imports: [TypeOrmModule.forFeature([ReportTicket]), UserModule, MessageModule, PostModule, ConfessionsModule, CommentModule]
+	imports: [
+		TypeOrmModule.forFeature([ReportTicket]),
+		UserModule,
+		MessageModule,
+		PostModule,
+		ConfessionsModule,
+		CommentModule,
+		ConversationModule
+	]
 })
 export class ReportTiketModule {}

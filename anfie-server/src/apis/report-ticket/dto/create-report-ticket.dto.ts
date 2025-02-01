@@ -23,6 +23,10 @@ export class CreateReportTicketDto {
 	reporteeId: string;
 
 	@IsString()
+	@IsOptional()
+	conversationId: string;
+
+	@IsString()
 	content: string;
 
 	@IsEnum(EReportTicketType)

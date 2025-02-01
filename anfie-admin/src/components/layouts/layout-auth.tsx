@@ -1,5 +1,4 @@
 import { Col, Row } from "antd";
-import Image from "next/image";
 import React, { PropsWithChildren } from "react";
 
 const LayoutAuth = ({ children }: PropsWithChildren) => {

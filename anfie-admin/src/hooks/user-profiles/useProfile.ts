@@ -12,3 +12,14 @@ export const useUserProfile = () => {
     isLoading,
   };
 };
+
+export const useUserProfileById = (userId: string) => {
+  const { data, isLoading } = useQuery({
+    queryKey: [queryKeys.GET_DETAILS_USER, userId],
+    queryFn: () => userProfilesService.getUserProfileById(userId),
+  });
+  return {
+    userProfile: data?.data,
+    isLoading,
+  };
+};

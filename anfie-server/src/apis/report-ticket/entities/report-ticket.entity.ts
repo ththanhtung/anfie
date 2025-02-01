@@ -1,13 +1,14 @@
 import { Admin } from 'src/apis/admin/entities';
 import { Comment } from 'src/apis/comment/entities';
 import { Confession } from 'src/apis/confessions/entities';
+import { Conversation } from 'src/apis/conversation/entities';
 import { Message } from 'src/apis/message/entities';
 import { Post } from 'src/apis/post/entities';
 import { UserProfiles } from 'src/apis/user/entities';
 import { TReportTicketStatus } from 'src/common/@types/report-ticket';
 import { EReportTicketType } from 'src/common/enums/reportTicket';
 import { BaseEntity } from 'src/database';
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToOne } from 'typeorm';
 
 @Entity()
 export class ReportTicket extends BaseEntity<ReportTicket> {
@@ -16,6 +17,12 @@ export class ReportTicket extends BaseEntity<ReportTicket> {
 		nullable: true
 	})
 	postId: string;
+
+	@Column({
+		name: 'conversation_id',
+		nullable: true
+	})
+	conversationId: string;
 
 	@Column({
 		name: 'confession_id',
@@ -66,6 +73,12 @@ export class ReportTicket extends BaseEntity<ReportTicket> {
 		name: 'post_id'
 	})
 	post: Post;
+
+	@OneToOne(() => Conversation, { createForeignKeyConstraints: false })
+	@JoinColumn({
+		name: 'conversation_id'
+	})
+	conversation: Conversation;
 
 	@ManyToOne(() => Confession, { createForeignKeyConstraints: false })
 	@JoinColumn({

@@ -21,6 +21,11 @@ type TFormLogin = {
   password: string;
 };
 
+type TFormLoginAdmin = {
+  username: string;
+  password: string;
+};
+
 type TFormSignup = {
   email: string;
   hash: string;

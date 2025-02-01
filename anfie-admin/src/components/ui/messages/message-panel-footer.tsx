@@ -1,6 +1,6 @@
 import { Form, Input, Tooltip, Button, InputRef, Upload } from "antd";
 import React, { useCallback, useRef } from "react";
-import { LuSendHorizonal } from "react-icons/lu";
+import { LuSendHorizontal } from "react-icons/lu";
 import { FiImage } from "react-icons/fi";
 import { FaCirclePlus } from "react-icons/fa6";
 
@@ -52,7 +52,7 @@ const MessagePanelFooter = ({ sendMessage }: TProps) => {
       <Tooltip title="Send">
         <Button
           shape="circle"
-          icon={<LuSendHorizonal size={22} />}
+          icon={<LuSendHorizontal size={22} />}
           className="border-transparent shadow-none"
           htmlType="submit"
         />

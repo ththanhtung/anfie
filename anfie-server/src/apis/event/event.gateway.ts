@@ -10,7 +10,6 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 import { ConversationAdminService } from '../conversation/services';
 import { ConversationRequestService } from '../conversation-request/services';
 import { ConversationRequest } from '../conversation-request/entities';
-import { group } from 'console';
 import { UserService } from '../user/services';
 
 @WebSocketGateway({

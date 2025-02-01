@@ -27,4 +27,8 @@ export class ConversationAdminService {
 		await this.userServies.reduceConversationSlot(user2.id);
 		return conversation;
 	}
+
+	findOneById(id: string) {
+		return this.conversationRepository.findOneById(id);
+	}
 }

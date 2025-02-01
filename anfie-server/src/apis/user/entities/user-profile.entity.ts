@@ -78,10 +78,10 @@ export class UserProfiles extends BaseEntity<UserProfiles> {
 	})
 	user: Users;
 
-	@OneToMany(() => ReportTicket, (reportTicket) => reportTicket.reporter, { nullable: true, cascade: true, onDelete: 'CASCADE' })
+	@OneToMany(() => ReportTicket, (reportTicket) => reportTicket.reportee, { nullable: true, cascade: true, onDelete: 'CASCADE' })
 	submittedReportTickets: ReportTicket[];
 
-	@OneToMany(() => ReportTicket, (reportTicket) => reportTicket.reportee, { nullable: true, cascade: true, onDelete: 'CASCADE' })
+	@OneToMany(() => ReportTicket, (reportTicket) => reportTicket.reporter, { nullable: true, cascade: true, onDelete: 'CASCADE' })
 	receivedReportTickets: ReportTicket[];
 
 	@ManyToMany(() => PreferGender, (preferGender) => preferGender.userProfiles)

@@ -49,7 +49,7 @@ const MenuSidebar = ({ href }: TProps) => {
       label: "users",
     },
     {
-      key: "tickets",
+      key: "report-tickets",
       icon: <AiOutlineComment />,
       label: "report tickets",
     },
@@ -64,11 +64,6 @@ const MenuSidebar = ({ href }: TProps) => {
       label: "Posts",
     },
     {
-      key: "alleys",
-      icon: <IoPersonAddOutline />,
-      label: "alleys",
-    },
-    {
       key: "profile",
       icon: <UserOutlined />,
       label: "profile",
@@ -79,7 +74,6 @@ const MenuSidebar = ({ href }: TProps) => {
       label: "logout",
     },
   ];
-
 
   const handleClick: MenuProps["onClick"] = (e) => {
     if (e.key === "logout") {

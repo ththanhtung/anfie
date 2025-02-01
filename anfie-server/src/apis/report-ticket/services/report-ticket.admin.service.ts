@@ -57,4 +57,8 @@ export class ReportTicketAdminService {
 
 		return this.reportTicketRepository.reject(requestId, modId);
 	}
+
+	async findOneById(id: string) {
+		return this.reportTicketRepository.getDetailTicketById(id);
+	}
 }
