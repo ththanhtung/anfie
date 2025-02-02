@@ -118,7 +118,7 @@ export class ReportTicketRepository extends Repository<ReportTicket> {
 
 	async getDetailTicketById(id: string) {
 		return this.findOne({
-			relations: ['reporter', 'reportee', 'reporter.user', 'reportee.user', 'confession', 'post', 'comment', 'conversation'],
+			relations: ['reporter', 'reportee', 'reporter.user', 'reportee.user', 'confession', 'post', 'comment', 'conversation', 'post.author'],
 			where: {
 				id: id
 			}

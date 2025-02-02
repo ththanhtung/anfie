@@ -27,3 +27,14 @@ type TGetReportTicketsAdminResponse = {
   comment?: TComment;
   conversation?: TConversation;
 };
+
+
+type TAcceptReportTicketParams = {
+  ticketId: string;
+  cb?: () => void;
+};
+
+type TRejectReportTicketParams = {
+  ticketId: string;
+  cb?: () => void;
+};

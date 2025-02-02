@@ -100,6 +100,8 @@ export default abstract class HttpClient {
       LocalKey.ACCESS_TOKEN_LOCALKEY
     );
 
+    console.log({jjjj: accessToken});
+
     if (accessToken) {
       (
         config.headers as AxiosRequestHeaders

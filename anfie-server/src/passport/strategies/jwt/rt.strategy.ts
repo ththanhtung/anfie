@@ -15,6 +15,7 @@ export class RtStrategy extends PassportStrategy(Strategy, 'rt-jwt') {
 	}
 
 	validate(req: Request, payload: TUserJwt) {
+		console.log('refresh token');
 		const refreshToken = req.body.refreshToken.replace('Bearer ', '');
 
 		if (!refreshToken) throw new ForbiddenException('Refresh token malformed');

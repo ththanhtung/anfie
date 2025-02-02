@@ -10,7 +10,7 @@ export class MessagesServiceApis extends HttpClient {
     conversationId: string = ""
   ) {
     const { data } = await this.instance.get<TResultResponse<TMessage[]>>(
-      `${ENDPOINT_APIS.conversation.list}/${conversationId}/messages`,
+      `${ENDPOINT_APIS.conversation.admin.list}/${conversationId}/messages`,
       { params }
     );
     return data;

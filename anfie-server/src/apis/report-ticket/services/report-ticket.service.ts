@@ -9,6 +9,7 @@ import { CommentService } from 'src/apis/comment/services';
 import { ConfessionsService } from 'src/apis/confessions/services';
 import { Message } from 'src/apis/message/entities';
 import { ConversationService } from 'src/apis/conversation/services';
+import { Post } from 'src/apis/post/entities';
 
 @Injectable()
 export class ReportTicketService {
@@ -36,8 +37,9 @@ export class ReportTicketService {
 				}
 			]);
 
+		let post: Post;
 		if (dto.postId) {
-			const post = await this.postService.findOneById(user.userId.toString(), dto.postId);
+			post = await this.postService.findOneById(user.userId.toString(), dto.postId);
 			if (!post)
 				throw new NotFoundException([
 					{
@@ -77,21 +79,32 @@ export class ReportTicketService {
 		}
 
 		const reporterId = user.userId.toString();
+
 		const reportedUser = await this.userService.findOneById(dto.reporteeId, true);
+
 		if (!reportedUser)
 			throw new NotFoundException([
 				{
-					message: 'reported user not found'
+					message: 'reportee user not found'
 				}
 			]);
 
-		const isExisted = await this.reportTicketRepository.isPending(reporterId, dto.reporteeId);
-		if (isExisted)
-			throw new BadRequestException([
+		const reporterUser = await this.userService.findOneById(user.userId.toString(), true);
+
+		if (!reporterUser)
+			throw new NotFoundException([
 				{
-					message: 'report ticket already exist'
+					message: 'reporter user not found'
 				}
 			]);
+
+		// const isExisted = await this.reportTicketRepository.isPending(reporterId, dto.reporteeId);
+		// if (isExisted)
+		// 	throw new BadRequestException([
+		// 		{
+		// 			message: 'report ticket already exist'
+		// 		}
+		// 	]);
 
 		if (dto.reporteeId === reporterId)
 			throw new BadRequestException([
@@ -119,7 +132,7 @@ export class ReportTicketService {
 			commentId: dto.commentId,
 			conversationId: dto.conversationId,
 			messages: messages,
-			reporterId: reportedUser.profile.id,
+			reporterId: reporterUser.profile.id,
 			reporteeId: reporteeUser.profile.id,
 			content: dto.content,
 			type: dto.type

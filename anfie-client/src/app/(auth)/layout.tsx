@@ -1,3 +1,5 @@
+"use client";
+
 import { LayoutAuth } from "@/components";
 import React, { PropsWithChildren } from "react";
 

@@ -166,7 +166,7 @@ const MessagePanel = ({
           <MessagePanelFooter sendMessage={sentMessage} />
         </div> */}
       </div>
-      <CreateGroupModal
+    {/* `  <CreateGroupModal
         ref={createGroupRef}
         onCreate={onCreate}
         currentConversation={conversation}
@@ -183,7 +183,7 @@ const MessagePanel = ({
         groupId={group?.id?.toString() || ""}
       />
 
-      <ShowAvatarModal ref={showAvatarRef} conversation={conversation} />
+      <ShowAvatarModal ref={showAvatarRef} conversation={conversation} />` */}
     </>
   );
 };

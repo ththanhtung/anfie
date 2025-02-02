@@ -18,6 +18,18 @@ export class ReportTicketServiceApis extends HttpClient {
     >(`${ENDPOINT_APIS.reportTicket.admin.list}/${id}`);
     return data;
   }
+
+  public patchAcceptReportTicket(id: string) {
+    return this.instance.patch(
+      `${ENDPOINT_APIS.reportTicket.admin.list}/${id}/accept`
+    );
+  }
+
+  public patchRejectReportTicket(id: string) {
+    return this.instance.patch(
+      `${ENDPOINT_APIS.reportTicket.admin.list}/${id}/reject`
+    );
+  }
 }
 
 export const reportTicketService = new ReportTicketServiceApis();

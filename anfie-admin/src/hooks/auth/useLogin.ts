@@ -56,6 +56,7 @@ export const useLogin = () => {
         },
         onSuccess: async (data) => {
           const accessToken = data.data.tokens;
+          console.log({accessToken: accessToken.accessToken});
           setAccessToken(accessToken?.accessToken);
           router.push(routes.USERS);
         },

@@ -13,7 +13,7 @@ export class ReportTicketAdminController {
 		return this.reportTiketAdminService.getReportTikets(query);
 	}
 
-	@Post(':id/accept')
+	@Patch(':id/accept')
 	@HttpCode(HttpStatus.OK)
 	async acceptReportTicket(@Param('id') id: string, @GetCurrentUser('id') adminId: string) {
 		return this.reportTiketAdminService.acceptReportTicket(id, adminId);

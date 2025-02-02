@@ -4,7 +4,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ConversationAdminService } from './services';
 import { AuthAdmin } from 'src/common';
 
-@AuthAdmin()
+@AuthAdmin() 
 @Controller('conversations/admin')
 export class ConversationAdminController {
 	constructor(
@@ -21,6 +21,7 @@ export class ConversationAdminController {
 
 	@Get(':id')
 	findOne(@Param('id') id: string) {
+		console.log('test');
 		return this.conversationAdminService.findOneById(id);
 	}
 }

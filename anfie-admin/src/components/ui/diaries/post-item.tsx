@@ -37,7 +37,7 @@ const PostItem = ({ post }: TProps) => {
         alt="post image"
         style={{ width: "100%", height: "100%" }}
       />
-      <InteractionBar />
+      {/* <InteractionBar /> */}
     </Card>
   );
 };

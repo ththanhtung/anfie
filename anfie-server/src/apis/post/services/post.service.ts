@@ -26,8 +26,10 @@ export class PostService {
 		return this.postRepository.getPostsByUserIds(followings, query);
 	}
 
-	async findOneById(userId: string, id: string) {
+	async findOneById(userId: string, id: string, isCheckingFriend: boolean = false) {
 		const post = await this.postRepository.findOneById(id);
+		if (!isCheckingFriend) return post;
+
 		if (this.friendsService.isFriend(post.authorId.toString(), userId))
 			throw new BadRequestException([
 				{

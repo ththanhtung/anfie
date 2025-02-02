@@ -7,7 +7,10 @@ export const ENDPOINT_APIS = {
     },
   },
   conversation: {
-    list: "api/conversations/admin",
+    list: "api/conversations",
+    admin: {
+      list: "api/conversations/admin",
+    }
   },
   conversationRequest: {
     list: "api/conversation-request",
