@@ -48,7 +48,7 @@ const AlleyDetailPage = ({ params }: TDetailPage) => {
           </div>
         </div>
         <div className="p-4 w-full grid grid-cols-4 gap-4">
-          <GroupItem item={group!} />
+          {group && <GroupItem item={group!} />}
           {alleyChildren?.map((item) => (
             <AlleyItem key={item.id} alley={item} />
           ))}

@@ -93,7 +93,7 @@ export class ReportTicketRepository extends Repository<ReportTicket> {
 	}
 
 	async getReportTicketsAdmin(query: GetReportTicketsAdminDto) {
-		const { status: statusString, reporteeEmail, reporterEmail, ticketId } = query;
+		const { status: statusString, reporteeEmail, reporterEmail, ticketId, postId } = query;
 
 		const status = statusString ? JSON.parse(statusString) : [];
 
@@ -111,14 +111,25 @@ export class ReportTicketRepository extends Repository<ReportTicket> {
 						user: { email: reporterEmail }
 					}
 				}),
-				...(ticketId && { id: ticketId })
+				...(ticketId && { id: ticketId }),
+				...(postId && { postId: postId })
 			}
 		});
 	}
 
 	async getDetailTicketById(id: string) {
 		return this.findOne({
-			relations: ['reporter', 'reportee', 'reporter.user', 'reportee.user', 'confession', 'post', 'comment', 'conversation', 'post.author'],
+			relations: [
+				'reporter',
+				'reportee',
+				'reporter.user',
+				'reportee.user',
+				'confession',
+				'post',
+				'comment',
+				'conversation',
+				'post.author'
+			],
 			where: {
 				id: id
 			}

@@ -2,7 +2,7 @@
 import { userInfoStoreAtom } from "@/stores";
 import { _common, _formatDay } from "@/utils";
 import { UserOutlined } from "@ant-design/icons";
-import { Avatar, Spin } from "antd";
+import { Avatar, Carousel, Spin, Image } from "antd";
 import { useAtomValue } from "jotai";
 import React, { useEffect, useRef } from "react";
 import { useInView } from "react-intersection-observer";
@@ -60,6 +60,23 @@ const MessageContainer = ({
           <div className="flex-col message-item-details">
             <div className="p-2 bg-slate-200 w-fit rounded-md message-item-container-body">
               {message?.content}
+              {message.medias.length > 0 && (
+                <div className="w-[400px]">
+                  <Carousel arrows infinite={false} className="text-center">
+                    {message.medias?.map((media) => (
+                      <div key={media.id}>
+                        <Image
+                          src={media.url}
+                          width={300}
+                          height={300}
+                          alt={media.key}
+                          className="object-cover"
+                        />
+                      </div>
+                    ))}
+                  </Carousel>
+                </div>
+              )}
             </div>
             <div className="flex items-center justify-center gap-2 text-slate-400 mt-1">
               {!isMessageMine ? (
@@ -77,6 +94,23 @@ const MessageContainer = ({
         ) : (
           <div className="w-fit ml-[52px] bg-slate-200 rounded-md m-0 p-2 message-item-container-body">
             {message?.content}
+            {message.medias.length > 0 && (
+              <div className="w-[400px]">
+                <Carousel arrows infinite={false} className="text-center">
+                  {message.medias?.map((media) => (
+                    <div key={media.id}>
+                      <Image
+                        src={media.url}
+                        width={300}
+                        height={300}
+                        alt={media.key}
+                        className="object-cover"
+                      />
+                    </div>
+                  ))}
+                </Carousel>
+              </div>
+            )}
           </div>
         )}
       </div>

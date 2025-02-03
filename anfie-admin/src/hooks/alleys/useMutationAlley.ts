@@ -12,6 +12,58 @@ export const useMutationAlley = () => {
       mutationFn: ({ form }) => alleysService.postCreateAlley(form),
     });
 
+  const { mutate: mutationEnableAlley, isPending: isEnableAlleyPending } =
+    useMutation<any, TResponseError, { id: string }>({
+      mutationKey: [mutationKeys.MUTATION_ENABLE_ALLEY],
+      mutationFn: ({ id }) => alleysService.patchEnableAlley(id),
+    });
+
+  const { mutate: mutationDisableAlley, isPending: isDisableAlleyPending } =
+    useMutation<any, TResponseError, { id: string }>({
+      mutationKey: [mutationKeys.MUTATION_DISABLE_ALLEY],
+      mutationFn: ({ id }) => alleysService.patchDisableAlley(id),
+    });
+
+  const onEnableAlley = useCallback(
+    ({ id, cb }: TEnableAlleyParams) => {
+      mutationEnableAlley(
+        { id },
+        {
+          onError: (error: any) => {
+            message.error(error.message);
+          },
+          onSuccess: (data, variables) => {
+            queryClient.invalidateQueries({
+              queryKey: [queryKeys.GET_DETAILS_ALLEY],
+            });
+            cb?.();
+          },
+        }
+      );
+    },
+    [mutationEnableAlley, queryClient]
+  );
+
+  const onDisableAlley = useCallback(
+    ({ id, cb }: TDisableAlleyParams) => {
+      mutationDisableAlley(
+        { id },
+        {
+          onError: (error: any) => {
+            message.error(error.message);
+          },
+          onSuccess: (data, variables) => {
+            queryClient.invalidateQueries({
+              queryKey: [queryKeys.GET_DETAILS_ALLEY],
+            });
+            cb?.();
+          },
+        }
+      );
+    },
+    [mutationDisableAlley, queryClient]
+  );
+
   const onCreateAlley = useCallback(
     ({ form, cb }: TCreateAlleyParams) => {
       mutationCreateAlley(
@@ -34,7 +86,11 @@ export const useMutationAlley = () => {
   );
 
   return {
+    onEnableAlley,
+    onDisableAlley,
     onCreateAlley,
     isCreateAlleyPending,
+    isLoading:
+      isCreateAlleyPending || isEnableAlleyPending || isDisableAlleyPending,
   };
 };

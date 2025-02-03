@@ -70,6 +70,10 @@ export class AlleyRepository extends Repository<Alley> {
 	async findAlleysByParentId(parentId: string, query: GetAlleysDto) {
 		if (parentId) {
 			const parent = await this.findOneById(parentId);
+			if (parent.disabled) {
+				return [];
+			}
+			
 			if (!parent) throw new NotFoundException([{ message: 'parent alley not found' }]);
 			return pagination(this, query, {
 				where: {
@@ -83,6 +87,7 @@ export class AlleyRepository extends Repository<Alley> {
 			});
 		}
 		return pagination(this, query, {
+			where: { disabled: false },
 			order: {
 				alleyLeft: 'ASC'
 			}
@@ -123,9 +128,14 @@ export class AlleyRepository extends Repository<Alley> {
 
 	async findFirstAlley() {
 		return this.findOne({
+			relations: ['parent'],
 			where: {
 				alleyLeft: 1
 			}
 		});
+	}
+
+	async updateAlleyStatusByID(id: string, disabled: boolean) {
+		return this.update(id, { disabled });
 	}
 }

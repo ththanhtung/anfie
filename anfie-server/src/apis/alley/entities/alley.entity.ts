@@ -16,12 +16,6 @@ export class Alley extends BaseEntity<Alley> {
 	})
 	title: string;
 
-	// @Column({
-	// 	name: 'alley_group_id',
-	// 	nullable: true
-	// })
-	// groupId: string;
-
 	@Column({
 		name: 'alley_left'
 	})
@@ -31,6 +25,12 @@ export class Alley extends BaseEntity<Alley> {
 		name: 'alley_right'
 	})
 	alleyRight: number;
+
+	@Column({
+		name: 'alley_disabled',
+		default: false
+	})
+	disabled: boolean;
 
 	@ManyToOne(() => Alley, (alley) => alley.id)
 	@JoinColumn({

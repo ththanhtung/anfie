@@ -11,4 +11,8 @@ export class MessageMediaRepository extends Repository<MessageMedia> {
 		const messageMedia = await this.create({ messageId });
 		return this.save(messageMedia);
 	}
+
+	async updateMessageMediaUrl(id: string, url: string) {
+		return this.update(id, { url });
+	}
 }

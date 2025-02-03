@@ -33,6 +33,7 @@ export class PostRepository extends Repository<Post> {
 
 	async findOneById(id: string) {
 		return this.findOne({
+			relations: ['author'],
 			where: {
 				id: id
 			}

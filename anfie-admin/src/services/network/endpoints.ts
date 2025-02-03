@@ -20,6 +20,9 @@ export const ENDPOINT_APIS = {
   },
   posts: {
     list: "api/posts",
+    admin: {
+      list: "api/posts/admin",
+    }
   },
   confessions: {
     list: "api/confessions",
@@ -62,6 +65,9 @@ export const ENDPOINT_APIS = {
   },
   alleys: {
     list: "api/alleys",
+    admin: {
+      list: "api/alleys/admin",
+    }
   },
   reportTicket: {
     list: 'api/report-ticket',

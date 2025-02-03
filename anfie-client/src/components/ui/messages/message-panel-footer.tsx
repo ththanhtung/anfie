@@ -12,8 +12,8 @@ const MessagePanelFooter = ({ sendMessage }: TProps) => {
   const [form] = Form.useForm();
   const onFinish = useCallback(
     (value: TMessageForm) => {
-      sendMessage(value);
-      form.resetFields();
+      // sendMessage(value);
+      // form.resetFields();
     },
     [form, sendMessage]
   );
@@ -33,7 +33,7 @@ const MessagePanelFooter = ({ sendMessage }: TProps) => {
         />
       </Tooltip>
       <Tooltip title="Attachment">
-        <Upload multiple maxCount={5} showUploadList={false}>
+        <Upload multiple maxCount={5} showUploadList={true}>
           <Button
             shape="circle"
             icon={<FiImage size={22} />}

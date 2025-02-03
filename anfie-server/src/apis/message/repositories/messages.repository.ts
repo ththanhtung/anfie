@@ -22,7 +22,7 @@ export class MessageRepository extends Repository<Message> {
 			where: {
 				conversationId: conversationId
 			},
-			relations: ['user']
+			relations: ['user', 'medias']
 		});
 	}
 

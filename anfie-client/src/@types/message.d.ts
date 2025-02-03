@@ -9,6 +9,7 @@ type TMessage = {
   created_at: string;
   updated_at: string;
   isSeen: boolean;
+  medias: TMessageMedias[];
 };
 
 type TMessageParams = {
@@ -26,4 +27,13 @@ type TCreateMessageParams = {
   conversationId: string;
   form: TMessageForm;
   cb?: () => void;
+};
+
+type TMessageMedias = {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  key: string;
+  messageId: string;
+  url: any;
 };

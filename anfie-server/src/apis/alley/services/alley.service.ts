@@ -87,4 +87,30 @@ export class AlleyService {
 
 		return data;
 	}
+
+	async enableAlley(id: string) {
+		const alley = await this.alleyRepository.findOneById(id);
+		if (!alley) {
+			throw new NotFoundException([
+				{
+					message: 'alley not found'
+				}
+			]);
+		}
+		await this.alleyRepository.updateAlleyStatusByID(id, false);
+		return true;
+	}
+
+	async disableAlley(id: string) {
+		const alley = await this.alleyRepository.findOneById(id);
+		if (!alley) {
+			throw new NotFoundException([
+				{
+					message: 'alley not found'
+				}
+			]);
+		}
+		await this.alleyRepository.updateAlleyStatusByID(id, true);
+		return true;
+	}
 }

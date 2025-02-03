@@ -23,4 +23,8 @@ export class GetReportTicketsAdminDto extends PaginationDto {
 	@IsOptional()
 	@IsString()
 	ticketId: string;
+
+	@IsOptional()
+	@IsString()
+	postId: string;
 }

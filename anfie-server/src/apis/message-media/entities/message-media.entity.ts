@@ -23,4 +23,10 @@ export class MessageMedia extends BaseEntity<MessageMedia> {
 	generateKey() {
 		this.key = uuidv4();
 	}
+
+	@Column({
+		name: 'message_media_url',
+		nullable: true
+	})
+	url: string;
 }

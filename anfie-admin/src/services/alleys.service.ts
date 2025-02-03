@@ -30,13 +30,27 @@ export class AlleysServiceApis extends HttpClient {
     );
 
     console.log({ groups: data });
-    
+
     return data;
   }
 
   public async getDetailsAlley(id: string) {
     const { data } = await this.instance.get<TResultResponse<TAlley>>(
       `${ENDPOINT_APIS.alleys.list}/${id}`
+    );
+    return data;
+  }
+
+  public async patchEnableAlley(id: string) {
+    const { data } = await this.instance.patch<TResultResponse<TAlley>>(
+      `${ENDPOINT_APIS.alleys.admin.list}/${id}/enable`
+    );
+    return data;
+  }
+
+  public async patchDisableAlley(id: string) {
+    const { data } = await this.instance.patch<TResultResponse<TAlley>>(
+      `${ENDPOINT_APIS.alleys.admin.list}/${id}/disable`
     );
     return data;
   }

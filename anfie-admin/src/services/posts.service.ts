@@ -22,6 +22,13 @@ export class PostServiceApis extends HttpClient {
     );
     return data;
   }
+
+  public async getDetailsPost(postId: string) {
+    const { data } = await this.instance.get<TResultResponse<TPost>>(
+      `${ENDPOINT_APIS.posts.admin.list}/${postId}`
+    );
+    return data;
+  }
 }
 
 export const postService = new PostServiceApis();

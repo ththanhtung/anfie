@@ -126,7 +126,10 @@ export class GroupRepository extends Repository<Group> {
 	async findGroupsByAlleyId(alleyId: string) {
 		return this.findOne({
 			where: {
-				alleyId
+				alleyId,
+				alley: {
+					disabled: false
+				}
 			}
 		});
 	}

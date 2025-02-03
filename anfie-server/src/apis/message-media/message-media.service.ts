@@ -14,10 +14,14 @@ export class MessageMediaService {
 		}
 		const promise = medias.map(async (media) => {
 			const newMedia = await this.messageMediaRepository.createOne(messageId);
-			await this.mediaUploaderService.uploadMedia({
-				file: media,
-				messageMedia: newMedia
-			});
+			await this.mediaUploaderService
+				.uploadMedia({
+					file: media,
+					messageMedia: newMedia
+				})
+				.then((data) => {
+					this.messageMediaRepository.updateMessageMediaUrl(newMedia.id, data.url);
+				});
 			return newMedia;
 		});
 		return Promise.all(promise);
