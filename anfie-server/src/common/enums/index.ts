@@ -5,3 +5,4 @@ export * from './genders';
 export * from './report-ticket';
 export * from './group';
 export * from './conversation'
+export * from './message';

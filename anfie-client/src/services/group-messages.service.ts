@@ -20,7 +20,7 @@ export class GroupMessagesServiceApis extends HttpClient {
     form: FormData,
     groupId: string = ""
   ) {
-    const { data } = await this.instance.post(
+    const { data } = await this.instance.postForm(
       `${ENDPOINT_APIS.groupConversations.list}/${groupId}/messages`,
       form
     );

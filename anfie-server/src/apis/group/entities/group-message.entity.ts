@@ -28,7 +28,7 @@ export class GroupMessage extends BaseEntity<GroupMessage> {
 	})
 	groupId?: string;
 
-	@OneToMany(() => MessageMedia, (messageMedia) => messageMedia.message)
+	@OneToMany(() => MessageMedia, (messageMedia) => messageMedia.groupMessage)
 	@JoinColumn()
 	medias: MessageMedia[];
 

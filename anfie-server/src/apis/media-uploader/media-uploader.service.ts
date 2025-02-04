@@ -49,7 +49,7 @@ export class MediaUploaderService {
 				(error, result) => {
 					if (error) return reject(error);
 					resolve(result);
-				}
+				} 
 			);
 
 			// Process image with sharp

@@ -30,12 +30,11 @@ export class GroupMessageRepository extends Repository<GroupMessage> {
 			where: {
 				groupId: groupId
 			},
-			relations: ['user', 'group', 'group.users']
+			relations: ['user', 'group', 'group.users', 'medias']
 		});
 	}
 
 	async getGroupMessagesByIds(ids: string[]) {
-		const idsInt = ids.map((id) => +id);
-		return this.find({ where: { id: In(idsInt) } });
+		return this.find({ relations: ['user', 'group', 'medias'], where: { id: In(ids) } });
 	}
 }
