@@ -35,6 +35,7 @@ const PostModal = ({ groupId }: TProps, ref: Ref<TModalRef>) => {
 
   const onFinish = (value: any) => {
     console.log({ value });
+
     const { medias, content } = value;
     const formData = new FormData();
     formData.append("content", content);

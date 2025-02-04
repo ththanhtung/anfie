@@ -65,7 +65,7 @@ export class PostRepository extends Repository<Post> {
 	async getPostsByGroupId(groupId: string, query: GetPostsDto) {
 		return pagination(this, query, {
 			where: { groupId: groupId },
-			relations: ['author']
+			relations: ['author', 'medias']
 		});
 	}
 }

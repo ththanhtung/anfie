@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, Tooltip } from "antd";
+import { Avatar, Button, Card, Carousel, Image, Tooltip } from "antd";
 import React from "react";
 import InteractionBar from "./interaction-bar";
 import { images } from "@/constants";
@@ -32,11 +32,21 @@ const PostItem = ({ post }: TProps) => {
         </Tooltip>
       </div>
       <p className="my-4">{post.content}</p>
-      <img
-        src={images.LOGO}
-        alt="post image"
-        style={{ width: "100%", height: "100%" }}
-      />
+      {post?.medias?.length > 0 && (
+        <div className="w-full">
+          <Carousel arrows infinite={false} className="text-center">
+            {post?.medias?.map((media) => (
+              <div key={media.id}>
+                <Image
+                  src={media.url}
+                  alt={media.key}
+                  className="object-cover"
+                />
+              </div>
+            ))}
+          </Carousel>
+        </div>
+      )}
       <InteractionBar />
     </Card>
   );

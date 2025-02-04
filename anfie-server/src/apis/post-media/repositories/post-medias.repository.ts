@@ -11,4 +11,8 @@ export class PostMediaRepository extends Repository<PostMedia> {
 		const postMedia = await this.create({ postId });
 		return this.save(postMedia);
 	}
+
+	async updatePostMediaUrl(id: string, url: string) {
+		return this.update({ id }, { url });
+	}
 }

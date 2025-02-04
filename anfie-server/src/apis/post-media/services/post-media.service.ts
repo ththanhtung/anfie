@@ -14,10 +14,14 @@ export class PostMediaService {
 		}
 		const promise = medias.map(async (media) => {
 			const newMedia = await this.postMediaRepository.createOne(postId);
-			await this.mediaUploaderService.uploadPostMedia({
-				file: media,
-				postMedia: newMedia
-			});
+			await this.mediaUploaderService
+				.uploadPostMedia({
+					file: media,
+					postMedia: newMedia
+				})
+				.then((data) => {
+					this.postMediaRepository.updatePostMediaUrl(newMedia.id, data.url);
+				});
 			return newMedia;
 		});
 		return Promise.all(promise);

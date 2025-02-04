@@ -23,4 +23,10 @@ export class PostMedia extends BaseEntity<PostMedia> {
 	generateKey() {
 		this.key = uuidv4();
 	}
+
+	@Column({
+		name: 'post_media_url',
+		nullable: true
+	})
+	url: string;
 }

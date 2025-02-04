@@ -12,6 +12,7 @@ type TPost = {
   groupId: string;
   id: string;
   author: TUser;
+  medias: TPostMedias[];
   created_at: string;
   updated_at: string;
 };
@@ -23,4 +24,13 @@ type TPostForm = {
 type TCreatePostParams = {
   form: any;
   cb?: () => void;
+};
+
+type TPostMedias = {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  key: string;
+  postId: string;
+  url: any;
 };
