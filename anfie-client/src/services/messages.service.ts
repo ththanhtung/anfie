@@ -17,10 +17,10 @@ export class MessagesServiceApis extends HttpClient {
   }
 
   public async postCreateMessage(
-    form: TMessageForm,
+    form: FormData,
     conversationId: string = ""
   ) {
-    const { data } = await this.instance.post(
+    const { data } = await this.instance.postForm(
       `${ENDPOINT_APIS.conversation.list}/${conversationId}/messages`,
       form
     );

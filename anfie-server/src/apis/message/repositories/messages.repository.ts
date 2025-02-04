@@ -27,7 +27,6 @@ export class MessageRepository extends Repository<Message> {
 	}
 
 	async getMessagesByIds(ids: string[]) {
-		const idsInt = ids.map((id) => +id);
-		return this.find({ where: { id: In(idsInt) } });
+		return this.find({ relations: ['user', 'medias'], where: { id: In(ids) } });
 	}
 }

@@ -12,6 +12,7 @@ export class MessageMediaService {
 		if (!medias || medias === undefined) {
 			return;
 		}
+
 		const promise = medias.map(async (media) => {
 			const newMedia = await this.messageMediaRepository.createOne(messageId);
 			await this.mediaUploaderService

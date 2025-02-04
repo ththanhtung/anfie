@@ -60,10 +60,10 @@ const MessageContainer = ({
           <div className="flex-col message-item-details">
             <div className="p-2 bg-slate-200 w-fit rounded-md message-item-container-body">
               {message?.content}
-              {message.medias.length > 0 && (
+              {message?.medias?.length > 0 && (
                 <div className="w-[400px]">
                   <Carousel arrows infinite={false} className="text-center">
-                    {message.medias?.map((media) => (
+                    {message?.medias?.map((media) => (
                       <div key={media.id}>
                         <Image
                           src={media.url}
@@ -94,10 +94,10 @@ const MessageContainer = ({
         ) : (
           <div className="w-fit ml-[52px] bg-slate-200 rounded-md m-0 p-2 message-item-container-body">
             {message?.content}
-            {message.medias.length > 0 && (
+            {message?.medias?.length > 0 && (
               <div className="w-[400px]">
                 <Carousel arrows infinite={false} className="text-center">
-                  {message.medias?.map((media) => (
+                  {message?.medias?.map((media) => (
                     <div key={media.id}>
                       <Image
                         src={media.url}

@@ -83,27 +83,35 @@ const MessagePanel = ({
   const onEndConversation = () => {
     onLeave?.();
   };
-
-  const sentMessage = async ({ content }: TMessageForm) => {
+  const sentMessage = async ({ content, medias }: TMessageForm) => {
     if (!content) return;
 
-    const trimmedContent = content?.trim();
+    const trimmedContent = content.trim();
     if (!trimmedContent) return;
-    const form = new FormData();
-    form.append("content", trimmedContent);
 
-    // TODO
-    // attach media to form
-    // sent message
+    const formData = new FormData();
+    formData.append("content", trimmedContent);
+
+    if (medias && medias.fileList) {
+      for (const file of medias.fileList) {
+        if (file.originFileObj) {
+          console.log({obj: file.originFileObj})
+          formData.append("medias", file.originFileObj);
+        }
+      }
+    }
+
+    console.log(Object.fromEntries(formData.entries()));
+
     if (type === EConversationTypes.PRIVATE) {
       onCreateMessage({
         conversationId: conversation?.id?.toString() || "",
-        form,
+        form: formData,
       });
     } else {
       onCreateGroupMessage({
         groupId: group?.id?.toString() || "",
-        form,
+        form: formData,
       });
     }
   };
@@ -171,7 +179,7 @@ const MessagePanel = ({
       <LeaveGroupModal
         ref={leaveGroupRef}
         onOk={() => {
-          onLeave?.({ groupId: group?.id?.toString() || "" });
+          onLeave?.();
         }}
       />
       <AddRecipientsModal

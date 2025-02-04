@@ -12,7 +12,7 @@ export const useMutationGroupMessage = () => {
   } = useMutation<
     any,
     TResponseError,
-    { groupId: string; form: TGroupMessageForm }
+    { groupId: string; form: FormData }
   >({
     mutationKey: [mutationKeys.MUTATION_CREATE_GROUP_MESSAGE],
     mutationFn: ({ groupId, form }) =>

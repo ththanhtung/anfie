@@ -21,11 +21,12 @@ type TMessageParams = {
 
 type TMessageForm = {
   content: string;
+  medias?: any;
 };
 
 type TCreateMessageParams = {
   conversationId: string;
-  form: TMessageForm;
+  form: FormData;
   cb?: () => void;
 };
 

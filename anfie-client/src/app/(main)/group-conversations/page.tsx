@@ -21,6 +21,15 @@ const GroupConversationPage = () => {
 
   const { onLeaveGroup, onAddRecipientsToGroup } = useMutationGroup();
 
+    const onLeave = useCallback(() => {
+      onLeaveGroup({
+        groupId: selectedConversation?.id ?? "",
+        cb: () => {
+          setSelectedConversation(undefined);
+        },
+      });
+    }, [onLeaveGroup, selectedConversation?.id]);
+
   const socket = useSocketContext();
   useEffect(() => {
     socket.on?.("connected", (payload) => {
@@ -156,7 +165,7 @@ const GroupConversationPage = () => {
           <MessagePanel
             group={selectedConversation}
             type={EConversationTypes.GROUP}
-            onLeave={onLeaveGroup}
+            onLeave={onLeave}
             onAddRecipients={onAddRecipientsToGroup}
           />
         </div>

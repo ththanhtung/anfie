@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import sharp from 'sharp';
 import { UploadApiErrorResponse, UploadApiResponse, v2 } from 'cloudinary';
-import toStream = require('buffer-to-stream');
+import { Readable } from 'stream';
 
 @Injectable()
 export class MediaUploaderService {
@@ -16,7 +17,25 @@ export class MediaUploaderService {
 					resolve(result);
 				}
 			);
-			toStream(params.file.buffer).pipe(upload);
+
+			// Process image with sharp
+			sharp(params.file.buffer)
+				.resize({
+					width: 800,
+					height: 800,
+					fit: 'inside', // Maintain aspect ratio
+					withoutEnlargement: true // Don't enlarge small images
+				})
+				.jpeg({
+					quality: 80, // Reduce quality to 80%
+					mozjpeg: true // Better compression
+				})
+				.toBuffer()
+				.then((processedBuffer) => {
+					const readableStream = Readable.from(processedBuffer);
+					readableStream.pipe(upload);
+				})
+				.catch((error) => reject(error));
 		});
 	}
 
@@ -32,7 +51,25 @@ export class MediaUploaderService {
 					resolve(result);
 				}
 			);
-			toStream(params.file.buffer).pipe(upload);
+
+			// Process image with sharp
+			sharp(params.file.buffer)
+				.resize({
+					width: 800,
+					height: 800,
+					fit: 'inside', // Maintain aspect ratio
+					withoutEnlargement: true // Don't enlarge small images
+				})
+				.jpeg({
+					quality: 80, // Reduce quality to 80%
+					mozjpeg: true // Better compression
+				})
+				.toBuffer()
+				.then((processedBuffer) => {
+					const readableStream = Readable.from(processedBuffer);
+					readableStream.pipe(upload);
+				})
+				.catch((error) => reject(error));
 		});
 	}
 }

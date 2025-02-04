@@ -5,15 +5,17 @@ import { FiImage } from "react-icons/fi";
 import { FaCirclePlus } from "react-icons/fa6";
 
 type TProps = {
-  sendMessage: ({ content }: TMessageForm) => void;
+  sendMessage: ({ content, medias}: TMessageForm) => void;
 };
 const MessagePanelFooter = ({ sendMessage }: TProps) => {
   const { Dragger } = Upload;
+  const [selectedFile, setSelectedFile] = React.useState<File[] | null>(null);
   const [form] = Form.useForm();
   const onFinish = useCallback(
     (value: TMessageForm) => {
-      // sendMessage(value);
-      // form.resetFields();
+      console.log({ value: value.medias.fileList });
+      sendMessage(value);
+      form.resetFields();
     },
     [form, sendMessage]
   );
@@ -33,13 +35,20 @@ const MessagePanelFooter = ({ sendMessage }: TProps) => {
         />
       </Tooltip>
       <Tooltip title="Attachment">
-        <Upload multiple maxCount={5} showUploadList={true}>
-          <Button
-            shape="circle"
-            icon={<FiImage size={22} />}
-            className="border-transparent shadow-none"
-          />
-        </Upload>
+        <Form.Item name="medias">
+          <Upload
+            multiple
+            maxCount={5}
+            showUploadList={true}
+            onChange={() => {}}
+          >
+            <Button
+              shape="circle"
+              icon={<FiImage size={22} />}
+              className="border-transparent shadow-none"
+            />
+          </Upload>
+        </Form.Item>
       </Tooltip>
       <Form.Item name="content" className="w-full">
         <Input

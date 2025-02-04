@@ -10,7 +10,7 @@ export const useMutationMessage = () => {
     useMutation<
       any,
       TResponseError,
-      { conversationId: string; form: TMessageForm }
+      { conversationId: string; form: FormData }
     >({
       mutationKey: [mutationKeys.MUTATION_CREATE_MESSAGE],
       mutationFn: ({ conversationId, form }) =>

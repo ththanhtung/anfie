@@ -17,16 +17,17 @@ export class MessageService {
 		const conversation = await this.conversationService.findOneById(createMessageParams.conversationId);
 
 		const message = await this.messageRepository.createOne(createMessageParams);
-		const user = await this.userServices.findOneById(message.userId);
 
 		await this.conversationService.updateLastMessage({
 			conversationId: createMessageParams.conversationId,
 			messageId: message.id
 		});
 
-		this.messageMediaService.create(message.id, createMessageParams.medias);
+		await this.messageMediaService.create(message.id, createMessageParams.medias);
 
-		return { ...message, user, conversation };
+		const updatedMessage = await this.messageRepository.getMessagesByIds([message.id]);
+
+		return { ...updatedMessage[0], conversation };
 	}
 
 	async getMessagesFromConversation(conversationId: string, query: GetMessagesDto) {
