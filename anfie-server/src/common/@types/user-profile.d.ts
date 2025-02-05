@@ -8,7 +8,7 @@ type TCreateUserProfileParams = {
 	dob: Date;
 	gender: Genders;
 	phone: string;
-	bio: string;
+	bio?: string;
 };
 
 type TUpdateUserProfileParams = {
@@ -24,4 +24,9 @@ type TUpdateUserProfileParams = {
 type TUpdateUserPreferencesParams = {
 	preferences: Preference[];
 	locations: Location[];
+};
+
+type TUploadProfileMediaParams = {
+	file: Express.Multer.File;
+	profileMedia: TMedia;
 };

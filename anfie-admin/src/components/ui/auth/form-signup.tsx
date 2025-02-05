@@ -10,10 +10,12 @@ import {
 import { _common, _formatDay } from "@/utils";
 import { Button, Form, Input, message } from "antd";
 import { DefaultOptionType } from "antd/es/select";
+import { useRouter } from "next/navigation";
 import React, { useCallback } from "react";
 
 const FormSignup = () => {
   const { mutateCreateAccount, isCreateAccountPending } = useSignup();
+
   const onFinish = (value: any) => {
     let preferGenders: string[] =
       value?.preferGenders?.map(

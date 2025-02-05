@@ -8,7 +8,7 @@ type TCreateMessageParams = {
 
 type TUpdateMessageMediaParams = {
 	file: Express.Multer.File;
-	messageMedia: MessageMedia;
+	messageMedia: TMedia;
 };
 
 type TMessage = {
@@ -35,4 +35,8 @@ type TCreateMessageResponse = {
 	updated_at: string;
 	deleted_at: any;
 	isSeen: boolean;
+};
+
+type TMedia = {
+	key: string;
 };

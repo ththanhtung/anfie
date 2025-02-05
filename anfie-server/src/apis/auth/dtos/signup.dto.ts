@@ -22,19 +22,19 @@ export class SignupDto {
 	@IsString()
 	phone: string;
 
-	@IsArray()
+	@IsString()
 	@IsOptional()
-	preferences: string[];
+	preferences: string;
 
-	@IsArray()
+	@IsString()
 	@IsOptional()
-	locations: string[];
+	locations: string;
 
-	@IsArray()
+	@IsString()
 	@IsOptional()
-	preferGenders: string[];
+	preferGenders: string;
 
-	@IsArray()
+	@IsString()
 	@IsOptional()
 	bio: string;
 }

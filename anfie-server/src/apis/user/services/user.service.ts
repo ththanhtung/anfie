@@ -17,8 +17,18 @@ export class UserService {
 		private readonly preferGendersService: PreferGenderService
 	) {}
 
-	async createOne(dto: CreateUserDto) {
-		const user = await this.userRepository.createOne(dto);
+	async createOne(dto: TSignupParams) {
+		const { preferGenders: preferGendersString, preferences: preferencesString, locations: locationsString } = dto;
+		const preferGenders = preferGendersString ? JSON.parse(preferGendersString) : [];
+		const preferences = preferencesString ? JSON.parse(preferencesString) : [];
+		const locations = locationsString ? JSON.parse(locationsString) : [];
+
+		const user = await this.userRepository.createOne({
+			...dto,
+			preferGenders,
+			preferences,
+			locations
+		});
 
 		if (!user) {
 			throw new InternalServerErrorException([
@@ -32,7 +42,7 @@ export class UserService {
 
 		return {
 			...user,
-			...profile
+			profile
 		};
 	}
 
@@ -73,16 +83,7 @@ export class UserService {
 	}
 
 	async findOneById(id: string, withProfile?: boolean) {
-		let profile: UserProfiles = null;
-		if (withProfile) {
-			profile = await this.userProfileService.getProfileByUserId(id);
-		}
-		const user = await this.userRepository.findOneById(id);
-
-		return {
-			...user,
-			profile
-		};
+		return this.userRepository.findOneById(id);
 	}
 
 	async updateRefreshToken(userId: string, refreshToken: string | null) {

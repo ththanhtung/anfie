@@ -40,3 +40,29 @@ type TUserProfile = {
 	strangerConversationSlots: number;
 	userId: string;
 };
+
+type TSignupParams = {
+	email: string;
+
+	hash: string;
+
+	firstName: string;
+
+	lastName: string;
+
+	dob: Date;
+
+	gender: string;
+
+	phone: string;
+
+	preferences?: string;
+
+	locations?: string;
+
+	preferGenders?: string;
+
+	bio?: string;
+
+	medias?: Express.Multer.File[];
+};

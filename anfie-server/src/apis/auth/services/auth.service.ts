@@ -5,13 +5,23 @@ import * as argon from 'argon2';
 import { getTokens } from 'src/common/helpers';
 import { Request, Response } from 'express';
 import { SignupDto } from '../dtos/signup.dto';
+import { ProfileMediaService } from 'src/apis/profile-media/profile-media.service';
 
 @Injectable()
 export class AuthService {
-	constructor(private readonly userServices: UserService) {}
+	constructor(
+		private readonly userServices: UserService,
+		private readonly profileMediaService: ProfileMediaService
+	) {}
 
-	async register(dto: SignupDto) {
-		return this.userServices.createOne(dto);
+	async register(dto: TSignupParams) {
+		const newUser = await this.userServices.createOne(dto);
+
+		await this.profileMediaService.create(newUser.profile.id, dto.medias);
+
+		const userWithMedias = await this.userServices.findOneById(newUser.id, true);
+
+		return userWithMedias;
 	}
 
 	async login(dto: LoginDto, res: Response) {

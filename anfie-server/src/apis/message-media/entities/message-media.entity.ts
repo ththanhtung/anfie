@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 @Entity()
 export class MessageMedia extends BaseEntity<MessageMedia> {
 	@Column()
-	key?: string;
+	key: string;
 
 	@Column({
 		name: 'message_id',

@@ -1,9 +1,9 @@
 /* eslint-disable prettier/prettier */
 import { Between, ILike, In, Repository } from 'typeorm';
 import { Users } from '../entities';
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateUserDto, GetMyGroupsDto, GetUsersDto } from '../dto';
+import { GetMyGroupsDto, GetUsersDto } from '../dto';
 import { EGroupType, pagination } from 'src/common';
 
 @Injectable()
@@ -38,7 +38,10 @@ export class UserRepository extends Repository<Users> {
 	}
 
 	async findOneById(id: string) {
-		const user = await this.findOne({ where: { id: id } });
+		const user = await this.findOne({
+			relations: ['profile', 'profile.medias'],
+			where: { id: id }
+		});
 		if (!user) {
 			throw new ConflictException([
 				{
@@ -50,7 +53,7 @@ export class UserRepository extends Repository<Users> {
 		return user;
 	}
 
-	async createOne(input: CreateUserDto) {
+	async createOne(input: TSignupParams) {
 		await this.checkExist(input.email);
 		const user = this.create(input);
 		return this.save(user);
@@ -208,7 +211,7 @@ export class UserRepository extends Repository<Users> {
 				...(lastname && { lastName: ILike(`%${lastnameParts.join('%')}%`) }),
 				profile: {
 					...(gender.length > 0 && { gender: In(gender) }),
-					...(location.length > 0 && { userLocation: In(location)}),
+					...(location.length > 0 && { userLocation: In(location) }),
 					...(isBanned.length > 0 && { isBanned: In(isBanned) }),
 					...(preferences.length > 0 && { preferences: { name: In(preferences) } })
 				},

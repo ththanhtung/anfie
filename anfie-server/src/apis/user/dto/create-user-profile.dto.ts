@@ -1,4 +1,4 @@
-import { IsDateString, IsEnum, IsString } from 'class-validator';
+import { IsDateString, IsEnum, IsOptional, IsString } from 'class-validator';
 import { Genders } from 'src/common';
 
 export class CreateUserProfileDto {
@@ -21,5 +21,6 @@ export class CreateUserProfileDto {
 	phone: string;
 
 	@IsString()
-	bio: string;
+	@IsOptional()
+	bio?: string;
 }

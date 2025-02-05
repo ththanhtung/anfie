@@ -1,4 +1,5 @@
 import { AFDatePicker, AFSelectInfinite, BlockFormItem } from "@/components";
+import UploadImage from "@/components/upload/upload-image";
 import {
   useListInfinityLocations,
   useListInfinityPreferGenders,
@@ -10,40 +11,79 @@ import {
 import { _common, _formatDay } from "@/utils";
 import { Button, Form, Input, message } from "antd";
 import { DefaultOptionType } from "antd/es/select";
+import dayjs from "dayjs";
+import { useRouter } from "next/navigation";
 import React, { useCallback } from "react";
 
 const FormSignup = () => {
-  const { mutateCreateAccount, isCreateAccountPending } = useSignup();
+  const { isCreateAccountPending, onSignup } = useSignup();
+  const router = useRouter();
+
   const onFinish = (value: any) => {
+    const formData = new FormData();
+
+    // Add all standard fields
+    Object.entries(value).forEach(([key, val]) => {
+      if (
+        ![
+          "preferGenders",
+          "preferences",
+          "locations",
+          "gender",
+          "medias",
+          "dob",
+        ].includes(key)
+      ) {
+        formData.append(key, val as string);
+      }
+    });
+
+    formData.append("dob", dayjs(value.dob).format("YYYY-MM-DD"));
+
     let preferGenders: string[] =
       value?.preferGenders?.map(
         (tag: string) => _common.findLabels(tag, preferGenderOptions)[0]
       ) ?? [];
+    formData.append("preferGenders", JSON.stringify(preferGenders));
 
     let preferences: string[] =
       value?.preferences?.map(
         (tag: string) => _common.findLabels(tag, preferenceOptions)[0]
       ) ?? [];
+    formData.append("preferences", JSON.stringify(preferences));
 
     let locations: string[] =
       value?.locations?.map(
         (tag: string) => _common.findLabels(tag, locationOptions)[0]
       ) ?? [];
+    formData.append("locations", JSON.stringify(locations));
 
     let gender: string =
       value?.gender?.map(
         (tag: string) => _common.findLabels(tag, preferGenderOptions)[0]
       )[0] ?? "";
+    formData.append("gender", gender);
 
-    console.log({ gender });
+    // Add hash/password conversion
+    if (value.password) {
+      formData.append("hash", value.password);
+    }
+    const { medias } = value;
 
-    mutateCreateAccount({
-      ...value,
-      hash: value.password,
-      preferGenders,
-      preferences,
-      locations,
-      gender,
+    if (medias && medias?.length > 0) {
+      medias?.forEach((media: any) => {
+        formData.append("medias", media?.originFileObj);
+      });
+    }
+
+    formData.forEach((val, key) => console.log(key, val));
+
+    // Send FormData instead of regular object
+    onSignup({
+      form: formData,
+      cb: () => {
+        router.push("/");
+      },
     });
   };
 
@@ -75,7 +115,10 @@ const FormSignup = () => {
   const { onCreateOrUpdatePreference } = useMutationPreference();
 
   const handleSelectGenders = useCallback(
-    (value: any, options: DefaultOptionType | DefaultOptionType[]) => {
+    (
+      value: any,
+      options: DefaultOptionType | DefaultOptionType[] | undefined
+    ) => {
       if (value.length > 1) {
         value.pop();
       }
@@ -113,7 +156,10 @@ const FormSignup = () => {
   );
 
   const handleSelectPreferGenders = useCallback(
-    (value: any, options: DefaultOptionType | DefaultOptionType[]) => {
+    (
+      value: any,
+      options: DefaultOptionType | DefaultOptionType[] | undefined
+    ) => {
       console.log({ value, options });
 
       const existedTagOptionValues: string[] = preferGenderOptions.map(
@@ -149,7 +195,10 @@ const FormSignup = () => {
   );
 
   const handleSelectPreference = useCallback(
-    (value: any, options: DefaultOptionType | DefaultOptionType[]) => {
+    (
+      value: any,
+      options: DefaultOptionType | DefaultOptionType[] | undefined
+    ) => {
       console.log({ value, options });
 
       const existedTagOptionValues: string[] = preferenceOptions.map(
@@ -189,7 +238,10 @@ const FormSignup = () => {
   );
 
   const handleSelectLocations = useCallback(
-    (value: any, options: DefaultOptionType | DefaultOptionType[]) => {
+    (
+      value: any,
+      options: DefaultOptionType | DefaultOptionType[] | undefined
+    ) => {
       console.log({ value, options });
 
       let tags: string[] = value.map((tag: string) => {
@@ -234,6 +286,17 @@ const FormSignup = () => {
         ]}
       >
         <Input placeholder="Last Name" />
+      </Form.Item>
+      <Form.Item
+        name="bio"
+        rules={[
+          {
+            type: "string",
+            message: "The input is not valid",
+          },
+        ]}
+      >
+        <Input placeholder="Tell something about yourself" />
       </Form.Item>
       <Form.Item
         name="email"
@@ -330,6 +393,11 @@ const FormSignup = () => {
       >
         <AFDatePicker placeholder="Date of Birth" />
       </Form.Item>
+      <BlockFormItem label="Pictures of You:">
+        <Form.Item name="medias">
+          <UploadImage />
+        </Form.Item>
+      </BlockFormItem>
       <Button
         type="primary"
         htmlType="submit"

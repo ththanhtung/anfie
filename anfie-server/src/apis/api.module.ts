@@ -28,6 +28,7 @@ import { PostMediaModule } from './post-media/post-media.module';
 import { ConversationRequestModule } from './conversation-request/conversation-request.module';
 import { LlamaModule } from './llama/llama.module';
 import { AlleyModule } from './alley/alley.module';
+import { ProfileMediaModule } from './profile-media/profile-media.module';
 
 @Module({
 	imports: [
@@ -58,7 +59,8 @@ import { AlleyModule } from './alley/alley.module';
 		PostMediaModule,
 		ConversationRequestModule,
 		LlamaModule,
-		AlleyModule
+		AlleyModule,
+		ProfileMediaModule
 	]
 })
 export class ApiModule {}

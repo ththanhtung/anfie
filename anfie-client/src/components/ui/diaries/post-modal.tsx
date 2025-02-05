@@ -40,7 +40,6 @@ const PostModal = ({ groupId }: TProps, ref: Ref<TModalRef>) => {
     const formData = new FormData();
     formData.append("content", content);
     formData.append("groupId", groupId);
-    console.log({groupId});
     
     if (medias && medias?.length > 0) {
       medias?.forEach((media: any) => {
