@@ -58,11 +58,16 @@ export class EventGateway {
 	// 	await this.userService.toggleFindingFriend(client.user.userId);
 	// }
 
-	@Cron('30 * * * * *')
+	@Cron(CronExpression.EVERY_10_SECONDS)
 	async matchMaking() {
+		console.log('service being called');
 		const match = await this.matchmakingService.matchmaking();
 
+		console.log({ match });
+
 		if (!match) return;
+
+		console.log({ match });
 
 		const conversationRequest = await this.conversationRequestService.createOne(
 			match.id1.toString(),

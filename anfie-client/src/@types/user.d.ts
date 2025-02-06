@@ -30,6 +30,7 @@ type TUserProfile = {
   strangerConversationSlots: number;
   userId: string;
   user?: TUser;
+  medias?: TProfileMedia[];
 };
 
 type TGetTUserProfileResponse = {
@@ -50,4 +51,14 @@ type TGetTUserProfileResponse = {
   preferences: any[];
   preferGenders: TPreferGender[];
   user: TUser;
+  medias: TProfileMedia[]
+};
+
+type TProfileMedia = {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  key: string;
+  messageId: string;
+  url: any;
 };

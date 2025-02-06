@@ -180,4 +180,8 @@ export class ConversationRequestService {
 
 		this.conversationRequestRepository.reject(requestId);
 	}
+
+	async getConversationRequestBetweenTwoUsers(id1: string, id2: string) {
+		return this.conversationRequestRepository.getConversationRequestBetweenTwoUsers(id1, id2);
+	}
 }

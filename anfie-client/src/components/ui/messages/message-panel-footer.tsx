@@ -8,12 +8,9 @@ type TProps = {
   sendMessage: ({ content, medias}: TMessageForm) => void;
 };
 const MessagePanelFooter = ({ sendMessage }: TProps) => {
-  const { Dragger } = Upload;
-  const [selectedFile, setSelectedFile] = React.useState<File[] | null>(null);
   const [form] = Form.useForm();
   const onFinish = useCallback(
     (value: TMessageForm) => {
-      console.log({ value: value.medias.fileList });
       sendMessage(value);
       form.resetFields();
     },

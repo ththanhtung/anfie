@@ -25,6 +25,7 @@ export class ConversationAdminService {
 		const conversation = await this.conversationRepository.createOne(createConversationDto);
 		await this.userServies.reduceConversationSlot(user1.id);
 		await this.userServies.reduceConversationSlot(user2.id);
+
 		return conversation;
 	}
 

@@ -123,4 +123,19 @@ export class ConversationRequestRepository extends Repository<ConversationReques
 		await this.save(request);
 		return request;
 	}
+
+	async getConversationRequestBetweenTwoUsers(id1: string, id2: string) {
+		return this.findOne({
+			where: [
+				{
+					firstUserId: id1,
+					secondUserId: id2
+				},
+				{
+					firstUserId: id2,
+					secondUserId: id1
+				}
+			]
+		});
+	}
 }

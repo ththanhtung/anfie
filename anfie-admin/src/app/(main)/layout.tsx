@@ -59,26 +59,26 @@ const ConversationLayout = ({ children }: PropsWithChildren) => {
           setMatchedUser(payload.firstUserProfile);
         }
 
-        counterId.current = setTimeout(() => {
-          onRejectConversationRequest({
-            requestId: payload.id.toString(),
-          });
-        }, 30000);
+        // counterId.current = setTimeout(() => {
+        //   onRejectConversationRequest({
+        //     requestId: payload.id.toString(),
+        //   });
+        // }, 30000);
 
         setConversationRequest(payload);
-        conversationRequestModalref.current?.showModal();
+        // conversationRequestModalref.current?.showModal();
       }
     );
 
     socket.on?.("onConversationRequestRejected", (payload: any) => {
-      conversationRequestModalref.current?.closeModal();
+      // conversationRequestModalref.current?.closeModal();
     });
 
     socket.on?.("onConversationCreated", (payload: any) => {
       queryClient.invalidateQueries({
         queryKey: [queryKeys.GET_LIST_INFINITE_CONVERSATIONS],
       });
-      conversationRequestModalref.current?.closeModal();
+      // conversationRequestModalref.current?.closeModal();
     });
 
     return () => {

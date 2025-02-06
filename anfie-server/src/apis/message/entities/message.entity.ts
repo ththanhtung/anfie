@@ -8,7 +8,8 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 @Entity()
 export class Message extends BaseEntity<Message> {
 	@Column({
-		name: 'message_content'
+		name: 'message_content',
+		nullable: true
 	})
 	content: string;
 

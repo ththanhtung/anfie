@@ -59,12 +59,6 @@ const ConversationLayout = ({ children }: PropsWithChildren) => {
           setMatchedUser(payload.firstUserProfile);
         }
 
-        counterId.current = setTimeout(() => {
-          onRejectConversationRequest({
-            requestId: payload.id.toString(),
-          });
-        }, 30000);
-
         setConversationRequest(payload);
         conversationRequestModalref.current?.showModal();
       }
@@ -85,7 +79,7 @@ const ConversationLayout = ({ children }: PropsWithChildren) => {
       socket.off?.("connected");
       socket.off?.("onMessage");
     };
-  }, [currentUser.userId, onRejectConversationRequest, socket]);
+  }, [currentUser.userId, onRejectConversationRequest, queryClient, socket]);
   return (
     <LayoutMain>
       <ConversationRequestModal

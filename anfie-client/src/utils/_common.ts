@@ -1,3 +1,5 @@
+import {v4 as uuidv4} from 'uuid'
+
 class Common {
   removeEmptyProperties = (
     obj: ArrayLike<unknown> | { [s: string]: unknown }
@@ -38,6 +40,46 @@ class Common {
       const dateA = new Date(a.created_at);
       const dateB = new Date(b.created_at);
       return dateA.getTime() - dateB.getTime();
+    });
+  }
+
+  numberFromUuid(uuid: string, length: number) {
+    const parsedNumber = uuid ? parseInt(uuid.replace(/-/g, ""), 16) : null;
+
+    return parsedNumber?.toString().slice(2, length + 2);
+  }
+
+  numberFromfileUrl(url: string) {
+    // Extract UUID using regular expression
+    const regex = /\/files\/([a-f0-9-]+)\/view/;
+    const match = url.match(regex);
+    const uuid = match ? match[1] : null;
+
+    if (uuid) {
+      return this.numberFromUuid(uuid, 5);
+    }
+    return "";
+  }
+
+  convertUrlsToFiles(files: any, type: "attachment" | "image") {
+    if (!files) {
+      return [];
+    }
+
+    return files?.map((file: any) => {
+      const originFileObj = {
+        uid: uuidv4(),
+        name: file,
+        url: file,
+      };
+
+      return {
+        isNotLocalFile: true,
+        originFileObj,
+        ...(type === "image"
+          ? { thumbUrl: file }
+          : { name: ` File name ${this.numberFromfileUrl(file)}` }),
+      };
     });
   }
 }

@@ -47,15 +47,16 @@ const ConversationRequestModal = (
       width={400}
       closeIcon={false}
       footer={null}
-      modalRender={(modal) => {
-        return React.cloneElement(modal, {
+      closable={false}
+      modalRender={(modal) =>
+        React.cloneElement(modal as React.ReactElement, {
           style: {
-            ...modal?.props.style,
-            ...{ borderRadius: 0, padding: 0 },
+            ...(modal as React.ReactElement).props.style,
             borderRadius: "15px",
+            padding: 0,
           },
-        });
-      }}
+        })
+      }
     >
       <div className="relative flex h-[500px] w-[400px] flex-col items-center justify-end rounded-2xl bg-[url('https://images.pexels.com/photos/406014/pexels-photo-406014.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')] bg-cover bg-center shadow-md p-0">
         <div className="absolute left-0 top-[50%] h-[50%] w-full overflow-hidden rounded-2xl bg-gradient-to-t from-black flex flex-col items-center justify-end py-7">

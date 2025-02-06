@@ -1,5 +1,6 @@
 "use client";
 import { AFDatePicker, AFSelectInfinite, BlockFormItem } from "@/components";
+import UploadImage from "@/components/upload/upload-image";
 import {
   useDebounce,
   useListInfinityLocations,
@@ -73,6 +74,12 @@ const ProfilePage = () => {
       ),
       minAge: userProfile?.minAge,
       maxAge: userProfile?.maxAge,
+      ...(userProfile?.medias && {
+        images: _common.convertUrlsToFiles(
+          userProfile?.medias.map((media) => media.url),
+          "image"
+        ),
+      }),
     };
   }, [userProfile]);
   useEffect(() => {
@@ -105,7 +112,10 @@ const ProfilePage = () => {
   const { onCreateOrUpdatePreferGender } = useMutationPreferGender();
 
   const handleSelectPreference = useCallback(
-    (value: any, options: DefaultOptionType | DefaultOptionType[]) => {
+    (
+      value: any,
+      options: DefaultOptionType | DefaultOptionType[] | undefined
+    ) => {
       console.log({ value, options });
 
       const existedTagOptionValues: string[] = preferenceOptions.map(
@@ -145,7 +155,10 @@ const ProfilePage = () => {
   );
 
   const handleSelectPreferGenders = useCallback(
-    (value: any, options: DefaultOptionType | DefaultOptionType[]) => {
+    (
+      value: any,
+      options: DefaultOptionType | DefaultOptionType[] | undefined
+    ) => {
       console.log({ value, options });
 
       const existedTagOptionValues: string[] = preferGenderOptions.map(
@@ -185,7 +198,10 @@ const ProfilePage = () => {
   );
 
   const handleSelectGenders = useCallback(
-    (value: any, options: DefaultOptionType | DefaultOptionType[]) => {
+    (
+      value: any,
+      options: DefaultOptionType | DefaultOptionType[] | undefined
+    ) => {
       console.log({ value, options });
 
       if (value.length > 1) {
@@ -229,7 +245,10 @@ const ProfilePage = () => {
   );
 
   const handleSelectLocations = useCallback(
-    (value: any, options: DefaultOptionType | DefaultOptionType[]) => {
+    (
+      value: any,
+      options: DefaultOptionType | DefaultOptionType[] | undefined
+    ) => {
       console.log({ value, options });
 
       let tags: string[] = value.map((tag: string) => {
@@ -411,6 +430,17 @@ const ProfilePage = () => {
               </Form.Item>
             </div>
           </BlockFormItem>
+          <div className="spacing-main border-b border-neutral_300">
+            <p className="!text-neutral_800">Photos</p>
+            <p className="mb-4">You can add up to 5 images</p>
+            <Form.Item name="images">
+              <UploadImage
+                onChange={(value) => {
+                  console.log({ value });
+                }}
+              />
+            </Form.Item>
+          </div>
           <Button type="primary" className="w-full capitalize">
             change password
           </Button>

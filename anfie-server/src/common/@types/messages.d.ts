@@ -2,7 +2,7 @@ type TCreateMessageParams = {
 	userId: string;
 	conversationId?: string;
 	groupId?: string;
-	content: string;
+	content?: string;
 	medias?: Express.Multer.File[];
 };
 
