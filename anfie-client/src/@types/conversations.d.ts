@@ -12,10 +12,10 @@ type TConversation = {
   creatorId: string;
   recipientId: string;
   lastMessageDate: any;
-  creator: TUser;
-  recipient: TUser;
+  creator: TUserGetConversationsResponse;
+  recipient: TUserGetConversationsResponse;
   lastMessage: TMessage;
-  mode: 'friend' | 'stranger';
+  mode: "friend" | "stranger";
 };
 
 type TLeaveConversationResponse = {

@@ -61,7 +61,7 @@ export class ConversationRepository extends Repository<Conversation> {
 				},
 				{ recipientId: userId }
 			],
-			relations: ['creator', 'recipient', 'lastMessage']
+			relations: ['creator', 'recipient', 'lastMessage', 'recipient.profile.medias', 'creator.profile.medias']
 		});
 	}
 

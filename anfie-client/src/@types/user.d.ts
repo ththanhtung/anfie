@@ -51,7 +51,7 @@ type TGetTUserProfileResponse = {
   preferences: any[];
   preferGenders: TPreferGender[];
   user: TUser;
-  medias: TProfileMedia[]
+  medias: TProfileMedia[];
 };
 
 type TProfileMedia = {
@@ -61,4 +61,20 @@ type TProfileMedia = {
   key: string;
   messageId: string;
   url: any;
+};
+
+type TUserGetConversationsResponse = {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at?: any;
+  email: string;
+  refreshToken: string;
+  accessToken?: any;
+  firstName: string;
+  lastName: string;
+  dob?: string;
+  profilePictureUrl?: string;
+  isFindFriend: boolean;
+  profile: TUserProfile;
 };

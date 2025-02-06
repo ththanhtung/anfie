@@ -1,6 +1,6 @@
 "use client";
 import { getName } from "@/helper";
-import { Button, Modal, Tooltip } from "antd";
+import { Button, Carousel, Modal, Tooltip } from "antd";
 import React, {
   Ref,
   forwardRef,
@@ -52,6 +52,8 @@ const ShowAvatarModal = (
       ? conversation?.recipient
       : conversation?.creator;
 
+  const medias = recipient?.profile?.medias ?? [];
+
   return (
     <Modal
       onCancel={closeModal}
@@ -61,39 +63,40 @@ const ShowAvatarModal = (
       footer={null}
     >
       <div>
-        {conversationDuration > FIFTEEN_MINUTES ? (
-          <div className="mt-3 flex gap-4 flex-col">
-            <Image
-              alt="avatar"
-              width={500}
-              height={500}
-              className="object-cover"
-              src={
-                recipient?.profilePictureUrl ??
-                "https://cdn.icon-icons.com/icons2/1392/PNG/512/avatar_96675.png"
-              }
-            />
-            <Tooltip
-              title="It is supposed to display another person's photo. If it does not, please report it to us."
-              key={"accept"}
-            >
-              <Button
-                icon={<MdReportProblem />}
-                className="shadow-none flex items-center justify-center"
-                htmlType="submit"
-                onClick={onReport}
-                size="large"
+        <div className="mt-3 flex gap-4 flex-col">
+          {medias.length > 0 && (
+            <div className="w-full">
+              <Carousel
+                arrows
+                infinite={false}
+                className="text-center bg-slate-500"
               >
-                Report User
-              </Button>
-            </Tooltip>
-          </div>
-        ) : (
-          <div>
-            Other person&apos;s photo will be unlock at:
-            {_formatDay.formatDDMMYYYYHH(unlockTime.toISOString())}
-          </div>
-        )}
+                {medias.map((media) => (
+                  <Image
+                    key={media.key}
+                    src={media.url}
+                    alt={media.key}
+                    className="object-cover"
+                  />
+                ))}
+              </Carousel>
+            </div>
+          )}
+          <Tooltip
+            title="It is supposed to display another person's photo. If it does not, please report it to us."
+            key={"accept"}
+          >
+            <Button
+              icon={<MdReportProblem />}
+              className="shadow-none flex items-center justify-center"
+              htmlType="submit"
+              onClick={onReport}
+              size="large"
+            >
+              Report User
+            </Button>
+          </Tooltip>
+        </div>
       </div>
     </Modal>
   );
