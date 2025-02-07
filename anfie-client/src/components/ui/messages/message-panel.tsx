@@ -85,7 +85,6 @@ const MessagePanel = ({
   };
   const sentMessage = async ({ content, medias }: TMessageForm) => {
     if (Number(Boolean(content)) + Number(Boolean(medias)) === 0) {
-      console.log("sent");
       return;
     }
 
@@ -97,7 +96,6 @@ const MessagePanel = ({
       formData.append("content", trimmedContent);
     }
 
-    console.log("dfkdlka;ldfj;lasjd;");
     if (Array.isArray(medias?.fileList)) {
       for (const file of medias.fileList) {
         if (file.originFileObj) {
@@ -107,7 +105,6 @@ const MessagePanel = ({
     }
 
     if (type === EConversationTypes.PRIVATE) {
-      console.log({ content });
       onCreateMessage({
         conversationId: conversation?.id?.toString() || "",
         form: formData,

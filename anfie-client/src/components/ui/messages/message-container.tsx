@@ -27,6 +27,9 @@ const MessageContainer = ({
     }
   }, [fetchNextPage, inView]);
   const user = useAtomValue(userInfoStoreAtom);
+  const reverseMessages = [...messages].reverse() as
+    | TMessage[]
+    | TGroupMessage[];
   const mapMessages = (
     message: TMessage | TGroupMessage,
     index: number,
@@ -58,10 +61,10 @@ const MessageContainer = ({
         )}
         {showMessageHeader ? (
           <div className="flex-col message-item-details">
-            <div className="p-2 bg-slate-200 w-fit rounded-md message-item-container-body">
+            <div className="p-2 bg-slate-200 w-fit rounded-md message-item-container-body max-w-[400px]">
               {message?.content}
               {message?.medias?.length > 0 && (
-                <div className="w-[400px]">
+                <div className="w-full">
                   <Carousel arrows infinite={false} className="text-center">
                     {message?.medias?.map((media) => (
                       <div key={media.id}>
@@ -95,7 +98,7 @@ const MessageContainer = ({
           <div className="w-fit ml-[52px] bg-slate-200 rounded-md m-0 p-2 message-item-container-body">
             {message?.content}
             {message?.medias?.length > 0 && (
-              <div className="w-[400px]">
+              <div className="w-full">
                 <Carousel arrows infinite={false} className="text-center">
                   {message?.medias?.map((media) => (
                     <div key={media.id}>
@@ -154,7 +157,7 @@ const MessageContainer = ({
           <Spin size="large" />
         </div>
       )}
-      {messages.reverse?.().map(mapMessages)}
+      {reverseMessages.map(mapMessages)}
     </div>
   );
 };
