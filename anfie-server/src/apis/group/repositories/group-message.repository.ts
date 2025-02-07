@@ -35,6 +35,6 @@ export class GroupMessageRepository extends Repository<GroupMessage> {
 	}
 
 	async getGroupMessagesByIds(ids: string[]) {
-		return this.find({ relations: ['user', 'group', 'medias'], where: { id: In(ids) } });
+		return this.find({ relations: ['user', 'group.users', 'medias'], where: { id: In(ids) } });
 	}
 }

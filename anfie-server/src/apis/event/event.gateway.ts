@@ -107,6 +107,8 @@ export class EventGateway {
 		this.server.emit('group-messages.created', payload);
 		const { users } = payload.group;
 
+		console.log({ users });
+
 		users.forEach((user) => {
 			const userSocket = this.sessionManager.getUserSocket(user.id);
 			if (userSocket)

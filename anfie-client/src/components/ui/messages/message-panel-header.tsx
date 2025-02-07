@@ -41,6 +41,20 @@ const MessagePanelHeader = ({
   const router = useRouter();
 
   const dropdownItems: MenuProps["items"] = useMemo(() => {
+    if (conversation?.mode === "stranger") {
+      return [
+        {
+          key: EDropdownAction.END_CONVERSATION,
+          label: (
+            <span className="text-red_400 text-sm ml-2 capitalize text-red-500">
+              end conversation
+            </span>
+          ),
+          icon: <span className="!text-base text-red_400 icon-trash" />,
+        },
+      ];
+    }
+
     return type === EConversationTypes.PRIVATE
       ? [
           {
@@ -51,16 +65,7 @@ const MessagePanelHeader = ({
               </span>
             ),
             icon: <span className="!text-base text-neutral_700 icon-undo" />,
-          },
-          {
-            key: EDropdownAction.END_CONVERSATION,
-            label: (
-              <span className="text-red_400 text-sm ml-2 capitalize text-red-500">
-                end conversation
-              </span>
-            ),
-            icon: <span className="!text-base text-red_400 icon-trash" />,
-          },
+          }
         ]
       : [
           {
@@ -100,7 +105,7 @@ const MessagePanelHeader = ({
             icon: <span className="!text-base text-neutral_700 icon-archive" />,
           },
         ];
-  }, [type]);
+  }, [type, conversation?.mode]);
 
   return (
     <div className="flex justify-between p-6 bg-sky-200">
@@ -180,7 +185,7 @@ const MessagePanelHeader = ({
                   break;
                 case EDropdownAction.GO_TO_GROUP_PAGE:
                   console.log("navigate to group page", recipientName);
-                  
+
                   router.replace(
                     `${process.env.NEXT_PUBLIC_URL}/page/groups/${group?.id}`
                   );
