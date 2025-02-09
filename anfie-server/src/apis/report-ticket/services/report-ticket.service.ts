@@ -46,6 +46,15 @@ export class ReportTicketService {
 						message: 'post not found'
 					}
 				]);
+
+			const isReportExisted = await this.reportTicketRepository.isUserAlreadyReportPost(post.id.toString(), user.userId.toString());
+
+			if (isReportExisted)
+				throw new BadRequestException([
+					{
+						message: 'post already reported'
+					}
+				]);
 		}
 
 		if (dto.conversationId) {
@@ -54,6 +63,18 @@ export class ReportTicketService {
 				throw new NotFoundException([
 					{
 						message: 'conversation not found'
+					}
+				]);
+
+			const isReportExisted = await this.reportTicketRepository.isUserAlreadyReportConversation(
+				conversation.id.toString(),
+				user.userId.toString()
+			);
+
+			if (isReportExisted)
+				throw new BadRequestException([
+					{
+						message: 'conversation already reported'
 					}
 				]);
 		}
@@ -97,14 +118,6 @@ export class ReportTicketService {
 					message: 'reporter user not found'
 				}
 			]);
-
-		// const isExisted = await this.reportTicketRepository.isPending(reporterId, dto.reporteeId);
-		// if (isExisted)
-		// 	throw new BadRequestException([
-		// 		{
-		// 			message: 'report ticket already exist'
-		// 		}
-		// 	]);
 
 		if (dto.reporteeId === reporterId)
 			throw new BadRequestException([

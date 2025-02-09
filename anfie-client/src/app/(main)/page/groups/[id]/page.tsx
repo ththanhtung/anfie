@@ -7,13 +7,17 @@ import {
   PostItem,
   PostModal,
 } from "@/components";
-import { EConversationTypes } from "@/constants";
+import { EConversationTypes, EReportTicketType } from "@/constants";
 import {
   useGetDetailsGroup,
   useListInfiniteConversations,
   useListInfinitePosts,
+  useMutationReportTicket,
 } from "@/hooks";
+import { userInfoStoreAtom } from "@/stores";
 import { Divider, List } from "antd";
+import { on } from "events";
+import { useAtomValue } from "jotai";
 import React, { useCallback, useRef } from "react";
 
 const GroupPage = ({ params }: TDetailPage) => {
@@ -24,8 +28,20 @@ const GroupPage = ({ params }: TDetailPage) => {
     React.useState<TConversation>();
   const ref = useRef<TModalRef>(null);
   const { group } = useGetDetailsGroup(params?.id);
+  const { onCreateReportTicket, isLoading } = useMutationReportTicket();
+  const [selectedPost, setSelectedPost] = React.useState<TPost>();
+  const currentUser = useAtomValue(userInfoStoreAtom);
 
-  console.log({ posts });
+  const onReport = useCallback(() => {
+    onCreateReportTicket({
+      form: {
+        postId: selectedPost?.id,
+        reporteeId: selectedPost?.authorId ?? "",
+        content: "",
+        type: EReportTicketType.POST,
+      },
+    });
+  }, [onCreateReportTicket, selectedPost?.authorId, selectedPost?.id]);
 
   const onAddPost = useCallback(() => {
     ref.current?.showModal();
@@ -72,12 +88,21 @@ const GroupPage = ({ params }: TDetailPage) => {
         } Group Page`}</h1>
         <PostForm onAddPost={onAddPost} />
         {posts.map((item: TPost) => {
-          return <PostItem key={item.id} post={item} />;
+          return (
+            <PostItem
+              key={item.id}
+              post={item}
+              onReport={onReport}
+              onClick={() => {
+                setSelectedPost(item);
+              }}
+            />
+          );
         })}
         <PostModal ref={ref} groupId={params?.id} />
       </div>
     );
-  }, [group?.title, onAddPost, params?.id, posts]);
+  }, [group?.title, onAddPost, onReport, params?.id, posts]);
   return (
     <LayoutDiary renderLeft={renderLeft()}>{recentConversations()}</LayoutDiary>
   );

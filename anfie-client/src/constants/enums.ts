@@ -17,3 +17,12 @@ export enum EDropdownAction {
   MEMBERS = "members",
   GO_TO_GROUP_PAGE = "go-to-group-page",
 }
+
+export enum EPostDropdownAction {
+  REPORT = "report",
+}
+
+export enum EReportTicketType {
+  POST = "post",
+  CONVERSATION = "conversation",
+}

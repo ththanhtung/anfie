@@ -135,4 +135,26 @@ export class ReportTicketRepository extends Repository<ReportTicket> {
 			}
 		});
 	}
+
+	async isUserAlreadyReportPost(postId: string, userId: string) {
+		return this.findOne({
+			where: {
+				postId: postId,
+				reporter: {
+					userId
+				}
+			}
+		});
+	}
+
+	async isUserAlreadyReportConversation(conversationId: string, userId: string) {
+		return this.findOne({
+			where: {
+				conversationId: conversationId,
+				reporter: {
+					userId
+				}
+			}
+		});
+	}
 }

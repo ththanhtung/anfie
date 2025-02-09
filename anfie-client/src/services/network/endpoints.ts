@@ -57,5 +57,8 @@ export const ENDPOINT_APIS = {
   },
   alleys: {
     list: "api/alleys",
-  }
+  },
+  reportTicket: {
+    list: "api/report-ticket",
+  },
 };

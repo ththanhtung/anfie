@@ -1,19 +1,51 @@
-import { Avatar, Button, Card, Carousel, Image, Tooltip } from "antd";
-import React from "react";
+import {
+  Avatar,
+  Button,
+  Card,
+  Carousel,
+  Dropdown,
+  Image,
+  MenuProps,
+  Tooltip,
+} from "antd";
+import React, { useMemo } from "react";
 import InteractionBar from "./interaction-bar";
-import { images } from "@/constants";
+import { EPostDropdownAction, images } from "@/constants";
 import { UserOutlined } from "@ant-design/icons";
 import { TfiMoreAlt } from "react-icons/tfi";
 import { _formatDay } from "@/utils";
+import { useAtomValue } from "jotai";
+import { userInfoStoreAtom } from "@/stores";
 type TProps = {
   post: TPost;
+  onReport: () => void;
+  onClick?: () => void;
 };
-const PostItem = ({ post }: TProps) => {
+const PostItem = ({ post, onReport, onClick }: TProps) => {
+  const currentUser = useAtomValue(userInfoStoreAtom);
+  const dropdownItems: MenuProps["items"] = useMemo(() => {
+    return [
+      ...(currentUser?.userId === post.author.id
+        ? []
+        : [
+            {
+              key: EPostDropdownAction.REPORT,
+              label: (
+                <span className="text-neutral_800 text-sm ml-2 capitalize text-red-700">
+                  Report Post
+                </span>
+              ),
+              icon: <span className="!text-base text-neutral_700 icon-undo" />,
+            },
+          ]),
+    ];
+  }, [currentUser?.userId, post.author.id]);
   return (
     <Card className="mx-auto mb-4">
       <div
         style={{ display: "flex", alignItems: "center" }}
         className="justify-between"
+        onClick={onClick}
       >
         <div className="user-info flex items-center">
           <Avatar icon={<UserOutlined />} size="large" />
@@ -23,12 +55,31 @@ const PostItem = ({ post }: TProps) => {
           </div>
         </div>
         <Tooltip title="more">
-          <Button
-            shape="circle"
-            icon={<TfiMoreAlt size={22} />}
-            className="border-transparent shadow-none"
-            htmlType="submit"
-          />
+          <Dropdown
+            menu={{
+              items: dropdownItems,
+              onClick: (e) => {
+                switch (e.key) {
+                  case EPostDropdownAction.REPORT:
+                    onReport();
+                    break;
+                  default:
+                    break;
+                }
+              },
+            }}
+            className="cirle-header group"
+            overlayStyle={{
+              width: 200,
+            }}
+          >
+            <Button
+              shape="circle"
+              icon={<TfiMoreAlt size={22} />}
+              className="border-transparent shadow-none"
+              htmlType="submit"
+            />
+          </Dropdown>
         </Tooltip>
       </div>
       <p className="my-4">{post.content}</p>
