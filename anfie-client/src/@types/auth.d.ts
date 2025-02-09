@@ -34,3 +34,8 @@ type TFormSignup = {
   locations?: string[];
   preferGenders?: string[];
 };
+
+type TFormChangePassword = {
+  previousPassword: string;
+  newPassword: string;
+};

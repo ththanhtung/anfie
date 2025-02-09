@@ -2,6 +2,7 @@ export const ENDPOINT_APIS = {
   auth: {
     login: "api/auth/login",
     signup: "api/auth/signup",
+    changePassword: "api/auth/change-password",
   },
   conversation: {
     list: "api/conversations",

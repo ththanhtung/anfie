@@ -1,10 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { LoginDto } from '../dtos';
+import { ChangePasswordDto, LoginDto } from '../dtos';
 import { UserService } from 'src/apis/user/services';
 import * as argon from 'argon2';
 import { getTokens } from 'src/common/helpers';
 import { Request, Response } from 'express';
-import { SignupDto } from '../dtos/signup.dto';
 import { ProfileMediaService } from 'src/apis/profile-media/profile-media.service';
 
 @Injectable()
@@ -73,8 +72,8 @@ export class AuthService {
 		return true;
 	}
 
-	async changePassword() {
-		return true;
+	async changePassword(user: TUserJwt, dto: ChangePasswordDto) {
+		return this.userServices.changePassword(user.userId, dto);
 	}
 
 	async forgotPassword() {

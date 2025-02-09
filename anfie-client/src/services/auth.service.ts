@@ -13,7 +13,24 @@ export class AuthServiceApis extends HttpClient {
   }
 
   public async postSignupUser(form: FormData) {
-    const { data } = await this.instance.postForm(ENDPOINT_APIS.auth.signup, form);
+    const { data } = await this.instance.postForm(
+      ENDPOINT_APIS.auth.signup,
+      form
+    );
+    return data;
+  }
+
+  public async patchChangePassword({
+    previousPassword,
+    newPassword,
+  }: TFormChangePassword) {
+    const { data } = await this.instance.patch(
+      ENDPOINT_APIS.auth.changePassword,
+      {
+        previousPassword,
+        newPassword,
+      }
+    );
     return data;
   }
 }

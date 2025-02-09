@@ -6,15 +6,17 @@ import {
   useListInfinityLocations,
   useListInfinityPreferGenders,
   useListInfinityPreferences,
+  useMutationChangePassword,
   useMutationPreferGender,
   useMutationPreference,
   useMutationUserProfile,
   useUserProfile,
 } from "@/hooks";
 import { _common } from "@/utils";
-import { Button, Form, Input, InputNumber, message } from "antd";
+import { Button, Divider, Form, Input, InputNumber, message } from "antd";
 import { DefaultOptionType } from "antd/es/select";
 import dayjs from "dayjs";
+import { useRouter } from "next/navigation";
 import React, {
   useCallback,
   useEffect,
@@ -25,6 +27,9 @@ import React, {
 const ProfilePage = () => {
   const ref = useRef<TModalRef>(null);
   const { userProfile } = useUserProfile();
+  const { onChangePassword, isChangePasswordPending } =
+    useMutationChangePassword();
+  const router = useRouter();
 
   const [currentProlfile, setCurrentProfile] =
     useState<TUpdateUserProfileForm>();
@@ -55,6 +60,7 @@ const ProfilePage = () => {
   }, [debounceProfile, onUpdateUserProfile]);
 
   const [form] = Form.useForm();
+  const [formChangePassword] = Form.useForm();
 
   const initialValues = useMemo(() => {
     return {
@@ -441,7 +447,57 @@ const ProfilePage = () => {
               />
             </Form.Item>
           </div>
-          <Button type="primary" className="w-full capitalize">
+        </Form>
+
+        <Divider />
+        <h3 className="!text-neutral_800 text-xl text-blue-600">
+          Change Password
+        </h3>
+        <Form
+          form={formChangePassword}
+          onFinish={(value) => {
+            onChangePassword({
+              form: value,
+              cb: () => {
+                formChangePassword.resetFields();
+                router.push("/login");
+              },
+            });
+          }}
+        >
+          <BlockFormItem label="Previous Password" required>
+            <Form.Item
+              name="previousPassword"
+              rules={[
+                {
+                  required: true,
+                  message: "Previous password is required",
+                },
+              ]}
+            >
+              <Input type="password" placeholder="Previous Password" onChange={(e) => {}} />
+            </Form.Item>
+          </BlockFormItem>
+
+          <BlockFormItem label="New Password" required>
+            <Form.Item
+              name="newPassword"
+              rules={[
+                {
+                  required: true,
+                  message: "new password is required",
+                },
+              ]}
+            >
+              <Input type="password" placeholder="New Password" onChange={(e) => {}} />
+            </Form.Item>
+          </BlockFormItem>
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="w-full capitalize mb-4"
+            disabled={isChangePasswordPending}
+          >
             change password
           </Button>
         </Form>

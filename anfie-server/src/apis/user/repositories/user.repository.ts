@@ -1,10 +1,12 @@
 /* eslint-disable prettier/prettier */
 import { Between, ILike, In, Repository } from 'typeorm';
 import { Users } from '../entities';
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GetMyGroupsDto, GetUsersDto } from '../dto';
 import { EGroupType, pagination } from 'src/common';
+import { ChangePasswordDto } from 'src/apis/auth/dtos';
+import * as argon from 'argon2';
 
 @Injectable()
 export class UserRepository extends Repository<Users> {
@@ -37,7 +39,8 @@ export class UserRepository extends Repository<Users> {
 		return user;
 	}
 
-	async findOneById(id: string) {
+	async findOneById(id: string, withProfile: boolean = false) {
+		console.log(withProfile);
 		const user = await this.findOne({
 			relations: ['profile', 'profile.medias'],
 			where: { id: id }
@@ -226,5 +229,26 @@ export class UserRepository extends Repository<Users> {
 		};
 
 		return pagination(this, query, filter);
+	}
+
+	async changePassword(userId: string, dto: ChangePasswordDto) {
+		const user = await this.findOne({ where: { id: userId } });
+		if (!user) {
+			throw new NotFoundException([
+				{
+					message: 'user not found'
+				}
+			]);
+		}
+		const isMatch = await argon.verify(user.hash, dto.previousPassword);
+		if (!isMatch) {
+			throw new BadRequestException([
+				{
+					message: 'old password is incorrect'
+				}
+			]);
+		}
+		user.hash = await argon.hash(dto.newPassword);
+		return this.save(user);
 	}
 }

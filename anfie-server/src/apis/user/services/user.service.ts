@@ -1,11 +1,12 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { UserRepository } from '../repositories';
-import { CreateUserDto, GetMyGroupsDto, GetUsersDto, UpdateUserProfileDto } from '../dto';
+import { GetMyGroupsDto, GetUsersDto, UpdateUserProfileDto } from '../dto';
 import { UserProfileService } from './user-profile.service';
 import { PreferencesService } from 'src/apis/preferences/services';
 import { LocationsService } from 'src/apis/locations/services';
 import { PreferGenderService } from 'src/apis/prefer-gender/services';
 import { UserProfiles } from '../entities';
+import { ChangePasswordDto } from 'src/apis/auth/dtos';
 
 @Injectable()
 export class UserService {
@@ -82,8 +83,8 @@ export class UserService {
 		return this.userRepository.findOneByEmail(email);
 	}
 
-	async findOneById(id: string, withProfile?: boolean) {
-		return this.userRepository.findOneById(id);
+	async findOneById(id: string, withProfile: boolean = false) {
+		return this.userRepository.findOneById(id, withProfile);
 	}
 
 	async updateRefreshToken(userId: string, refreshToken: string | null) {
@@ -136,5 +137,9 @@ export class UserService {
 
 	findAllUsers(query: GetUsersDto) {
 		return this.userRepository.findAllUsers(query);
+	}
+
+	async changePassword(userId: string, dto: ChangePasswordDto) {
+		return this.userRepository.changePassword(userId, dto);
 	}
 }
