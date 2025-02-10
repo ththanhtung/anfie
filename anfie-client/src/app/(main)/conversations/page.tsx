@@ -5,12 +5,13 @@ import {
   MessagePanel,
 } from "@/components";
 import { useSocketContext } from "@/configs";
-import { EConversationTypes, queryKeys } from "@/constants";
+import { EConversationTypes, EReportTicketType, queryKeys } from "@/constants";
 import {
   useListInfiniteConversations,
   useMutationConversation,
   useMutationFriendRequest,
   useMutationGroup,
+  useMutationReportTicket,
 } from "@/hooks";
 import { userInfoStoreAtom } from "@/stores";
 import { _common } from "@/utils";
@@ -30,6 +31,27 @@ const ConversationPage = () => {
   const { onLeaveConversation } = useMutationConversation();
   const { onCreateFriendRequest: onCreateFriendRequestMutation } =
     useMutationFriendRequest();
+  const { onCreateReportTicket } = useMutationReportTicket();
+
+  const onReport = useCallback(() => {
+    onCreateReportTicket({
+      form: {
+        conversationId: selectedConversation?.id ?? "",
+        content: "",
+        reporteeId:
+          currentUser?.userId === selectedConversation?.recipientId
+            ? selectedConversation?.creatorId
+            : selectedConversation?.recipientId,
+        type: EReportTicketType.CONVERSATION,
+      },
+    });
+  }, [
+    currentUser?.userId,
+    onCreateReportTicket,
+    selectedConversation?.creatorId,
+    selectedConversation?.id,
+    selectedConversation?.recipientId,
+  ]);
 
   const onCreateGroup = useCallback(
     (title: string, userIds: string[]) => {
@@ -209,6 +231,9 @@ const ConversationPage = () => {
             onCreate={onCreateGroup}
             onLeave={onLeave}
             onCreateFriendRequest={onCreateFriendRequest}
+            onReport={(conversationId: string) => {
+              onReport();
+            }}
           />
         </div>
       </LayoutConversation>

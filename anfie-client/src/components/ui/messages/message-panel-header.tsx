@@ -6,7 +6,7 @@ import {
   VideoCameraOutlined,
 } from "@ant-design/icons";
 import { Avatar, Button, Dropdown, MenuProps } from "antd";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React, { useMemo } from "react";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { RiUserAddFill } from "react-icons/ri";
@@ -23,6 +23,7 @@ type TProps = {
   onEndConversation: () => void;
   onCreateFriendRequest?: () => void;
   type: EConversationTypes;
+  onReport?: (conversationId: string) => void;
 };
 
 const MessagePanelHeader = ({
@@ -37,6 +38,7 @@ const MessagePanelHeader = ({
   onShowAvatar,
   onEndConversation,
   onCreateFriendRequest,
+  onReport,
 }: TProps) => {
   const router = useRouter();
 
@@ -48,6 +50,15 @@ const MessagePanelHeader = ({
           label: (
             <span className="text-red_400 text-sm ml-2 capitalize text-red-500">
               end conversation
+            </span>
+          ),
+          icon: <span className="!text-base text-red_400 icon-trash" />,
+        },
+        {
+          key: EDropdownAction.REPORT_CONVERSATION,
+          label: (
+            <span className="text-red_400 text-sm ml-2 capitalize text-red-500">
+              report conversation
             </span>
           ),
           icon: <span className="!text-base text-red_400 icon-trash" />,
@@ -65,7 +76,7 @@ const MessagePanelHeader = ({
               </span>
             ),
             icon: <span className="!text-base text-neutral_700 icon-undo" />,
-          }
+          },
         ]
       : [
           {
@@ -189,6 +200,9 @@ const MessagePanelHeader = ({
                   router.replace(
                     `${process.env.NEXT_PUBLIC_URL}/page/groups/${group?.id}`
                   );
+                  break;
+                case EDropdownAction.REPORT_CONVERSATION:
+                  onReport?.(conversation?.id ?? "");
                   break;
                 default:
                   // onUpdate();

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConversationRequestService } from 'src/apis/conversation-request/services';
+import { FriendService } from 'src/apis/friend/services';
 import { LlamaService } from 'src/apis/llama/llama.service';
 import { UserProfileService, UserService } from 'src/apis/user/services';
 import { FIFTEEN_MINUTES } from 'src/common';
@@ -10,7 +11,8 @@ export class MatchmakingService {
 		private readonly llamaService: LlamaService,
 		private readonly userProfileService: UserProfileService,
 		private readonly userService: UserService,
-		private readonly conversataionRequestServide: ConversationRequestService
+		private readonly conversataionRequestServide: ConversationRequestService,
+		private readonly friendService: FriendService
 	) {}
 	async matchmaking() {
 		// console.log({ dto });
@@ -23,6 +25,13 @@ export class MatchmakingService {
 
 		// const usersInQueue = users.map((user) => user.id);
 		const usersInQueue = ['3d1bdf26-3b40-4c63-b05a-9598790f9cde', '10287ec7-ca50-49ed-b950-dcbcecb77cb0'];
+
+
+		const isFriend = await this.friendService.isFriend(usersInQueue[0], usersInQueue[1]);
+
+		if (isFriend) {
+			return;
+		}
 
 		const existedConversation = await this.conversataionRequestServide.getConversationRequestBetweenTwoUsers(
 			usersInQueue[0],

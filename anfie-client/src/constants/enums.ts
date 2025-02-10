@@ -16,6 +16,7 @@ export enum EDropdownAction {
   REMOVE_RECIPIENT = "remove-recipient",
   MEMBERS = "members",
   GO_TO_GROUP_PAGE = "go-to-group-page",
+  REPORT_CONVERSATION = "report-conversation",
 }
 
 export enum EPostDropdownAction {

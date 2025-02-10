@@ -1,7 +1,7 @@
 type TPostCreateReportTicketParams = {
   postId?: string;
-  converationId?: string;
-  reporteeId: string;
+  conversationId?: string;
+  reporteeId?: string;
   content: string;
   type: string;
 };
