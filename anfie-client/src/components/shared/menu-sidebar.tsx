@@ -84,11 +84,11 @@ const MenuSidebar = ({ href }: TProps) => {
       icon: <TbShieldQuestion />,
       label: "confessions",
     },
-    {
-      key: "notifications",
-      icon: <BellOutlined />,
-      label: "notifications",
-    },
+    // {
+    //   key: "notifications",
+    //   icon: <BellOutlined />,
+    //   label: "notifications",
+    // },
     {
       key: "notes",
       icon: <SnippetsOutlined />,

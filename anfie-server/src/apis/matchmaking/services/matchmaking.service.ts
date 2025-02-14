@@ -14,29 +14,35 @@ export class MatchmakingService {
 		private readonly conversataionRequestServide: ConversationRequestService,
 		private readonly friendService: FriendService
 	) {}
-	async matchmaking() {
+	async matchmaking(usersOnline: string[]) {
 		// console.log({ dto });
 
-		// const users = await this.userService.finUsersFindFriend();
+		const users = await this.userService.finUsersFindFriend();
 
-		// if (users.length < 2) {
-		// 	return;
-		// }
+		if (users.length < 2) {
+			return;
+		}
 
-		// const usersInQueue = users.map((user) => user.id);
-		const usersInQueue = ['3d1bdf26-3b40-4c63-b05a-9598790f9cde', '10287ec7-ca50-49ed-b950-dcbcecb77cb0'];
+		const usersOnlineAndFindFriend = users.filter((user) => usersOnline.includes(user.id) && user.isFindFriend);
 
+		const usersInQueue = usersOnlineAndFindFriend.map((user) => user.id);
+		// const usersInQueue = ['3d1bdf26-3b40-4c63-b05a-9598790f9cde', '10287ec7-ca50-49ed-b950-dcbcecb77cb0'];
 
-		const isFriend = await this.friendService.isFriend(usersInQueue[0], usersInQueue[1]);
+		const userProfiles = await this.userProfileService.getProfilesByUserIds(usersInQueue);
+
+		const match = await this.llamaService.matchRequest(userProfiles);
+
+		if (!match) {
+			return;
+		}
+
+		const isFriend = await this.friendService.isFriend(match.id1, match.id2);
 
 		if (isFriend) {
 			return;
 		}
 
-		const existedConversation = await this.conversataionRequestServide.getConversationRequestBetweenTwoUsers(
-			usersInQueue[0],
-			usersInQueue[1]
-		);
+		const existedConversation = await this.conversataionRequestServide.getConversationRequestBetweenTwoUsers(match.id1, match.id2);
 
 		if (existedConversation) {
 			const conversationDuration = Date.now() - existedConversation.created_at.getTime();
@@ -46,23 +52,9 @@ export class MatchmakingService {
 			}
 		}
 
-		// const userProfiles = await this.userProfileService.getProfilesByUserIds(usersInQueue);
+		await this.userService.foundMatch(match.id1);
+		await this.userService.foundMatch(match.id2);
 
-		// const match = await this.llamaService.matchRequest(userProfiles);
-
-		// if (!match) {
-		// 	return;
-		// }
-
-		// console.log({ match });
-
-		// await this.userService.foundMatch(match.id1);
-		// await this.userService.foundMatch(match.id2);
-
-		return {
-			id1: '3d1bdf26-3b40-4c63-b05a-9598790f9cde',
-			id2: '10287ec7-ca50-49ed-b950-dcbcecb77cb0',
-			reason: 'test'
-		};
+		return match;
 	}
 }

@@ -257,155 +257,157 @@ const FormSignup = () => {
   );
 
   return (
-    <Form
-      name="signup"
-      className="form-signup w-full"
-      onFinish={onFinish}
-      layout="vertical"
-    >
-      <Form.Item
-        name="firstName"
-        rules={[
-          { required: true, message: "please input your firstname!" },
-          {
-            type: "string",
-            message: "The input is not valid",
-          },
-        ]}
+    <div className="h-full">
+      <Form
+        name="signup"
+        className="form-signup w-full"
+        onFinish={onFinish}
+        layout="vertical"
       >
-        <Input placeholder="First Name" />
-      </Form.Item>
-      <Form.Item
-        name="lastName"
-        rules={[
-          { required: true, message: "please input your lastname!" },
-          {
-            type: "string",
-            message: "The input is not valid",
-          },
-        ]}
-      >
-        <Input placeholder="Last Name" />
-      </Form.Item>
-      <Form.Item
-        name="bio"
-        rules={[
-          {
-            type: "string",
-            message: "The input is not valid",
-          },
-        ]}
-      >
-        <Input placeholder="Tell something about yourself" />
-      </Form.Item>
-      <Form.Item
-        name="email"
-        rules={[
-          { required: true, message: "please input your email!" },
-          {
-            type: "email",
-            message: "The input is not valid E-mail!",
-          },
-        ]}
-      >
-        <Input placeholder="Email" />
-      </Form.Item>
-      <Form.Item
-        name="password"
-        rules={[{ required: true, message: "Please input your password!" }]}
-      >
-        <Input type="password" placeholder="Password" />
-      </Form.Item>
-      <Form.Item
-        name="confirm-password"
-        rules={[{ required: true, message: "Please input your password!" }]}
-      >
-        <Input type="password" placeholder="Comfirm Password" />
-      </Form.Item>
-      <Form.Item
-        name="phone"
-        rules={[
-          { required: true, message: "please input your phone number!" },
-          {
-            type: "string",
-            message: "The input is not valid",
-          },
-        ]}
-      >
-        <Input placeholder="Phone Number" />
-      </Form.Item>
-      <Form.Item name="preferences">
-        <AFSelectInfinite
-          allowClear
-          options={preferenceOptions}
-          loadMore={fetchNextPagePreferences}
-          hasMore={preferenceOptions.length < totalPreferences!}
-          loading={isFetchingNextPagePreferences || isLoadingPreferences}
-          placeholder="Preferences"
-          className="!mr-3 !w-full"
-          onChange={handleSelectPreference}
-        />
-      </Form.Item>
-      <Form.Item name="gender">
-        <AFSelectInfinite
-          allowClear
-          options={preferGenderOptions}
-          loadMore={fetchNextPagePreferGenders}
-          hasMore={preferGenderOptions.length < totalPreferGenders!}
-          loading={isFetchingNextPagePreferGenders || isLoadingPreferGenders}
-          placeholder="Gender"
-          className="!mr-3 !w-full"
-          onChange={handleSelectGenders}
-        />
-      </Form.Item>
-      <Form.Item name="preferGenders">
-        <AFSelectInfinite
-          allowClear
-          options={preferGenderOptions}
-          loadMore={fetchNextPagePreferGenders}
-          hasMore={preferGenderOptions.length < totalPreferGenders!}
-          loading={isFetchingNextPagePreferGenders || isLoadingPreferGenders}
-          placeholder="Prefer Friend's Gender"
-          className="!mr-3 !w-full"
-          onChange={handleSelectPreferGenders}
-        />
-      </Form.Item>
-      <Form.Item name="locations">
-        <AFSelectInfinite
-          allowClear
-          options={locationOptions}
-          loadMore={fetchNextPageLocations}
-          hasMore={locationOptions.length < totalLocations!}
-          loading={isFetchingNextPageLocations || isLoadingLocations}
-          placeholder="locations"
-          className="!mr-3 !w-full"
-          onChange={handleSelectLocations}
-        />
-      </Form.Item>
-      <Form.Item
-        name="dob"
-        rules={[
-          {
-            required: true,
-            message: "Please input you date of birth!",
-          },
-        ]}
-      >
-        <AFDatePicker placeholder="Date of Birth" />
-      </Form.Item>
-      <BlockFormItem label="Pictures of You:">
-        <Form.Item name="medias">
-          <UploadImage />
+        <Form.Item
+          name="firstName"
+          rules={[
+            { required: true, message: "please input your firstname!" },
+            {
+              type: "string",
+              message: "The input is not valid",
+            },
+          ]}
+        >
+          <Input placeholder="First Name" />
         </Form.Item>
-      </BlockFormItem>
-      <Button
-        type="primary"
-        htmlType="submit"
-        disabled={isCreateAccountPending}
-      >
-        Sign up
-      </Button>
-    </Form>
+        <Form.Item
+          name="lastName"
+          rules={[
+            { required: true, message: "please input your lastname!" },
+            {
+              type: "string",
+              message: "The input is not valid",
+            },
+          ]}
+        >
+          <Input placeholder="Last Name" />
+        </Form.Item>
+        <Form.Item
+          name="bio"
+          rules={[
+            {
+              type: "string",
+              message: "The input is not valid",
+            },
+          ]}
+        >
+          <Input placeholder="Tell something about yourself" />
+        </Form.Item>
+        <Form.Item
+          name="email"
+          rules={[
+            { required: true, message: "please input your email!" },
+            {
+              type: "email",
+              message: "The input is not valid E-mail!",
+            },
+          ]}
+        >
+          <Input placeholder="Email" />
+        </Form.Item>
+        <Form.Item
+          name="password"
+          rules={[{ required: true, message: "Please input your password!" }]}
+        >
+          <Input type="password" placeholder="Password" />
+        </Form.Item>
+        <Form.Item
+          name="confirm-password"
+          rules={[{ required: true, message: "Please input your password!" }]}
+        >
+          <Input type="password" placeholder="Comfirm Password" />
+        </Form.Item>
+        <Form.Item
+          name="phone"
+          rules={[
+            { required: true, message: "please input your phone number!" },
+            {
+              type: "string",
+              message: "The input is not valid",
+            },
+          ]}
+        >
+          <Input placeholder="Phone Number" />
+        </Form.Item>
+        <Form.Item name="preferences">
+          <AFSelectInfinite
+            allowClear
+            options={preferenceOptions}
+            loadMore={fetchNextPagePreferences}
+            hasMore={preferenceOptions.length < totalPreferences!}
+            loading={isFetchingNextPagePreferences || isLoadingPreferences}
+            placeholder="Preferences"
+            className="!mr-3 !w-full"
+            onChange={handleSelectPreference}
+          />
+        </Form.Item>
+        <Form.Item name="gender">
+          <AFSelectInfinite
+            allowClear
+            options={preferGenderOptions}
+            loadMore={fetchNextPagePreferGenders}
+            hasMore={preferGenderOptions.length < totalPreferGenders!}
+            loading={isFetchingNextPagePreferGenders || isLoadingPreferGenders}
+            placeholder="Gender"
+            className="!mr-3 !w-full"
+            onChange={handleSelectGenders}
+          />
+        </Form.Item>
+        <Form.Item name="preferGenders">
+          <AFSelectInfinite
+            allowClear
+            options={preferGenderOptions}
+            loadMore={fetchNextPagePreferGenders}
+            hasMore={preferGenderOptions.length < totalPreferGenders!}
+            loading={isFetchingNextPagePreferGenders || isLoadingPreferGenders}
+            placeholder="Prefer Friend's Gender"
+            className="!mr-3 !w-full"
+            onChange={handleSelectPreferGenders}
+          />
+        </Form.Item>
+        <Form.Item name="locations">
+          <AFSelectInfinite
+            allowClear
+            options={locationOptions}
+            loadMore={fetchNextPageLocations}
+            hasMore={locationOptions.length < totalLocations!}
+            loading={isFetchingNextPageLocations || isLoadingLocations}
+            placeholder="locations"
+            className="!mr-3 !w-full"
+            onChange={handleSelectLocations}
+          />
+        </Form.Item>
+        <Form.Item
+          name="dob"
+          rules={[
+            {
+              required: true,
+              message: "Please input you date of birth!",
+            },
+          ]}
+        >
+          <AFDatePicker placeholder="Date of Birth" />
+        </Form.Item>
+        <BlockFormItem label="Pictures of You:">
+          <Form.Item name="medias">
+            <UploadImage />
+          </Form.Item>
+        </BlockFormItem>
+        <Button
+          type="primary"
+          htmlType="submit"
+          disabled={isCreateAccountPending}
+        >
+          Sign up
+        </Button>
+      </Form>
+    </div>
   );
 };
 

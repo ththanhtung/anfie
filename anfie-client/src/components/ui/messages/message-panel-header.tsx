@@ -106,15 +106,15 @@ const MessagePanelHeader = ({
             ),
             icon: <span className="!text-base text-neutral_700 icon-archive" />,
           },
-          {
-            key: EDropdownAction.MEMBERS,
-            label: (
-              <span className="text-neutral_800 text-sm ml-2 capitalize">
-                members
-              </span>
-            ),
-            icon: <span className="!text-base text-neutral_700 icon-archive" />,
-          },
+          // {
+          //   key: EDropdownAction.MEMBERS,
+          //   label: (
+          //     <span className="text-neutral_800 text-sm ml-2 capitalize">
+          //       members
+          //     </span>
+          //   ),
+          //   icon: <span className="!text-base text-neutral_700 icon-archive" />,
+          // },
         ];
   }, [type, conversation?.mode]);
 

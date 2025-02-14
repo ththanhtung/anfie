@@ -6,7 +6,7 @@ import React, { useRef } from "react";
 
 const LoginPage = () => {
   const refTab = useRef<HTMLDivElement>(null);
-  
+
   const items: TabsProps["items"] = [
     {
       key: EActionTabs.LOGIN,
@@ -20,15 +20,20 @@ const LoginPage = () => {
     },
   ];
   return (
-    <div ref={refTab}>
-      <Tabs
-        className="w-full"
-        defaultActiveKey="1"
-        items={items}
-        onTabClick={(key, event) => {
-          refTab.current?.scrollIntoView({ behavior: "smooth" });
-        }}
-      />
+    <div
+      ref={refTab}
+      className="w-full h-screen flex justify-center items-center "
+    >
+      <div className="w-full max-w-lg h-[80%] overflow-y-auto border rounded-lg p-4 ">
+        <Tabs
+          className="w-full"
+          defaultActiveKey={EActionTabs.LOGIN}
+          items={items}
+          onTabClick={(key, event) => {
+            refTab.current?.scrollIntoView({ behavior: "smooth" });
+          }}
+        />
+      </div>
     </div>
   );
 };

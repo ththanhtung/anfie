@@ -13,7 +13,7 @@ const GroupItem = ({ item }: TProps) => {
   const router = useRouter();
   return (
     <Card
-      className="w-[300px] cursor-pointer"
+      className="w-[300px] cursor-pointer capitalize"
       cover={
         <Image
           alt="alley"
@@ -27,7 +27,7 @@ const GroupItem = ({ item }: TProps) => {
         router.replace(`../group-conversations/${item?.id}`);
       }}
     >
-      <Meta title={`Trà Chanh ${item?.title}`} />
+      <Meta title={`${item?.title} Tavern`} />
     </Card>
   );
 };

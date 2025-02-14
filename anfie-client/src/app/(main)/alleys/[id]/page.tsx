@@ -9,9 +9,10 @@ import {
   useGetGroupByAlleyId,
 } from "@/hooks";
 import { _common } from "@/utils";
-import { Button, Input, Typography } from "antd";
+import { Button, Input, message, Typography } from "antd";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useRef } from "react";
+const { Search } = Input;
 
 const AlleyDetailPage = ({ params }: TDetailPage) => {
   const { alleyChildren } = useGetAlleyByParentId(params.id);
@@ -31,19 +32,39 @@ const AlleyDetailPage = ({ params }: TDetailPage) => {
     router.push(`/alleys/${alley?.parentId}`);
   }, [alley?.parentId, router]);
 
+  const copyAlleyId = async () => {
+    try {
+      await navigator.clipboard.writeText(params.id);
+      message.success("Alley ID copied to clipboard!");
+    } catch (error) {
+      message.error("Failed to copy Alley ID.");
+    }
+  };
+
   return (
     <>
       <div className="w-[calc(100%-250px)]">
         <h1 className="text-center text-blue-600 my-4">Alley</h1>
         <div className="flex items-end justify-between">
-          <Button className="ml-4" onClick={goBack}>
-            Go Back
-          </Button>
+          <div className="flex gap-2 items-center">
+            <Button className="ml-4" onClick={goBack}>
+              Go Back
+            </Button>
+            <Button onClick={copyAlleyId} type="primary" className="">
+              Copy Alley ID
+            </Button>
+          </div>
           <div className="flex items-end gap-2 justify-end mr-4">
             <Button onClick={onAddAlley}>Create New Alley</Button>
             <div>
               <Typography.Title level={5}>Find Alley</Typography.Title>
-              <Input placeholder="Alley ID" />
+              <Search
+                placeholder="input alley id"
+                onSearch={(value) => {
+                  router.replace(`${value}`);
+                }}
+                enterButton
+              />
             </div>
           </div>
         </div>

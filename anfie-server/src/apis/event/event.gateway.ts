@@ -61,13 +61,11 @@ export class EventGateway {
 	@Cron(CronExpression.EVERY_10_SECONDS)
 	async matchMaking() {
 		console.log('service being called');
-		const match = await this.matchmakingService.matchmaking();
-
-		console.log({ match });
+		const usersOnline = Array.from(this.sessionManager.getSockets().keys());
+		console.log({ usersOnline });
+		const match = await this.matchmakingService.matchmaking(usersOnline.slice(0, 10));
 
 		if (!match) return;
-
-		console.log({ match });
 
 		const conversationRequest = await this.conversationRequestService.createOne(
 			match.id1.toString(),
