@@ -4,6 +4,7 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { AtGuard, GetCurrentUser } from 'src/common';
 import { GetPostsDto } from './dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import { GetCommentsDto } from '../comment/dto';
 
 @UseGuards(AtGuard)
 @Controller('posts')
@@ -33,5 +34,10 @@ export class PostController {
 	@Get(':id')
 	async findOneById(@GetCurrentUser('userId') userId: string, @Param('id') id: string) {
 		return this.postService.findOneById(userId, id);
+	}
+
+	@Get(':id/comments')
+	async getComments(@Param('id') id: string, @Query() query: GetCommentsDto) {
+		return this.postService.getComments(id, query);
 	}
 }

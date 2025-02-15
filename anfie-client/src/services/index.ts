@@ -16,4 +16,5 @@ export * from "./group-conversations.service";
 export * from "./group-messages.service";
 export * from "./friend.service";
 export * from "./alleys.service";
-export * from './report-tickets.service'
+export * from "./report-tickets.service";
+export * from "./comments.service";

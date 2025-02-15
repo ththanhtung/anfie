@@ -22,6 +22,16 @@ export class PostServiceApis extends HttpClient {
     );
     return data;
   }
+
+  public async getPostComments(postId: string, params: TGetComnentsParams) {
+    const { data } = await this.instance.get<TResultResponse<TComment[]>>(
+      `${ENDPOINT_APIS.posts.list}/${postId}/comments`,
+      {
+        params,
+      }
+    );
+    return data;
+  }
 }
 
 export const postService = new PostServiceApis();

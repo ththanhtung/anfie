@@ -78,26 +78,21 @@ export class CommentRepository extends Repository<Comment> {
 			const parent = await this.findOneById(parentId);
 			if (!parent) throw new NotFoundException([{ message: 'parent comment not found' }]);
 			return pagination(this, query, {
+				relations: ['user'],
 				where: {
 					postId: query.postId,
 					commentLeft: MoreThan(parent.commentLeft),
 					commentRight: LessThanOrEqual(parent.commentRight)
-				},
-				order: {
-					commentLeft: 'ASC'
 				}
 			});
 		}
 		return pagination(this, query, {
+			relations: ['user'],
 			where: {
 				postId: query.postId
-			},
-			order: {
-				commentLeft: 'ASC'
 			}
 		});
 	}
-
 	async findOneAndDelete(id: string) {
 		return this.delete(id);
 	}
@@ -131,5 +126,14 @@ export class CommentRepository extends Repository<Comment> {
 				commentRight: () => `comment_right - ${amount}`
 			}
 		);
+	}
+
+	async getComments(postId: string, query: GetCommentsDto) {
+		return pagination(this, query, {
+			relations: ['user'],
+			where: {
+				postId: postId
+			}
+		});
 	}
 }

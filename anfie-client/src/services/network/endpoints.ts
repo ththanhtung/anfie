@@ -61,4 +61,7 @@ export const ENDPOINT_APIS = {
   reportTicket: {
     list: "api/report-ticket",
   },
+  comments: {
+    list: "api/comments",
+  }
 };

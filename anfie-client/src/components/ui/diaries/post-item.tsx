@@ -8,7 +8,7 @@ import {
   MenuProps,
   Tooltip,
 } from "antd";
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo, useRef } from "react";
 import InteractionBar from "./interaction-bar";
 import { EPostDropdownAction, images } from "@/constants";
 import { UserOutlined } from "@ant-design/icons";
@@ -16,12 +16,14 @@ import { TfiMoreAlt } from "react-icons/tfi";
 import { _formatDay } from "@/utils";
 import { useAtomValue } from "jotai";
 import { userInfoStoreAtom } from "@/stores";
+import PostCommentsModel from "./post-comments-model";
 type TProps = {
   post: TPost;
   onReport: () => void;
   onClick?: () => void;
+  onShowComments?: () => void;
 };
-const PostItem = ({ post, onReport, onClick }: TProps) => {
+const PostItem = ({ post, onReport, onClick, onShowComments }: TProps) => {
   const currentUser = useAtomValue(userInfoStoreAtom);
   const dropdownItems: MenuProps["items"] = useMemo(() => {
     return [
@@ -40,12 +42,12 @@ const PostItem = ({ post, onReport, onClick }: TProps) => {
           ]),
     ];
   }, [currentUser?.userId, post.author.id]);
+
   return (
-    <Card className="mx-auto mb-4">
+    <Card className="mx-auto mb-4" onClick={onClick}>
       <div
         style={{ display: "flex", alignItems: "center" }}
         className="justify-between"
-        onClick={onClick}
       >
         <div className="user-info flex items-center">
           <Avatar icon={<UserOutlined />} size="large" />
@@ -98,7 +100,7 @@ const PostItem = ({ post, onReport, onClick }: TProps) => {
           </Carousel>
         </div>
       )}
-      <InteractionBar />
+      <InteractionBar onShowComments={onShowComments} />
     </Card>
   );
 };

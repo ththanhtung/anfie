@@ -7,6 +7,7 @@ import {
   PostItem,
   PostModal,
 } from "@/components";
+import PostCommentsModel from "@/components/ui/diaries/post-comments-model";
 import { EConversationTypes, EReportTicketType } from "@/constants";
 import {
   useGetDetailsGroup,
@@ -27,6 +28,7 @@ const GroupPage = ({ params }: TDetailPage) => {
   const [selectedConversation, setSelectedConversation] =
     React.useState<TConversation>();
   const ref = useRef<TModalRef>(null);
+  const commentRef = useRef<TModalRef>(null);
   const { group } = useGetDetailsGroup(params?.id);
   const { onCreateReportTicket, isLoading } = useMutationReportTicket();
   const [selectedPost, setSelectedPost] = React.useState<TPost>();
@@ -45,6 +47,10 @@ const GroupPage = ({ params }: TDetailPage) => {
 
   const onAddPost = useCallback(() => {
     ref.current?.showModal();
+  }, []);
+
+  const onShowComments = useCallback(() => {
+    commentRef.current?.showModal();
   }, []);
 
   const recentConversations = useCallback(() => {
@@ -96,13 +102,23 @@ const GroupPage = ({ params }: TDetailPage) => {
               onClick={() => {
                 setSelectedPost(item);
               }}
+              onShowComments={onShowComments}
             />
           );
         })}
         <PostModal ref={ref} groupId={params?.id} />
+        <PostCommentsModel ref={commentRef} postId={selectedPost?.id ?? ""} />
       </div>
     );
-  }, [group?.title, onAddPost, onReport, params?.id, posts]);
+  }, [
+    group?.title,
+    onAddPost,
+    onReport,
+    onShowComments,
+    params?.id,
+    posts,
+    selectedPost?.id,
+  ]);
   return (
     <LayoutDiary renderLeft={renderLeft()}>{recentConversations()}</LayoutDiary>
   );

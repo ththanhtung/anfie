@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCommentDto } from '../dto/create-comment.dto';
 import { CommentRepository } from '../repositories';
 import { DeleteCommentDto, GetCommentsDto } from '../dto';
@@ -9,6 +9,7 @@ import { FriendService } from 'src/apis/friend/services';
 export class CommentService {
 	constructor(
 		private readonly commnentRepository: CommentRepository,
+		@Inject(forwardRef(() => PostService))
 		private readonly postService: PostService,
 		private readonly friendService: FriendService
 	) {}
@@ -82,5 +83,9 @@ export class CommentService {
 			]);
 
 		return comment;
+	}
+
+	async getCommentsByPostId(postId: string, query: GetCommentsDto) {
+		return this.commnentRepository.getComments(postId, query);
 	}
 }

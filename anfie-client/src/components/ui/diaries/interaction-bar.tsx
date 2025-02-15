@@ -4,7 +4,11 @@ import { AiOutlineLike } from "react-icons/ai";
 import { FaRegComment } from "react-icons/fa";
 import { FiSend } from "react-icons/fi";
 
-const InteractionBar = () => {
+type TProps = {
+  onShowComments?: () => void;
+};
+
+const InteractionBar = ({ onShowComments }: TProps) => {
   return (
     <div className="flex items-center gap-4">
       <Tooltip title="like">
@@ -21,6 +25,9 @@ const InteractionBar = () => {
           icon={<FaRegComment size={22} />}
           className="border-transparent shadow-none"
           htmlType="submit"
+          onClick={() => {
+            onShowComments?.();
+          }}
         />
       </Tooltip>
       <Tooltip title="share">

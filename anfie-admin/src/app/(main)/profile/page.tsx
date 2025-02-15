@@ -88,7 +88,7 @@ const ProfilePage = () => {
   } = useListInfinityPreferGenders();
   const {
     preferenceOptions,
-    fetchNextPage: fetchNextPagePreferences,
+    fetchNextPage: sPreferences,
     total: totalPreferences,
     isFetchingNextPage: isFetchingNextPagePreferences,
     isLoading: isLoadingPreferences,

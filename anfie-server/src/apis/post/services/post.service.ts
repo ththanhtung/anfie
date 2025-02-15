@@ -1,16 +1,20 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, forwardRef, Inject, Injectable } from '@nestjs/common';
 import { CreatePostDto } from '../dto/create-post.dto';
 import { PostRepository } from '../repositories';
 import { GetPostsDto } from '../dto';
 import { FriendService } from 'src/apis/friend/services';
 import { PostMediaService } from 'src/apis/post-media/services';
+import { GetCommentsDto } from 'src/apis/comment/dto';
+import { CommentService } from 'src/apis/comment/services';
 
 @Injectable()
 export class PostService {
 	constructor(
 		private readonly postRepository: PostRepository,
 		private readonly friendsService: FriendService,
-		private readonly postMediaService: PostMediaService
+		private readonly postMediaService: PostMediaService,
+		@Inject(forwardRef(() => CommentService))
+		private readonly commentsService: CommentService
 	) {}
 	async create(authorId: string, createPostDto: CreatePostDto, medias: Express.Multer.File[]) {
 		const post = await this.postRepository.createOne({ authorId, totalLikes: 0, ...createPostDto });
@@ -46,5 +50,9 @@ export class PostService {
 
 	async getPostsByGroupId(groupId: string, query: GetPostsDto) {
 		return this.postRepository.getPostsByGroupId(groupId, query);
+	}
+
+	async getComments(id: string, query: GetCommentsDto) {
+		return this.commentsService.getCommentsByPostId(id, query);
 	}
 }
