@@ -55,4 +55,8 @@ export class PostService {
 	async getComments(id: string, query: GetCommentsDto) {
 		return this.commentsService.getCommentsByPostId(id, query);
 	}
+
+	async deletePostById(id: string, userId: string) {
+		return this.postRepository.deletePostById(id, userId);
+	}
 }

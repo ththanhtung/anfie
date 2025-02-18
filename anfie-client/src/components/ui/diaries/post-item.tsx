@@ -8,27 +8,43 @@ import {
   MenuProps,
   Tooltip,
 } from "antd";
-import React, { useCallback, useMemo, useRef } from "react";
+import React, { useMemo } from "react";
 import InteractionBar from "./interaction-bar";
-import { EPostDropdownAction, images } from "@/constants";
+import { EPostDropdownAction } from "@/constants";
 import { UserOutlined } from "@ant-design/icons";
 import { TfiMoreAlt } from "react-icons/tfi";
 import { _formatDay } from "@/utils";
 import { useAtomValue } from "jotai";
 import { userInfoStoreAtom } from "@/stores";
-import PostCommentsModel from "./post-comments-model";
 type TProps = {
   post: TPost;
   onReport: () => void;
   onClick?: () => void;
   onShowComments?: () => void;
+  onShowDelete?: () => void;
 };
-const PostItem = ({ post, onReport, onClick, onShowComments }: TProps) => {
+const PostItem = ({
+  post,
+  onReport,
+  onClick,
+  onShowComments,
+  onShowDelete,
+}: TProps) => {
   const currentUser = useAtomValue(userInfoStoreAtom);
   const dropdownItems: MenuProps["items"] = useMemo(() => {
     return [
       ...(currentUser?.userId === post.author.id
-        ? []
+        ? [
+            {
+              key: EPostDropdownAction.DELETE,
+              label: (
+                <span className="text-neutral_800 text-sm ml-2 capitalize text-red-700">
+                  Delete Post
+                </span>
+              ),
+              icon: <span className="!text-base text-neutral_700 icon-undo" />,
+            },
+          ]
         : [
             {
               key: EPostDropdownAction.REPORT,
@@ -65,6 +81,8 @@ const PostItem = ({ post, onReport, onClick, onShowComments }: TProps) => {
                   case EPostDropdownAction.REPORT:
                     onReport();
                     break;
+                  case EPostDropdownAction.DELETE:
+                    onShowDelete?.();
                   default:
                     break;
                 }

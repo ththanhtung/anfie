@@ -68,4 +68,11 @@ export class PostRepository extends Repository<Post> {
 			relations: ['author', 'medias']
 		});
 	}
+
+	async deletePostById(postId: string, userId: string) {
+		return this.delete({
+			id: postId,
+			authorId: userId
+		});
+	}
 }

@@ -34,3 +34,8 @@ type TPostMedias = {
   postId: string;
   url: any;
 };
+
+type TDeletePostParams = {
+  postId: string;
+  cb?: () => void;
+};

@@ -1,6 +1,7 @@
 "use client";
 import {
   ConversationItem,
+  DeletePostModal,
   LayoutDiary,
   MessagePanel,
   PostForm,
@@ -13,6 +14,7 @@ import {
   useGetDetailsGroup,
   useListInfiniteConversations,
   useListInfinitePosts,
+  useMutationPost,
   useMutationReportTicket,
 } from "@/hooks";
 import { userInfoStoreAtom } from "@/stores";
@@ -29,10 +31,12 @@ const GroupPage = ({ params }: TDetailPage) => {
     React.useState<TConversation>();
   const ref = useRef<TModalRef>(null);
   const commentRef = useRef<TModalRef>(null);
+  const deletePostRef = useRef<TModalRef>(null);
   const { group } = useGetDetailsGroup(params?.id);
   const { onCreateReportTicket, isLoading } = useMutationReportTicket();
   const [selectedPost, setSelectedPost] = React.useState<TPost>();
   const currentUser = useAtomValue(userInfoStoreAtom);
+  const { onDeletePost, isDeletePostPending } = useMutationPost();
 
   const onReport = useCallback(() => {
     onCreateReportTicket({
@@ -51,6 +55,10 @@ const GroupPage = ({ params }: TDetailPage) => {
 
   const onShowComments = useCallback(() => {
     commentRef.current?.showModal();
+  }, []);
+
+  const onShowDelete = useCallback(() => {
+    deletePostRef.current?.showModal();
   }, []);
 
   const recentConversations = useCallback(() => {
@@ -103,18 +111,34 @@ const GroupPage = ({ params }: TDetailPage) => {
                 setSelectedPost(item);
               }}
               onShowComments={onShowComments}
+              onShowDelete={onShowDelete}
             />
           );
         })}
         <PostModal ref={ref} groupId={params?.id} />
         <PostCommentsModel ref={commentRef} postId={selectedPost?.id ?? ""} />
+        <DeletePostModal
+          ref={deletePostRef}
+          isLoading={isDeletePostPending}
+          onOk={() => {
+            onDeletePost({
+              postId: selectedPost?.id ?? "",
+              cb: () => {
+                deletePostRef.current?.closeModal();
+              },
+            });
+          }}
+        />
       </div>
     );
   }, [
     group?.title,
+    isDeletePostPending,
     onAddPost,
+    onDeletePost,
     onReport,
     onShowComments,
+    onShowDelete,
     params?.id,
     posts,
     selectedPost?.id,

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, UseGuards, Query, UseInterceptors, UploadedFiles, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Query, UseInterceptors, UploadedFiles, Param, Delete } from '@nestjs/common';
 import { PostService } from './services/post.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { AtGuard, GetCurrentUser } from 'src/common';
@@ -39,5 +39,10 @@ export class PostController {
 	@Get(':id/comments')
 	async getComments(@Param('id') id: string, @Query() query: GetCommentsDto) {
 		return this.postService.getComments(id, query);
+	}
+
+	@Delete(':id')
+	async deletePostById(@Param('id') id: string, @GetCurrentUser('userId') userId: string) {
+		return this.postService.deletePostById(id, userId);
 	}
 }

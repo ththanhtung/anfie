@@ -21,6 +21,7 @@ export enum EDropdownAction {
 
 export enum EPostDropdownAction {
   REPORT = "report",
+  DELETE = "delete",
 }
 
 export enum EReportTicketType {

@@ -32,6 +32,13 @@ export class PostServiceApis extends HttpClient {
     );
     return data;
   }
+
+  public async deletePost(postId: string) {
+    const { data } = await this.instance.delete(
+      `${ENDPOINT_APIS.posts.list}/${postId}`
+    );
+    return data;
+  }
 }
 
 export const postService = new PostServiceApis();
