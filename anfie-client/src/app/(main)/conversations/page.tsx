@@ -3,6 +3,7 @@ import {
   ConversationItem,
   LayoutConversation,
   MessagePanel,
+  ReportModal,
 } from "@/components";
 import { useSocketContext } from "@/configs";
 import { EConversationTypes, EReportTicketType, queryKeys } from "@/constants";
@@ -31,27 +32,38 @@ const ConversationPage = () => {
   const { onLeaveConversation } = useMutationConversation();
   const { onCreateFriendRequest: onCreateFriendRequestMutation } =
     useMutationFriendRequest();
-  const { onCreateReportTicket } = useMutationReportTicket();
+  const { onCreateReportTicket, isLoading } = useMutationReportTicket();
+  const reportModalRef = React.useRef<TModalRef>(null);
 
-  const onReport = useCallback(() => {
-    onCreateReportTicket({
-      form: {
-        conversationId: selectedConversation?.id ?? "",
-        content: "",
-        reporteeId:
-          currentUser?.userId === selectedConversation?.recipientId
-            ? selectedConversation?.creatorId
-            : selectedConversation?.recipientId,
-        type: EReportTicketType.CONVERSATION,
-      },
-    });
-  }, [
-    currentUser?.userId,
-    onCreateReportTicket,
-    selectedConversation?.creatorId,
-    selectedConversation?.id,
-    selectedConversation?.recipientId,
-  ]);
+  const onReport = useCallback(
+    (value: any) => {
+      onCreateReportTicket({
+        form: {
+          conversationId: selectedConversation?.id ?? "",
+          content: value?.content ?? "",
+          reporteeId:
+            currentUser?.userId === selectedConversation?.recipientId
+              ? selectedConversation?.creatorId
+              : selectedConversation?.recipientId,
+          type: EReportTicketType.CONVERSATION,
+        },
+        cb: () => {
+          reportModalRef.current?.closeModal();
+        },
+      });
+    },
+    [
+      currentUser?.userId,
+      onCreateReportTicket,
+      selectedConversation?.creatorId,
+      selectedConversation?.id,
+      selectedConversation?.recipientId,
+    ]
+  );
+
+  const onShowReport = useCallback(() => {
+    reportModalRef.current?.showModal();
+  }, []);
 
   const onCreateGroup = useCallback(
     (title: string, userIds: string[]) => {
@@ -231,11 +243,14 @@ const ConversationPage = () => {
             onCreate={onCreateGroup}
             onLeave={onLeave}
             onCreateFriendRequest={onCreateFriendRequest}
-            onReport={(conversationId: string) => {
-              onReport();
-            }}
+            onShowReport={onShowReport}
           />
         </div>
+        <ReportModal
+          ref={reportModalRef}
+          isLoading={isLoading}
+          onReport={onReport}
+        />
       </LayoutConversation>
     </>
   );

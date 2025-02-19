@@ -7,6 +7,7 @@ import {
   PostForm,
   PostItem,
   PostModal,
+  ReportModal,
 } from "@/components";
 import PostCommentsModel from "@/components/ui/diaries/post-comments-model";
 import { EConversationTypes, EReportTicketType } from "@/constants";
@@ -32,22 +33,29 @@ const GroupPage = ({ params }: TDetailPage) => {
   const ref = useRef<TModalRef>(null);
   const commentRef = useRef<TModalRef>(null);
   const deletePostRef = useRef<TModalRef>(null);
+  const reportRef = useRef<TModalRef>(null);
   const { group } = useGetDetailsGroup(params?.id);
   const { onCreateReportTicket, isLoading } = useMutationReportTicket();
   const [selectedPost, setSelectedPost] = React.useState<TPost>();
   const currentUser = useAtomValue(userInfoStoreAtom);
   const { onDeletePost, isDeletePostPending } = useMutationPost();
 
-  const onReport = useCallback(() => {
-    onCreateReportTicket({
-      form: {
-        postId: selectedPost?.id,
-        reporteeId: selectedPost?.authorId ?? "",
-        content: "",
-        type: EReportTicketType.POST,
-      },
-    });
-  }, [onCreateReportTicket, selectedPost?.authorId, selectedPost?.id]);
+  const onReport = useCallback(
+    (value: any) => {
+      onCreateReportTicket({
+        form: {
+          postId: selectedPost?.id,
+          reporteeId: selectedPost?.authorId ?? "",
+          content: value?.content ?? "",
+          type: EReportTicketType.POST,
+        },
+        cb: () => {
+          reportRef.current?.closeModal();
+        },
+      });
+    },
+    [onCreateReportTicket, selectedPost?.authorId, selectedPost?.id]
+  );
 
   const onAddPost = useCallback(() => {
     ref.current?.showModal();
@@ -59,6 +67,10 @@ const GroupPage = ({ params }: TDetailPage) => {
 
   const onShowDelete = useCallback(() => {
     deletePostRef.current?.showModal();
+  }, []);
+
+  const onShowReport = useCallback(() => {
+    reportRef.current?.showModal();
   }, []);
 
   const recentConversations = useCallback(() => {
@@ -106,10 +118,10 @@ const GroupPage = ({ params }: TDetailPage) => {
             <PostItem
               key={item.id}
               post={item}
-              onReport={onReport}
               onClick={() => {
                 setSelectedPost(item);
               }}
+              onShowReport={onShowReport}
               onShowComments={onShowComments}
               onShowDelete={onShowDelete}
             />
@@ -129,6 +141,7 @@ const GroupPage = ({ params }: TDetailPage) => {
             });
           }}
         />
+        <ReportModal ref={reportRef} onReport={onReport} />
       </div>
     );
   }, [
@@ -139,6 +152,7 @@ const GroupPage = ({ params }: TDetailPage) => {
     onReport,
     onShowComments,
     onShowDelete,
+    onShowReport,
     params?.id,
     posts,
     selectedPost?.id,

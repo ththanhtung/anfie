@@ -31,7 +31,7 @@ const MessageContainer = ({
     | TMessage[]
     | TGroupMessage[];
 
-  console.log({ reverseMessages });
+
   const mapMessages = (
     message: TMessage | TGroupMessage,
     index: number,

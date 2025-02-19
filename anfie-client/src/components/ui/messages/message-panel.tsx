@@ -29,7 +29,7 @@ type TProps = {
   onLeave?: () => void;
   onAddRecipients?: (params: TAddRecipientsToGroupParams) => void;
   onCreateFriendRequest?: () => void;
-  onReport?: (conversationId: string) => void;
+  onShowReport?: () => void;
 };
 const MessagePanel = ({
   conversation,
@@ -39,7 +39,7 @@ const MessagePanel = ({
   onLeave,
   onAddRecipients,
   onCreateFriendRequest,
-  onReport,
+  onShowReport,
 }: TProps) => {
   // console.log({ conversation, group, type });
 
@@ -132,9 +132,7 @@ const MessagePanel = ({
           recipient={recipient ?? ({} as TUser)}
           onCreate={onCreateGroup}
           onLeave={onLeaveGroup}
-          onReport={(id) => {
-            onReport?.(id);
-          }}
+          onShowReport={onShowReport}
           onAddRecipients={onShowAddRecipientsModal}
           onShowAvatar={onShowAvatar}
           onEndConversation={onEndConversation}

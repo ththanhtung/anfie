@@ -23,7 +23,7 @@ type TProps = {
   onEndConversation: () => void;
   onCreateFriendRequest?: () => void;
   type: EConversationTypes;
-  onReport?: (conversationId: string) => void;
+  onShowReport?: (conversationId: string) => void;
 };
 
 const MessagePanelHeader = ({
@@ -38,7 +38,7 @@ const MessagePanelHeader = ({
   onShowAvatar,
   onEndConversation,
   onCreateFriendRequest,
-  onReport,
+  onShowReport,
 }: TProps) => {
   const router = useRouter();
 
@@ -202,7 +202,7 @@ const MessagePanelHeader = ({
                   );
                   break;
                 case EDropdownAction.REPORT_CONVERSATION:
-                  onReport?.(conversation?.id ?? "");
+                  onShowReport?.(conversation?.id ?? "");
                   break;
                 default:
                   // onUpdate();

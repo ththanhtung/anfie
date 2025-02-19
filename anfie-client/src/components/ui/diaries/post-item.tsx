@@ -18,14 +18,14 @@ import { useAtomValue } from "jotai";
 import { userInfoStoreAtom } from "@/stores";
 type TProps = {
   post: TPost;
-  onReport: () => void;
+  onShowReport: () => void;
   onClick?: () => void;
   onShowComments?: () => void;
   onShowDelete?: () => void;
 };
 const PostItem = ({
   post,
-  onReport,
+  onShowReport,
   onClick,
   onShowComments,
   onShowDelete,
@@ -79,7 +79,7 @@ const PostItem = ({
               onClick: (e) => {
                 switch (e.key) {
                   case EPostDropdownAction.REPORT:
-                    onReport();
+                    onShowReport();
                     break;
                   case EPostDropdownAction.DELETE:
                     onShowDelete?.();
