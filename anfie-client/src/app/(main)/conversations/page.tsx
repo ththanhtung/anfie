@@ -19,10 +19,15 @@ import { _common } from "@/utils";
 import { useQueryClient } from "@tanstack/react-query";
 import { List } from "antd";
 import { useAtomValue } from "jotai";
+import { redirect } from "next/navigation";
 import React, { useCallback, useEffect } from "react";
 
 const ConversationPage = () => {
   const currentUser = useAtomValue(userInfoStoreAtom);
+  if (!currentUser) {
+    redirect("/login");
+  }
+  console.log({ currentUser });
   const { conversations } = useListInfiniteConversations();
   const queryClient = useQueryClient();
   const [valueChecked, setValueChecked] = React.useState<string>();
