@@ -5,16 +5,16 @@ export class UserProfilesServiceApis extends HttpClient {
     super();
   }
 
-  public async getUserProfile() {
+  public async getUserProfile(id: string) {
     const { data } = await this.instance.get<
       TResultResponse<TGetTUserProfileResponse>
-    >(ENDPOINT_APIS.userProfiles.list + "/me");
+    >(`${ENDPOINT_APIS.userProfiles.admin.list}/${id}`);
     return data;
   }
 
-  public async patchUpdateUserProfile(form: any) {
+  public async patchUpdateUserProfile(form: any, userId: string) {
     const { data } = await this.instance.patch(
-      ENDPOINT_APIS.users.list + "/me",
+      `${ENDPOINT_APIS.userProfiles.admin.list}/${userId}`,
       {
         ...form,
       }
@@ -32,7 +32,7 @@ export class UserProfilesServiceApis extends HttpClient {
   public async getUserProfileById(id: string) {
     const { data } = await this.instance.get<
       TResultResponse<TGetTUserProfileResponse>
-    >(`${ENDPOINT_APIS.userProfiles.list}/${id}`);
+    >(`${ENDPOINT_APIS.userProfiles.admin.list}/${id}`);
     return data;
   }
 }

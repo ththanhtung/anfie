@@ -27,7 +27,10 @@ export class UserRepository extends Repository<Users> {
 	}
 
 	async findOneByEmail(email: string) {
-		const user = await this.findOne({ where: { email: email } });
+		const user = await this.findOne({
+			relations: ['profile'],
+			where: { email: email }
+		});
 		if (!user) {
 			throw new ConflictException([
 				{

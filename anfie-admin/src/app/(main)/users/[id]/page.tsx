@@ -11,7 +11,7 @@ import {
   useUserProfileById,
 } from "@/hooks";
 import { _common } from "@/utils";
-import { Button, Form, Input, InputNumber, message } from "antd";
+import { Button, Form, Input, InputNumber, message, Switch } from "antd";
 import { DefaultOptionType } from "antd/es/select";
 import dayjs from "dayjs";
 import React, {
@@ -36,9 +36,10 @@ const ProfilePage = ({ params }: TDetailPage) => {
   const { onUpdateUserProfile } = useMutationUserProfile();
 
   useEffect(() => {
-    console.log({ debounceProfile });
+    // console.log({ debounceProfile });
     onUpdateUserProfile({
       form: _common.removeEmptyProperties({
+        id: params?.id,
         firstName: debounceProfile?.firstName!,
         lastName: debounceProfile?.lastName!,
         user: debounceProfile?.user!,
@@ -49,9 +50,11 @@ const ProfilePage = ({ params }: TDetailPage) => {
         locations: debounceProfile?.locations!,
         minAge: debounceProfile?.minAge!,
         maxAge: debounceProfile?.maxAge!,
+        isBanned: debounceProfile?.isBanned!,
+        bio: debounceProfile?.bio!,
       }) as TUpdateUserProfileForm,
     });
-  }, [debounceProfile, onUpdateUserProfile]);
+  }, [debounceProfile, onUpdateUserProfile, params?.id]);
 
   const [form] = Form.useForm();
 
@@ -78,6 +81,7 @@ const ProfilePage = ({ params }: TDetailPage) => {
       bio: userProfile?.bio,
     };
   }, [userProfile]);
+
   useEffect(() => {
     form.setFieldsValue(initialValues);
   }, [form, initialValues]);
@@ -108,7 +112,10 @@ const ProfilePage = ({ params }: TDetailPage) => {
   const { onCreateOrUpdatePreferGender } = useMutationPreferGender();
 
   const handleSelectPreference = useCallback(
-    (value: any, options: DefaultOptionType | DefaultOptionType[]) => {
+    (
+      value: any,
+      options: DefaultOptionType | DefaultOptionType[] | undefined
+    ) => {
       console.log({ value, options });
 
       const existedTagOptionValues: string[] = preferenceOptions.map(
@@ -148,7 +155,10 @@ const ProfilePage = ({ params }: TDetailPage) => {
   );
 
   const handleSelectPreferGenders = useCallback(
-    (value: any, options: DefaultOptionType | DefaultOptionType[]) => {
+    (
+      value: any,
+      options: DefaultOptionType | DefaultOptionType[] | undefined
+    ) => {
       console.log({ value, options });
 
       const existedTagOptionValues: string[] = preferGenderOptions.map(
@@ -188,7 +198,10 @@ const ProfilePage = ({ params }: TDetailPage) => {
   );
 
   const handleSelectGenders = useCallback(
-    (value: any, options: DefaultOptionType | DefaultOptionType[]) => {
+    (
+      value: any,
+      options: DefaultOptionType | DefaultOptionType[] | undefined
+    ) => {
       console.log({ value, options });
 
       if (value.length > 1) {
@@ -232,7 +245,10 @@ const ProfilePage = ({ params }: TDetailPage) => {
   );
 
   const handleSelectLocations = useCallback(
-    (value: any, options: DefaultOptionType | DefaultOptionType[]) => {
+    (
+      value: any,
+      options: DefaultOptionType | DefaultOptionType[] | undefined
+    ) => {
       console.log({ value, options });
 
       let tags: string[] = value.map((tag: string) => {
@@ -429,21 +445,6 @@ const ProfilePage = ({ params }: TDetailPage) => {
               />
             </Form.Item>
           </BlockFormItem>
-          <BlockFormItem label="Is User Banned" required>
-            <Form.Item
-              name="isBanned"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Input
-                placeholder="is banned"
-                onChange={(e) => handleChange("isBanned", e.target.value)}
-              />
-            </Form.Item>
-          </BlockFormItem>
           <BlockFormItem label="User Bio" required>
             <Form.Item
               name="bio"
@@ -459,9 +460,19 @@ const ProfilePage = ({ params }: TDetailPage) => {
               />
             </Form.Item>
           </BlockFormItem>
-          <Button type="primary" className="w-full capitalize">
-            change password
-          </Button>
+
+          <BlockFormItem label="Is User Banned" required>
+            <Form.Item
+              name="isBanned"
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <Switch onChange={(e) => handleChange("isBanned", e)} />
+            </Form.Item>
+          </BlockFormItem>
         </Form>
       </div>
     </div>

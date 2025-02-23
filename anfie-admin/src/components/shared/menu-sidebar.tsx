@@ -14,26 +14,16 @@ import { useAtomValue } from "jotai";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { TbMessageCircleUp } from "react-icons/tb";
-import { IoBookOutline, IoPersonAddOutline } from "react-icons/io5";
-import { TbShieldQuestion } from "react-icons/tb";
 import { AiOutlineComment } from "react-icons/ai";
-import { MdOutlineStorefront } from "react-icons/md";
 import { LuDoorOpen } from "react-icons/lu";
-import { useMutationUserProfile, useUserProfile } from "@/hooks";
-import { useQueryClient } from "@tanstack/react-query";
 
 type TProps = {
   href: string;
 };
 const MenuSidebar = ({ href }: TProps) => {
-  const socket = useSocketContext();
-  const collapsed = useAtomValue(collapsedAtom);
   const router = useRouter();
-  const { onFindNewFriend } = useMutationUserProfile();
-  const { userProfile } = useUserProfile();
-  const queryClient = useQueryClient();
 
   const [current, setCurrent] = useState<string>(href);
 

@@ -4,6 +4,7 @@ type TUpdateUserProfileParams = {
 };
 
 type TUpdateUserProfileForm = {
+  id: string;
   firstName?: string;
   lastName?: string;
   dob?: string;

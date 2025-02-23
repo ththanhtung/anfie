@@ -3,7 +3,7 @@ import { ChangePasswordDto, LoginDto } from '../dtos';
 import { UserService } from 'src/apis/user/services';
 import * as argon from 'argon2';
 import { getTokens } from 'src/common/helpers';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { ProfileMediaService } from 'src/apis/profile-media/profile-media.service';
 
 @Injectable()
@@ -26,6 +26,16 @@ export class AuthService {
 	async login(dto: LoginDto, res: Response) {
 		const user = await this.userServices.findOneByEmail(dto.email);
 
+		const isBanned = user.profile.isBanned;
+
+		if (isBanned) {
+			throw new BadRequestException([
+				{
+					message: 'user is banned'
+				}
+			]);
+		}
+
 		const comparePassword = await argon.verify(user.hash, dto.password);
 
 		if (!comparePassword) {
@@ -47,6 +57,8 @@ export class AuthService {
 			secure: true
 		});
 
+		delete user.profile;
+
 		return {
 			user,
 			tokens: { accessToken }
@@ -57,9 +69,9 @@ export class AuthService {
 		return true;
 	}
 
-	async refreshToken(user: TUserJwt, req: Request) {
-		const refreshTokenFromCoookie = req.cookies?.jwt;
-		console.log({ refreshTokenFromCoookie });
+	async refreshToken(user: TUserJwt) {
+		// const refreshTokenFromCoookie = req.cookies?.jwt;
+		// console.log({ refreshTokenFromCoookie });
 
 		const { accessToken, refreshToken } = await getTokens({ userId: user.userId, email: user.email });
 

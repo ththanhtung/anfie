@@ -31,6 +31,7 @@ const TableUsers = ({
         render: (_, record) => (
           <Image
             alt={record.id}
+            className="object-cover"
             src={
               record?.profilePictureUrl
                 ? images.DEFAULT_AVATAR
@@ -58,6 +59,16 @@ const TableUsers = ({
         render: (_, record) => (
           <>
             <p>{record.lastName}</p>
+          </>
+        ),
+      },
+      {
+        title: "Email",
+        dataIndex: "email",
+        key: "email",
+        render: (_, record) => (
+          <>
+            <p>{record.email}</p>
           </>
         ),
       },

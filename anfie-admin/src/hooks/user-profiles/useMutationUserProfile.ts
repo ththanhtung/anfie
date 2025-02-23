@@ -9,9 +9,14 @@ export const useMutationUserProfile = () => {
   const {
     mutate: mutationUpdateUserProfile,
     isPending: isUpdateUserProfilePending,
-  } = useMutation<any, TResponseError, { form: TUpdateUserProfileForm }>({
+  } = useMutation<
+    any,
+    TResponseError,
+    { form: TUpdateUserProfileForm; userId: string }
+  >({
     mutationKey: [mutationKeys.MUTATION_UPDATE_USER_PROFILE],
-    mutationFn: ({ form }) => userProfilesService.patchUpdateUserProfile(form),
+    mutationFn: ({ form, userId }) =>
+      userProfilesService.patchUpdateUserProfile(form, userId),
   });
 
   const { mutate: mutationFindNewFriend, isPending: isFindNewFriendPending } =
@@ -23,7 +28,7 @@ export const useMutationUserProfile = () => {
   const onUpdateUserProfile = useCallback(
     ({ form, cb }: TUpdateUserProfileParams) => {
       mutationUpdateUserProfile(
-        { form },
+        { form, userId: form.id },
         {
           onError: (error) => {
             message.error(error.response.data.errors[0].message);

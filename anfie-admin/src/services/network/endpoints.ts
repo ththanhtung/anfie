@@ -10,7 +10,7 @@ export const ENDPOINT_APIS = {
     list: "api/conversations",
     admin: {
       list: "api/conversations/admin",
-    }
+    },
   },
   conversationRequest: {
     list: "api/conversation-request",
@@ -22,7 +22,7 @@ export const ENDPOINT_APIS = {
     list: "api/posts",
     admin: {
       list: "api/posts/admin",
-    }
+    },
   },
   confessions: {
     list: "api/confessions",
@@ -47,6 +47,9 @@ export const ENDPOINT_APIS = {
   },
   userProfiles: {
     list: "api/user-profiles",
+    admin: {
+      list: "api/user-profiles/admin",
+    },
   },
   preferences: {
     list: "api/preferences",
@@ -67,12 +70,12 @@ export const ENDPOINT_APIS = {
     list: "api/alleys",
     admin: {
       list: "api/alleys/admin",
-    }
+    },
   },
   reportTicket: {
-    list: 'api/report-ticket',
+    list: "api/report-ticket",
     admin: {
-      list: 'api/report-ticket/admin'
-    }
-  }
+      list: "api/report-ticket/admin",
+    },
+  },
 };

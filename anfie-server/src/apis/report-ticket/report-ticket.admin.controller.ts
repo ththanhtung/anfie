@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch, Param, Query, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Patch, Param, Query, HttpCode, HttpStatus } from '@nestjs/common';
 import { AuthAdmin, GetCurrentUser } from 'src/common';
 import { GetReportTicketsAdminDto } from './dto';
 import { ReportTicketAdminService } from './services';

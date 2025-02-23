@@ -1,42 +1,11 @@
 "use client";
-import {
-  AFDatePicker,
-  AFSelectInfinite,
-  BlockFormItem,
-  MessagePanel,
-  PostItem,
-} from "@/components";
+import { MessagePanel, PostItem } from "@/components";
 import { EConversationTypes, EReportTicketStatus, images } from "@/constants";
-import {
-  useDebounce,
-  useGetDetailsReportTicket,
-  useMutationReportTicket,
-  useMutationUserProfile,
-  useUserProfileById,
-} from "@/hooks";
+import { useGetDetailsReportTicket, useMutationReportTicket } from "@/hooks";
 import { _common, _formatDay } from "@/utils";
-import {
-  Avatar,
-  Button,
-  Card,
-  Form,
-  Image,
-  Input,
-  InputNumber,
-  List,
-  message,
-  Space,
-} from "antd";
-import { DefaultOptionType } from "antd/es/select";
-import Title from "antd/es/skeleton/Title";
-import dayjs from "dayjs";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { Avatar, Button, Card, Space } from "antd";
+import { useRouter } from "next/navigation";
+import React, { useRef } from "react";
 const ProfilePage = ({ params }: TDetailPage) => {
   const ref = useRef<TModalRef>(null);
   const { reportTicket, isLoading } = useGetDetailsReportTicket(params?.id);
@@ -45,6 +14,7 @@ const ProfilePage = ({ params }: TDetailPage) => {
     onRejectReportTicket,
     isLoading: isActionLoading,
   } = useMutationReportTicket();
+  const router = useRouter();
 
   return (
     <div className="flex gap-6 p-6 max-w-6xl mx-auto w-full">
@@ -54,29 +24,51 @@ const ProfilePage = ({ params }: TDetailPage) => {
         {/* Reporter Section */}
         <Card className="mb-6">
           <h5 className="text-xl">Reporter</h5>
-          <Space size={64}>
-            <Avatar size={64} src={images.DEFAULT_AVATAR} />
-            <div>
-              <p>{`${reportTicket?.reporter?.user?.lastName} ${reportTicket?.reporter?.user?.firstName}`}</p>
-              <br />
-              <p>
-                reproted at:{" "}
-                {_formatDay.formatDDMMYYYY(reportTicket?.created_at)}
-              </p>
+          <Space size={64} className="flex justify-between">
+            <div className="flex gap-8 items-center">
+              <Avatar size={64} src={images.DEFAULT_AVATAR} />
+              <div>
+                <p>{_common.getUserFullName(reportTicket?.reporter?.user!)}</p>
+                <br />
+                <p>
+                  reproted at:{" "}
+                  {_formatDay.formatDDMMYYYY(reportTicket?.created_at)}
+                </p>
+              </div>
             </div>
+            <Button
+              className="capitalize text-end"
+              type="primary"
+              onClick={() =>
+                router.push(`/users/${reportTicket?.reporter?.user?.id}`)
+              }
+            >
+              go to profile
+            </Button>
           </Space>
         </Card>
 
         {/* Reportee Section */}
         <Card className="mb-6">
           <h5 className="text-xl">Reportee</h5>
-          <Space size={64}>
-            <Avatar size={64} src={images.DEFAULT_AVATAR} />
-            <div>
-              <p>{`${reportTicket?.reportee?.user?.lastName} ${reportTicket?.reportee?.user?.firstName}`}</p>
-              <br />
-              <p>{`Reported count: ${reportTicket?.reportee?.reportedCount}`}</p>
+          <Space size={64} className="flex justify-between">
+            <div className="flex gap-8 items-center">
+              <Avatar size={64} src={images.DEFAULT_AVATAR} />
+              <div>
+                <p>{_common.getUserFullName(reportTicket?.reportee?.user!)}</p>
+                <br />
+                <p>{`Reported count: ${reportTicket?.reportee?.reportedCount}`}</p>
+              </div>
             </div>
+            <Button
+              className="capitalize"
+              type="primary"
+              onClick={() =>
+                router.push(`/users/${reportTicket?.reportee?.user?.id}`)
+              }
+            >
+              go to profile
+            </Button>
           </Space>
         </Card>
 
@@ -128,6 +120,9 @@ const ProfilePage = ({ params }: TDetailPage) => {
                   onClick={() => {
                     onAcceptReportTicket({
                       ticketId: params?.id,
+                      cb: () => {
+                        router.push("/report-tickets");
+                      },
                     });
                   }}
                   disabled={isActionLoading}
@@ -147,6 +142,9 @@ const ProfilePage = ({ params }: TDetailPage) => {
                   onClick={() => {
                     onRejectReportTicket({
                       ticketId: params?.id,
+                      cb: () => {
+                        router.push("/report-tickets");
+                      },
                     });
                   }}
                 >
@@ -157,7 +155,7 @@ const ProfilePage = ({ params }: TDetailPage) => {
           ) : (
             <Card>
               <h5>Report Status</h5>
-              <p>ticket accepted</p>
+              <p>{`Status: ${reportTicket?.status}`}</p>
             </Card>
           )}
         </Space>
