@@ -3,16 +3,15 @@ import { images } from "@/constants";
 import { getName } from "@/helper";
 import { Button, Carousel, Flex, Modal, Tooltip, Tag } from "antd";
 import React, {
+  ReactElement,
   Ref,
   forwardRef,
   memo,
   useImperativeHandle,
-  useRef,
   useState,
 } from "react";
 import { FaCheck } from "react-icons/fa6";
 import { ImCross } from "react-icons/im";
-import TinderCard from "react-tinder-card";
 
 type TProps = {
   matchedUser?: TUserProfile;
@@ -58,15 +57,18 @@ const ConversationRequestModal = (
       closeIcon={false}
       footer={null}
       closable={false}
-      modalRender={(modal) =>
-        React.cloneElement(modal, {
-          style: {
-            ...modal?.props.style,
-            borderRadius: "15px",
-            padding: 0,
-          },
-        })
-      }
+      modalRender={(modal) => {
+        if (React.isValidElement(modal)) {
+          return React.cloneElement(modal as ReactElement, {
+            style: {
+              ...modal?.props.style,
+              borderRadius: "15px",
+              padding: 0,
+            },
+          });
+        }
+        return modal;
+      }}
     >
       <div className="relative flex h-[500px] w-[400px] items-center justify-center">
         <div className="relative h-full w-full rounded-2xl shadow-md">

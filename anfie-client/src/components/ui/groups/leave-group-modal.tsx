@@ -1,8 +1,7 @@
 "use client";
-import { AFSelectInfinite, BlockFormItem } from "@/components";
-import { useListInfiniteFriends } from "@/hooks";
+
 import { userInfoStoreAtom } from "@/stores";
-import { Button, Form, Input, Modal } from "antd";
+import { Modal } from "antd";
 import { useAtomValue } from "jotai";
 import React, {
   Ref,
@@ -34,7 +33,6 @@ const LeaveGroupModal = ({ onOk }: TProps, ref: Ref<TModalRef>) => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
-
 
   return (
     <Modal

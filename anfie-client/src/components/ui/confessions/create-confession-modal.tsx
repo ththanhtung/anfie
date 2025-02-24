@@ -26,7 +26,10 @@ const CreateConfessionModal = (props: any, ref: Ref<TModalRef>) => {
   } = useListInfinityTags({});
 
   const handleSelectTag = useCallback(
-    (value: any, options: DefaultOptionType | DefaultOptionType[]) => {
+    (
+      value: any,
+      options: DefaultOptionType | DefaultOptionType[] | undefined
+    ) => {
       const existedTagOptionValues: string[] = tagOptions.map(
         (option) => option.value
       );

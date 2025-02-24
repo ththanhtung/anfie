@@ -70,7 +70,7 @@ export default abstract class HttpClient {
           console.log({ accessToken });
           if (accessToken) {
             localStorage.setItem(
-              LocalKey.ACCESS_TOKEN_LOCALKEY,   
+              LocalKey.ACCESS_TOKEN_LOCALKEY,
               JSON.stringify(accessToken)
             );
           }
@@ -79,7 +79,7 @@ export default abstract class HttpClient {
       const retryOrigReq = new Promise((resolve, reject) => {
         const newToken = localStorage.getItem(LocalKey.ACCESS_TOKEN_LOCALKEY);
         console.log({ newToken });
-        
+
         if (originalRequest?.headers) {
           originalRequest.headers["Authorization"] = "Bearer " + newToken;
           resolve(axios(originalRequest));

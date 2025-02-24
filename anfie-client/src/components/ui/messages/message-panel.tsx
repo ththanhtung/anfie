@@ -70,7 +70,7 @@ const MessagePanel = ({
     createGroupRef.current?.showModal();
   };
 
-  const onLeaveGroup = () => {
+  const onShowLeaveGroup = () => {
     leaveGroupRef.current?.showModal();
   };
 
@@ -131,7 +131,7 @@ const MessagePanel = ({
           conversation={conversation}
           recipient={recipient ?? ({} as TUser)}
           onCreate={onCreateGroup}
-          onLeave={onLeaveGroup}
+          onLeave={onShowLeaveGroup}
           onShowReport={onShowReport}
           onAddRecipients={onShowAddRecipientsModal}
           onShowAvatar={onShowAvatar}
@@ -183,7 +183,8 @@ const MessagePanel = ({
       <LeaveGroupModal
         ref={leaveGroupRef}
         onOk={() => {
-          onLeave?.();
+          console.log('hello');
+          // onLeave?.();
         }}
       />
       <AddRecipientsModal

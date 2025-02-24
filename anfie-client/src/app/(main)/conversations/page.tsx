@@ -27,7 +27,7 @@ const ConversationPage = () => {
   if (!currentUser) {
     redirect("/login");
   }
-  console.log({ currentUser });
+
   const { conversations } = useListInfiniteConversations();
   const queryClient = useQueryClient();
   const [valueChecked, setValueChecked] = React.useState<string>();

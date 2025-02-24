@@ -23,7 +23,6 @@ const GroupConversationDetailPage = ({ params }: TDetailPage) => {
   const queryClient = useQueryClient();
   const { publicGroup } = useGetDetailsPublicGroup(params.id);
   const currentUser = useAtomValue(userInfoStoreAtom);
-  console.log({ publicGroup });
 
   const { onLeaveGroup, onAddRecipientsToGroup } = useMutationGroup();
 
@@ -157,7 +156,6 @@ const GroupConversationDetailPage = ({ params }: TDetailPage) => {
         <MessagePanel
           group={publicGroup}
           type={EConversationTypes.GROUP}
-          onLeave={onLeaveGroup}
           onAddRecipients={onAddRecipientsToGroup}
         />
       </div>

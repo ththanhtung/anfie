@@ -186,7 +186,6 @@ const MessagePanelHeader = ({
                   break;
                 case EDropdownAction.END_CONVERSATION:
                   onEndConversation();
-                  // onArchive();
                   break;
                 case EDropdownAction.ADD_RECIPIENT:
                   onAddRecipients();
@@ -195,8 +194,6 @@ const MessagePanelHeader = ({
                   onLeave();
                   break;
                 case EDropdownAction.GO_TO_GROUP_PAGE:
-                  console.log("navigate to group page", recipientName);
-
                   router.replace(
                     `${process.env.NEXT_PUBLIC_URL}/page/groups/${group?.id}`
                   );
@@ -205,7 +202,6 @@ const MessagePanelHeader = ({
                   onShowReport?.(conversation?.id ?? "");
                   break;
                 default:
-                  // onUpdate();
                   break;
               }
             },
