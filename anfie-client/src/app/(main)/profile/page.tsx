@@ -42,7 +42,6 @@ const ProfilePage = () => {
   const { onUpdateUserProfile } = useMutationUserProfile();
 
   useEffect(() => {
-    console.log({ debounceProfile });
     onUpdateUserProfile({
       form: _common.removeEmptyProperties({
         firstName: debounceProfile?.firstName!,
@@ -55,6 +54,7 @@ const ProfilePage = () => {
         locations: debounceProfile?.locations!,
         minAge: debounceProfile?.minAge!,
         maxAge: debounceProfile?.maxAge!,
+        selfDescribed: debounceProfile?.selfDescribed!,
       }) as TUpdateUserProfileForm,
     });
   }, [debounceProfile, onUpdateUserProfile]);
@@ -86,6 +86,9 @@ const ProfilePage = () => {
           "image"
         ),
       }),
+      selfDescribed: userProfile?.selfDescribed?.map(
+        (preference: TPreference) => preference?.name
+      ),
     };
   }, [userProfile]);
   useEffect(() => {
@@ -120,10 +123,9 @@ const ProfilePage = () => {
   const handleSelectPreference = useCallback(
     (
       value: any,
-      options: DefaultOptionType | DefaultOptionType[] | undefined
+      options: DefaultOptionType | DefaultOptionType[] | undefined,
+      type: "preferences" | "selfDescribed"
     ) => {
-      console.log({ value, options });
-
       const existedTagOptionValues: string[] = preferenceOptions.map(
         (option) => option.value
       );
@@ -151,10 +153,18 @@ const ProfilePage = () => {
           },
         });
       }
-      setCurrentProfile((prevProfile: any) => ({
-        ...prevProfile,
-        preferences: tags,
-      }));
+
+      if (type === "selfDescribed") {
+        setCurrentProfile((prevProfile: any) => ({
+          ...prevProfile,
+          selfDescribed: tags,
+        }));
+      } else if (type === "preferences") {
+        setCurrentProfile((prevProfile: any) => ({
+          ...prevProfile,
+          preferences: tags,
+        }));
+      }
     },
 
     [preferenceOptions, onCreateOrUpdatePreference]
@@ -165,8 +175,6 @@ const ProfilePage = () => {
       value: any,
       options: DefaultOptionType | DefaultOptionType[] | undefined
     ) => {
-      console.log({ value, options });
-
       const existedTagOptionValues: string[] = preferGenderOptions.map(
         (option) => option.value
       );
@@ -255,8 +263,6 @@ const ProfilePage = () => {
       value: any,
       options: DefaultOptionType | DefaultOptionType[] | undefined
     ) => {
-      console.log({ value, options });
-
       let tags: string[] = value.map((tag: string) => {
         const label = findLabels(tag, locationOptions)[0];
         if (!label) {
@@ -370,6 +376,22 @@ const ProfilePage = () => {
               />
             </Form.Item>
           </BlockFormItem>
+          <BlockFormItem label="self described">
+            <Form.Item name="selfDescribed">
+              <AFSelectInfinite
+                allowClear
+                options={preferenceOptions}
+                loadMore={fetchNextPagePreferences}
+                hasMore={preferenceOptions.length < totalPreferences!}
+                loading={isFetchingNextPagePreferences || isLoadingPreferences}
+                placeholder="Self Described"
+                className="!mr-3 !w-full"
+                onChange={(value, option) => {
+                  handleSelectPreference(value, option, "selfDescribed");
+                }}
+              />
+            </Form.Item>
+          </BlockFormItem>
           <BlockFormItem label="preferences">
             <Form.Item name="preferences">
               <AFSelectInfinite
@@ -380,7 +402,9 @@ const ProfilePage = () => {
                 loading={isFetchingNextPagePreferences || isLoadingPreferences}
                 placeholder="Preferences"
                 className="!mr-3 !w-full"
-                onChange={handleSelectPreference}
+                onChange={(value, option) => {
+                  handleSelectPreference(value, option, "preferences");
+                }}
               />
             </Form.Item>
           </BlockFormItem>
@@ -475,7 +499,11 @@ const ProfilePage = () => {
                 },
               ]}
             >
-              <Input type="password" placeholder="Previous Password" onChange={(e) => {}} />
+              <Input
+                type="password"
+                placeholder="Previous Password"
+                onChange={(e) => {}}
+              />
             </Form.Item>
           </BlockFormItem>
 
@@ -489,7 +517,11 @@ const ProfilePage = () => {
                 },
               ]}
             >
-              <Input type="password" placeholder="New Password" onChange={(e) => {}} />
+              <Input
+                type="password"
+                placeholder="New Password"
+                onChange={(e) => {}}
+              />
             </Form.Item>
           </BlockFormItem>
           <Button

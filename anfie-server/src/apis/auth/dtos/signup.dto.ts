@@ -1,4 +1,4 @@
-import { IsArray, IsDateString, IsOptional, IsString } from 'class-validator';
+import { IsDateString, IsOptional, IsString } from 'class-validator';
 
 export class SignupDto {
 	@IsString()
@@ -25,6 +25,10 @@ export class SignupDto {
 	@IsString()
 	@IsOptional()
 	preferences: string;
+
+	@IsString()
+	@IsOptional()
+	selfDescribed: string;
 
 	@IsString()
 	@IsOptional()

@@ -52,6 +52,7 @@ type TGetTUserProfileResponse = {
   preferGenders: TPreferGender[];
   user: TUser;
   medias: TProfileMedia[];
+  selfDescribed: TPreferGender[];
 };
 
 type TProfileMedia = {

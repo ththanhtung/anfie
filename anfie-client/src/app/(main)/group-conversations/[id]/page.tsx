@@ -47,7 +47,7 @@ const GroupConversationDetailPage = ({ params }: TDetailPage) => {
   }, [onLeaveGroup, params.id]);
 
   const socket = useSocketContext();
-  
+
   useEffect(() => {
     socket.on?.("connected", (payload) => {
       console.log({ payload });

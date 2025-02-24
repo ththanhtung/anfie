@@ -37,7 +37,7 @@ export class UserProfileRepository extends Repository<UserProfiles> {
 			where: {
 				user: { id: id }
 			},
-			relations: ['locations', 'preferences', 'preferGenders', 'user', 'medias']
+			relations: ['locations', 'preferences', 'preferGenders', 'user', 'medias', 'selfDescribed']
 		});
 	}
 

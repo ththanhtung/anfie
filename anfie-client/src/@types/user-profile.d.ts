@@ -18,6 +18,7 @@ type TUpdateUserProfileForm = {
   locations?: string[];
   preferences?: string[];
   preferGenders?: string[];
+  selfDescribed?: string[];
 };
 
 type TUpdateUserUserProfile = {

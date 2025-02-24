@@ -19,8 +19,14 @@ export class UserService {
 	) {}
 
 	async createOne(dto: TSignupParams) {
-		const { preferGenders: preferGendersString, preferences: preferencesString, locations: locationsString } = dto;
+		const {
+			preferGenders: preferGendersString,
+			preferences: preferencesString,
+			locations: locationsString,
+			selfDescribed: selfDescribedString
+		} = dto;
 		const preferGenders = preferGendersString ? JSON.parse(preferGendersString) : [];
+		const selfDescribed = selfDescribedString ? JSON.parse(selfDescribedString) : [];
 		const preferences = preferencesString ? JSON.parse(preferencesString) : [];
 		const locations = locationsString ? JSON.parse(locationsString) : [];
 
@@ -28,7 +34,8 @@ export class UserService {
 			...dto,
 			preferGenders,
 			preferences,
-			locations
+			locations,
+			selfDescribed
 		});
 
 		if (!user) {

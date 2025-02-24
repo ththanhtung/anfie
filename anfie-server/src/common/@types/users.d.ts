@@ -62,6 +62,8 @@ type TSignupParams = {
 
 	preferGenders?: string;
 
+	selfDescribed?: string;
+
 	bio?: string;
 
 	medias?: Express.Multer.File[];
