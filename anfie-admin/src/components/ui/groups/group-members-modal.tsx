@@ -52,19 +52,8 @@ const GroupMembersModal = (
   } = useListInfiniteFriends();
 
   const onFinish = (value: any) => {
-    let currentRecipientId: string = currentConversation?.recipientId
-
-    console.log({ currentConversation });
-    
-
-    console.log({ currentRecipientId });
 
     return;
-    onCreate?.(
-      value.title,
-      [...value?.friends, currentUser.userId.toString(), currentRecipientId] ??
-        []
-    );
   };
 
   return (

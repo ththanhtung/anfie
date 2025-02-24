@@ -2,12 +2,14 @@
 
 import { ModuleReportTickets } from "@/modules";
 import { _common } from "@/utils";
-import React from "react";
+import React, { Suspense } from "react";
 
 const ReportTicketListPage = () => {
   return (
     <>
-      <ModuleReportTickets />
+      <Suspense>
+        <ModuleReportTickets />
+      </Suspense>
     </>
   );
 };

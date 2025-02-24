@@ -87,30 +87,6 @@ const MessagePanel = ({
     onLeave?.();
   };
 
-  const sentMessage = async ({ content }: TMessageForm) => {
-    if (!content) return;
-
-    const trimmedContent = content?.trim();
-    if (!trimmedContent) return;
-    const form = new FormData();
-    form.append("content", trimmedContent);
-
-    // TODO
-    // attach media to form
-    // sent message
-    if (type === EConversationTypes.PRIVATE) {
-      onCreateMessage({
-        conversationId: conversation?.id?.toString() || "",
-        form,
-      });
-    } else {
-      onCreateGroupMessage({
-        groupId: group?.id?.toString() || "",
-        form,
-      });
-    }
-  };
-
   const recipient =
     conversation?.creatorId === currentUser.userId
       ? conversation?.recipient

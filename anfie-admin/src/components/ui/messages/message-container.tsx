@@ -20,7 +20,7 @@ const MessageContainer = ({
   fetchNextPage,
 }: TProps) => {
   const { ref, inView } = useInView();
-  const containerRef = useRef<HTMLDivElement | null>();
+  const containerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (inView) {
       fetchNextPage();
