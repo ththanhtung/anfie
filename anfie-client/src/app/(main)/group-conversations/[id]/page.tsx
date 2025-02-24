@@ -47,6 +47,7 @@ const GroupConversationDetailPage = ({ params }: TDetailPage) => {
   }, [onLeaveGroup, params.id]);
 
   const socket = useSocketContext();
+  
   useEffect(() => {
     socket.on?.("connected", (payload) => {
       console.log({ payload });
@@ -77,28 +78,25 @@ const GroupConversationDetailPage = ({ params }: TDetailPage) => {
       ];
 
       queryClient.setQueryData(queryKeyMessages, (oldData: any) => {
-        // Find the latest page
-        const latestPage = oldData?.pages[oldData?.pages.length - 1];
+        // Use the first page because with "DESC" the newest messages are on page 1
+        const newestPage = oldData?.pages[0];
 
-        // Create a new page object with the updated data
+        // Create a new page object with the updated data (prepending the new message)
         const newPage = {
-          ...latestPage,
-          data: [...latestPage?.data, payload],
+          ...newestPage,
+          data: [payload, ...newestPage?.data],
         };
 
-        // Create a new array of pages with the updated latest page
+        // Create a new array of pages with the updated first page
         const newPages = oldData?.pages.map(
           (page: TResultResponse<TGroupMessage[]>, index: number) =>
-            index === oldData?.pages.length - 1 ? newPage : page
+            index === 0 ? newPage : page
         );
 
-        // Create a new data object with the updated pages
-        const newData = {
+        return {
           ...oldData,
           pages: newPages,
         };
-
-        return newData;
       });
 
       queryClient.setQueryData(queryKeyConversations, (oldData: any) => {
