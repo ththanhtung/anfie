@@ -51,21 +51,14 @@ export class EventGateway {
 		console.log(`Client disconnected: ${socket.user.userId}`);
 	}
 
-	// @SubscribeMessage('onFindNewFriend')
-	// async onFindNewFriend(@MessageBody() data: any, @ConnectedSocket() client: AuthenticatedSocket) {
-	// 	console.log('find new friend', client.user.userId);
-
-	// 	await this.userService.toggleFindingFriend(client.user.userId);
-	// }
-
 	@Cron(CronExpression.EVERY_10_SECONDS)
 	async matchMaking() {
-		console.log('service being called');
 		const usersOnline = Array.from(this.sessionManager.getSockets().keys());
-		console.log({ usersOnline });
 		const match = await this.matchmakingService.matchmaking(usersOnline.slice(0, 10));
 
 		if (!match) return;
+
+		console.log({ match });
 
 		const conversationRequest = await this.conversationRequestService.createOne(
 			match.id1.toString(),

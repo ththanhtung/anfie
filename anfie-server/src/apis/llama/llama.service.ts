@@ -11,53 +11,39 @@ export class LlamaService {
 
 		const userInfos = profiles
 			.map((profile) => {
-				const preferences = profile?.preferences?.map((preference) => preference?.name).join();
-				const locations = profile?.locations?.map((location) => location?.name).join();
+				const preferences = profile?.preferences?.map((p) => p?.name).join(', ') || 'None';
+				const locations = profile?.locations?.map((l) => l?.name).join(', ') || 'Any';
 				const age = calculateAge(profile.user.dob);
-				let ageRange = `${profile?.maxAge} to ${profile?.minAge}`;
-				const preferGender = profile.preferGenders.map((gender) => gender.name).join();
+				const preferGender = profile.preferGenders.map((g) => g.name).join(', ') || 'No preference';
+				const selfDescribed = profile.selfDescribed.map((g) => g.name).join(', ') || 'No self described';
 
-				let prompt = `Name: ${profile?.user.firstName} ${profile?.user.lastName}, ID: ${profile?.user?.id}, `;
-
-				if (profile.gender) {
-					prompt += `Gender: ${profile?.gender}, `;
+				// Age range calculation with clear boundaries
+				let ageRange = '';
+				if (profile.minAge && profile.maxAge) {
+					ageRange = `${profile.minAge}-${profile.maxAge}`;
+				} else if (profile.minAge) {
+					ageRange = `>${profile.minAge}`;
+				} else if (profile.maxAge) {
+					ageRange = `<${profile.maxAge}`;
+				} else {
+					ageRange = 'No restriction';
 				}
 
-				if (profile.user.dob) {
-					prompt += `Age: ${age}, `;
-				}
-
-				// console.log({ preferences });
-
-				if (preferences !== '') {
-					prompt += `Likes: ${preferences}, `;
-				}
-
-				if (locations !== '') {
-					prompt += `Preferred partner locations: ${locations}, `;
-				}
-
-				if (profile.minAge !== null && profile.maxAge === null) {
-					ageRange = `Preferred partner age greater than ${profile.minAge}`;
-				}
-
-				if (profile.maxAge !== null && profile.minAge === null) {
-					ageRange = `Preferred partner age from 16 to ${profile.maxAge}`;
-				}
-
-				if (profile.maxAge !== null && profile.minAge !== null) {
-					prompt += `Preferred partner age range: ${ageRange}, `;
-				}
-
-				if (preferGender !== null) {
-					prompt += `Preferred partner gender: ${preferGender}`;
-				}
-
-				console.log({ prompt });
-
-				return prompt;
+				return `
+				[id: ${profile.user.id}]
+				1. Basic Info:
+				- Name: ${profile.user.firstName} ${profile.user.lastName}
+				- Age: ${age} (Seeking: ${ageRange})
+				- Gender: ${profile.gender || 'Unspecified'}
+				- Self Described: ${selfDescribed || 'Unspecified'}
+				
+				2. Preferences (Weighted):
+				* Partner Gender: ${preferGender} [25% weight]
+				* Location Priority: ${locations} [20% weight] 
+				* Key Interests: ${preferences} [30% weight]
+				`;
 			})
-			.join(' - ');
+			.join('\n\n');
 
 		const chatCompletion = await fetch(`${process.env.OLLAMA_URL}/api/chat`, {
 			method: 'POST',
@@ -65,46 +51,51 @@ export class LlamaService {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				model: 'llama3.2:1b',
+				model: 'llama3.2:3b',
 				messages: [
 					{
 						role: 'system',
-						content:
-							'you are a matchmaker. I will give you a list of possible matchs. Your job is to help to find the best match. Do not be too verbose. Refer to the user in the form. format the entire response in the JSON format: {"result": {"id1": id of first matched user id, "id2": id of second matched user id, "reason": why you match them}}. Here is a response example: {"result":{"id1":4,"id2":3,"reason":"they both love cooking"}}'
+						content: `Act as a professional matchmaker AI. Follow this process rigorously:
+								1. ANALYZE profiles using these compatibility pillars:
+								- Interest Synergy (30% weight): Deep semantic match of hobbies/values
+								- Personality Alignment (25%): Complementary communication styles
+								- Geo-Proximity (20%): Reasonable distance for real connections
+								- Value Resonance (25%): Shared life goals/ethics
+
+								2. SCORING SYSTEM:
+								- Calculate match score (0-100) for all possible pairs
+								- Prioritize matches where BOTH users have indicated openness to new connections
+								- Deduct points for conflicting dealbreakers
+								- If no mutual matches, select highest unilateral attraction
+								- NEVER omit match - ALWAYS return best available pair
+
+								3. SELECTION:
+								- Choose the pair with highest mutual score
+
+								4. RESPONSE FORMAT STRICTLY AS:
+								{"result": {"id1": [string], "id2": [string], "reason": "[concise 5-7 word shared interest]"}}
+
+								Example of ideal response:
+								{"result": {"id1":"10287ec7-ca50-49ed-b950-dcbcecb77cb0","id2":"e2ea4f48-7d30-4a49-90ab-e128badb49a2","reason":"shared passion for culinary arts"}}
+
+								Prohibited:
+								- Markdown formatting
+								- Additional text outside JSON
+								- Generic reasons like "common interests
+								`
 					},
-					{ role: 'user', content: userInfos }
+					{ role: 'assistant', content: userInfos }
 				],
 				stream: false
 			})
 		});
 
-		console.log({ userInfos });
-
 		const chatCompletionJson = await chatCompletion.json();
 
 		const result = chatCompletionJson?.message?.content;
 
-		console.log({ result });
+		const parsedResult = JSON.parse(result);
 
-		const parsedResult = extractValues(result);
-		return parsedResult as TMatchResult;
+		return parsedResult.result as TMatchResult;
 	}
-}
-
-function extractValues(input: string): { id1: string; id2: string; reason: string } | null {
-	const idPattern = /"id1":\s*"?([\w-]+)"?,\s*"id2":\s*"?([\w-]+)"?/;
-	const reasonPattern = /"reason":\s*"([^"]+)"/;
-
-	const idMatch = input.match(idPattern);
-	const reasonMatch = input.match(reasonPattern);
-
-	if (idMatch && reasonMatch) {
-		return {
-			id1: idMatch[1],
-			id2: idMatch[2],
-			reason: reasonMatch[1]
-		};
-	}
-
-	return null;
 }

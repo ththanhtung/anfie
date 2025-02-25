@@ -15,8 +15,6 @@ export class MatchmakingService {
 		private readonly friendService: FriendService
 	) {}
 	async matchmaking(usersOnline: string[]) {
-		// console.log({ dto });
-
 		const users = await this.userService.finUsersFindFriend();
 
 		if (users.length < 2) {
@@ -26,7 +24,6 @@ export class MatchmakingService {
 		const usersOnlineAndFindFriend = users.filter((user) => usersOnline.includes(user.id) && user.isFindFriend);
 
 		const usersInQueue = usersOnlineAndFindFriend.map((user) => user.id);
-		// const usersInQueue = ['3d1bdf26-3b40-4c63-b05a-9598790f9cde', '10287ec7-ca50-49ed-b950-dcbcecb77cb0'];
 
 		const userProfiles = await this.userProfileService.getProfilesByUserIds(usersInQueue);
 
@@ -37,16 +34,13 @@ export class MatchmakingService {
 		}
 
 		const isFriend = await this.friendService.isFriend(match.id1, match.id2);
-
 		if (isFriend) {
 			return;
 		}
 
 		const existedConversation = await this.conversataionRequestServide.getConversationRequestBetweenTwoUsers(match.id1, match.id2);
-
 		if (existedConversation) {
 			const conversationDuration = Date.now() - existedConversation.created_at.getTime();
-
 			if (conversationDuration <= FIFTEEN_MINUTES) {
 				return;
 			}

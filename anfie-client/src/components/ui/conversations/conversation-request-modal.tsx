@@ -98,19 +98,9 @@ const ConversationRequestModal = (
             {matchedUser?.bio && (
               <p className="text-white">{`About ${matchedUser.user?.firstName}: ${matchedUser?.bio}`}</p>
             )}
-            <Flex gap="4px 0" wrap>
-              <Tag color="magenta">magenta</Tag>
-              <Tag color="red">red</Tag>
-              <Tag color="volcano">volcano</Tag>
-              <Tag color="orange">orange</Tag>
-              <Tag color="gold">gold</Tag>
-              <Tag color="lime">lime</Tag>
-              <Tag color="green">green</Tag>
-              <Tag color="cyan">cyan</Tag>
-              <Tag color="blue">blue</Tag>
-              <Tag color="geekblue">geekblue</Tag>
-              <Tag color="purple">purple</Tag>
-            </Flex>
+            {/* <Flex gap="4px 0" wrap>
+              {matchedUser.ser}
+            </Flex> */}
             <div className="mt-3 flex gap-[150px]">
               <Tooltip title="reject" key="reject" className="z-10">
                 <Button

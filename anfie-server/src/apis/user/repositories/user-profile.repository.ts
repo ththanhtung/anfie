@@ -42,7 +42,10 @@ export class UserProfileRepository extends Repository<UserProfiles> {
 	}
 
 	async getProfilesByUserIds(ids: string[]) {
-		return this.find({ where: { user: { id: In(ids) } }, relations: ['locations', 'preferences', 'preferGenders', 'user'] });
+		return this.find({
+			where: { user: { id: In(ids) } },
+			relations: ['locations', 'preferences', 'preferGenders', 'user', 'selfDescribed']
+		});
 	}
 
 	async banUser(userId: string) {
