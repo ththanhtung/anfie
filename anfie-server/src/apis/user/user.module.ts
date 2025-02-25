@@ -10,10 +10,11 @@ import { LocationsModule } from '../locations/locations.module';
 import { PreferGenderModule } from '../prefer-gender/prefer-gender.module';
 import { UserAdminController } from './user.admin.controller';
 import { UserProfileAdminController } from './user-profile.admin.controller';
+import { ProfileMediaModule } from '../profile-media/profile-media.module';
 
 @Module({
 	controllers: [UserController, UserProfileController, UserAdminController, UserProfileAdminController],
-	imports: [TypeOrmModule.forFeature([Users, UserProfiles]), PreferencesModule, LocationsModule, PreferGenderModule],
+	imports: [TypeOrmModule.forFeature([Users, UserProfiles]), PreferencesModule, LocationsModule, PreferGenderModule, ProfileMediaModule],
 	providers: [UserService, UserRepository, UserProfileService, UserProfileRepository, AdminUserService],
 	exports: [UserService, UserProfileService]
 })

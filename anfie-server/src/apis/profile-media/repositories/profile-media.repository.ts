@@ -15,4 +15,8 @@ export class ProfileMediaRepository extends Repository<ProfileMedia> {
 	async updateProfileMediaUrl(id: string, url: string) {
 		return this.update(id, { url });
 	}
+
+	async deleteProfileMedia(id: string) {
+		return this.delete(id);
+	}
 }

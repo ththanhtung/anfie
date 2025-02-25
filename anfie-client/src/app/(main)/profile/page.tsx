@@ -468,6 +468,9 @@ const ProfilePage = () => {
                 onChange={(value) => {
                   console.log({ value });
                 }}
+                onRemove={(value) => {
+                  console.log({ value });
+                }}
               />
             </Form.Item>
           </div>

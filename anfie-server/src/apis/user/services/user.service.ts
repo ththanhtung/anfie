@@ -1,12 +1,13 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { UserRepository } from '../repositories';
-import { GetMyGroupsDto, GetUsersDto, UpdateUserProfileDto } from '../dto';
+import { DeleteProfileMediasDto, GetMyGroupsDto, GetUsersDto, UpdateUserProfileDto } from '../dto';
 import { UserProfileService } from './user-profile.service';
 import { PreferencesService } from 'src/apis/preferences/services';
 import { LocationsService } from 'src/apis/locations/services';
 import { PreferGenderService } from 'src/apis/prefer-gender/services';
 import { UserProfiles } from '../entities';
 import { ChangePasswordDto } from 'src/apis/auth/dtos';
+import { ProfileMediaService } from 'src/apis/profile-media/profile-media.service';
 
 @Injectable()
 export class UserService {
@@ -15,7 +16,8 @@ export class UserService {
 		private readonly userProfileService: UserProfileService,
 		private readonly preferencesService: PreferencesService,
 		private readonly locationService: LocationsService,
-		private readonly preferGendersService: PreferGenderService
+		private readonly preferGendersService: PreferGenderService,
+		private readonly profileMediaService: ProfileMediaService
 	) {}
 
 	async createOne(dto: TSignupParams) {
@@ -148,5 +150,11 @@ export class UserService {
 
 	async changePassword(userId: string, dto: ChangePasswordDto) {
 		return this.userRepository.changePassword(userId, dto);
+	}
+
+	async deleteMedias(userId: string, dto: DeleteProfileMediasDto) {
+		const { ids } = dto;
+		const promises = ids.map((id) => this.profileMediaService.delete(userId, id));
+		return Promise.all(promises);
 	}
 }

@@ -85,4 +85,13 @@ export class MediaUploaderService {
 				.catch((error) => reject(error));
 		});
 	}
+
+	async deleteMedia(key: string) {
+		try {
+			const result = await v2.uploader.destroy(key);
+			console.log('Xóa ảnh thành công:', result);
+		} catch (error) {
+			console.error('Lỗi khi xóa ảnh:', error);
+		}
+	}
 }
