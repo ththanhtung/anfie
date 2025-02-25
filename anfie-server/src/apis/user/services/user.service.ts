@@ -27,18 +27,12 @@ export class UserService {
 			locations: locationsString,
 			selfDescribed: selfDescribedString
 		} = dto;
-		const preferGenders = preferGendersString ? JSON.parse(preferGendersString) : [];
-		const selfDescribed = selfDescribedString ? JSON.parse(selfDescribedString) : [];
-		const preferences = preferencesString ? JSON.parse(preferencesString) : [];
-		const locations = locationsString ? JSON.parse(locationsString) : [];
 
-		const user = await this.userRepository.createOne({
-			...dto,
-			preferGenders,
-			preferences,
-			locations,
-			selfDescribed
-		});
+		const preferences = await this.preferencesService.findByNames(preferencesString ? JSON.parse(preferencesString) : []);
+		const preferGenders = await this.preferGendersService.findByNames(preferGendersString ? JSON.parse(preferGendersString) : []);
+		const selfDescribed = await this.preferencesService.findByNames(selfDescribedString ? JSON.parse(selfDescribedString) : []);
+		const locations = await this.locationService.findByNames(locationsString ? JSON.parse(locationsString) : []);
+		const user = await this.userRepository.createOne(dto);
 
 		if (!user) {
 			throw new InternalServerErrorException([
@@ -48,7 +42,14 @@ export class UserService {
 			]);
 		}
 
-		const profile = await this.userProfileService.createOne({ userId: user.id, ...dto });
+		const profile = await this.userProfileService.createOne({
+			userId: user.id,
+			...dto,
+			preferGenders,
+			preferences,
+			locations,
+			selfDescribed
+		});
 
 		return {
 			...user,

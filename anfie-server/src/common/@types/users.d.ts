@@ -56,15 +56,39 @@ type TSignupParams = {
 
 	phone: string;
 
-	preferences?: string;
+	preferences?: any;
 
-	locations?: string;
+	locations?: any;
 
-	preferGenders?: string;
+	preferGenders?: any;
 
-	selfDescribed?: string;
+	selfDescribed?: any;
 
 	bio?: string;
 
 	medias?: Express.Multer.File[];
+};
+
+type TCreateUserProfileParams = {
+	userId: string;
+
+	firstName: string;
+
+	lastName: string;
+
+	dob: Date;
+
+	gender: string;
+
+	phone: string;
+
+	bio?: string;
+
+	preferences?: any;
+
+	locations?: any;
+
+	preferGenders?: any;
+
+	selfDescribed?: any;
 };

@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { UserProfileRepository } from '../repositories';
-import { CreateUserProfileDto } from '../dto';
 import { PreferencesService } from 'src/apis/preferences/services';
 import { LocationsService } from 'src/apis/locations/services';
 import { UserProfiles } from '../entities';
@@ -15,7 +14,7 @@ export class UserProfileService {
 		private readonly preferGendersService: PreferGenderService
 	) {}
 
-	async createOne(user: CreateUserProfileDto) {
+	async createOne(user: TCreateUserProfileParams) {
 		return this.userProfileRepository.createOne(user);
 	}
 

@@ -9,7 +9,7 @@ import {
   useSignup,
 } from "@/hooks";
 import { _common, _formatDay } from "@/utils";
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input, InputNumber, message } from "antd";
 import { DefaultOptionType } from "antd/es/select";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
@@ -28,6 +28,7 @@ const FormSignup = () => {
         ![
           "preferGenders",
           "preferences",
+          "selfDescribed",
           "locations",
           "gender",
           "medias",
@@ -52,6 +53,12 @@ const FormSignup = () => {
       ) ?? [];
     formData.append("preferences", JSON.stringify(preferences));
 
+    let selfDescribed: string[] =
+      value?.selfDescribed?.map(
+        (tag: string) => _common.findLabels(tag, preferenceOptions)[0]
+      ) ?? [];
+    formData.append("selfDescribed", JSON.stringify(selfDescribed));
+
     let locations: string[] =
       value?.locations?.map(
         (tag: string) => _common.findLabels(tag, locationOptions)[0]
@@ -75,7 +82,6 @@ const FormSignup = () => {
         formData.append("medias", media?.originFileObj);
       });
     }
-
     // Send FormData instead of regular object
     onSignup({
       form: formData,
@@ -226,10 +232,6 @@ const FormSignup = () => {
           },
         });
       }
-      // setCurrentProfile((prevProfile: any) => ({
-      //   ...prevProfile,
-      //   preferences: tags,
-      // }));
     },
 
     [preferenceOptions, onCreateOrUpdatePreference]
@@ -333,6 +335,18 @@ const FormSignup = () => {
         >
           <Input placeholder="Phone Number" />
         </Form.Item>
+        <Form.Item name="selfDescribed">
+          <AFSelectInfinite
+            allowClear
+            options={preferenceOptions}
+            loadMore={fetchNextPagePreferences}
+            hasMore={preferenceOptions.length < totalPreferences!}
+            loading={isFetchingNextPagePreferences || isLoadingPreferences}
+            placeholder="Self Described"
+            className="!mr-3 !w-full"
+            onChange={handleSelectPreference}
+          />
+        </Form.Item>
         <Form.Item name="preferences">
           <AFSelectInfinite
             allowClear
@@ -392,9 +406,25 @@ const FormSignup = () => {
         >
           <AFDatePicker placeholder="Date of Birth" />
         </Form.Item>
+        <BlockFormItem label="Partner Age Range">
+          <div className="grid grid-cols-2 gap-4">
+            <Form.Item name="minAge">
+              <InputNumber placeholder="Min Age" className="w-full" min={16} />
+            </Form.Item>
+            <Form.Item className="!mb-0">
+              <Form.Item name="maxAge">
+                <InputNumber
+                  placeholder="Max Age"
+                  className="w-full"
+                  min={17}
+                />
+              </Form.Item>
+            </Form.Item>
+          </div>
+        </BlockFormItem>
         <BlockFormItem label="Pictures of You:">
           <Form.Item name="medias">
-            <UploadImage />
+            <UploadImage maxCount={5} />
           </Form.Item>
         </BlockFormItem>
         <Button
