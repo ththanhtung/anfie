@@ -76,8 +76,6 @@ const FormSignup = () => {
       });
     }
 
-    formData.forEach((val, key) => console.log(key, val));
-
     // Send FormData instead of regular object
     onSignup({
       form: formData,

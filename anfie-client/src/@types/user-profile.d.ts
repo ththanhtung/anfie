@@ -28,3 +28,13 @@ type TUpdateUserUserProfile = {
 type TFindNewFriendParams = {
   cb?: () => void;
 };
+
+type TDeleteProfileMediaParams = {
+  ids: string[];
+  cb?: () => void;
+};
+
+type TUpdateProfileMediaParams = {
+  form: any;
+  cb?: () => void;
+};

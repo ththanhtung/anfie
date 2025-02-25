@@ -8,8 +8,8 @@ export class ProfileMediaRepository extends Repository<ProfileMedia> {
 	}
 
 	async createOne(profileId: string) {
-		const messageMedia = await this.create({ profileId });
-		return this.save(messageMedia);
+		const profileMedia = await this.create({ profileId });
+		return this.save(profileMedia);
 	}
 
 	async updateProfileMediaUrl(id: string, url: string) {

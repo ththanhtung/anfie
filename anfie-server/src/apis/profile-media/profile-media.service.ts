@@ -47,6 +47,6 @@ export class ProfileMediaService {
 
 		await this.mediaUploaderService.deleteMedia(publicId);
 
-		// return this.profileMediaRepository.deleteProfileMedia(id);
+		return this.profileMediaRepository.deleteProfileMedia(id);
 	}
 }

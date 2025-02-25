@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, HttpCode, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Patch, Post, Query, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
 import { UserService } from './services';
 import { AtGuard, GetCurrentUser } from 'src/common';
 import { DeleteProfileMediasDto, GetMyGroupsDto, UpdateUserProfileDto } from './dto';
+import { FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('user')
 @UseGuards(AtGuard)
@@ -39,5 +40,12 @@ export class UserController {
 	@HttpCode(200)
 	async deleteMedias(@GetCurrentUser('userId') userId: string, @Body() dto: DeleteProfileMediasDto) {
 		return this.userService.deleteMedias(userId, dto);
+	}
+
+	@Post('me/medias')
+	@HttpCode(200)
+	@UseInterceptors(FilesInterceptor('medias'))
+	async updateMedias(@GetCurrentUser('userId') userId: string, @UploadedFiles() medias: Express.Multer.File[]) {
+		return this.userService.updateProfileMedia(userId, medias);
 	}
 }

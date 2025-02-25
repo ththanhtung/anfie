@@ -20,6 +20,28 @@ export const useMutationUserProfile = () => {
       mutationFn: () => userProfilesService.postFindNewFriends(),
     });
 
+  const {
+    mutate: mutationDeleteProfileMedia,
+    isPending: isDeleteProfileMediaPending,
+  } = useMutation<
+    any,
+    TResponseError,
+    {
+      ids: string[];
+    }
+  >({
+    mutationKey: [mutationKeys.MUTATION_DELETE_PROFILE_MEDIA],
+    mutationFn: ({ ids }) => userProfilesService.deleteUserProfileMedia(ids),
+  });
+
+  const {
+    mutate: mutationUpdateProfileMedia,
+    isPending: isUpdateProfileMediaPending,
+  } = useMutation<any, TResponseError, { form: FormData }>({
+    mutationKey: [mutationKeys.MUTATION_UPDATE_PROFILE_MEDIA],
+    mutationFn: ({ form }) => userProfilesService.updateUserProfileMedia(form),
+  });
+
   const onUpdateUserProfile = useCallback(
     ({ form, cb }: TUpdateUserProfileParams) => {
       mutationUpdateUserProfile(
@@ -56,10 +78,58 @@ export const useMutationUserProfile = () => {
     },
     [mutationFindNewFriend]
   );
+  const onDeleteProfileMedia = useCallback(
+    ({ ids, cb }: TDeleteProfileMediaParams) => {
+      mutationDeleteProfileMedia(
+        { ids },
+        {
+          onError: (error) => {
+            message.error(error.response.data.errors[0].message);
+          },
+          onSuccess: (data) => {
+            cb?.();
+            queryClient.invalidateQueries({
+              queryKey: [queryKeys.GET_USER_PROFILE],
+            });
+            message.success("Deleted profile media successfully");
+          },
+        }
+      );
+      return;
+    },
+    [mutationDeleteProfileMedia, queryClient]
+  );
+
+  const onUpdateProfileMedia = useCallback(
+    ({ form, cb }: TUpdateProfileMediaParams) => {
+      mutationUpdateProfileMedia(
+        { form },
+        {
+          onError: (error) => {
+            message.error(error.response.data.errors[0].message);
+          },
+          onSuccess: (data) => {
+            cb?.();
+            queryClient.invalidateQueries({
+              queryKey: [queryKeys.GET_USER_PROFILE],
+            });
+            message.success("Updated profile media successfully");
+          },
+        }
+      );
+      return;
+    },
+    [mutationUpdateProfileMedia, queryClient]
+  );
 
   return {
-    isLoading: isUpdateUserProfilePending,
+    isLoading:
+      isUpdateUserProfilePending ||
+      isDeleteProfileMediaPending ||
+      isUpdateProfileMediaPending,
     onUpdateUserProfile,
     onFindNewFriend,
+    onDeleteProfileMedia,
+    onUpdateProfileMedia,
   };
 };

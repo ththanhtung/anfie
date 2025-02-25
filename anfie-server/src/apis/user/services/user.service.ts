@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { UserRepository } from '../repositories';
 import { DeleteProfileMediasDto, GetMyGroupsDto, GetUsersDto, UpdateUserProfileDto } from '../dto';
 import { UserProfileService } from './user-profile.service';
@@ -156,5 +156,21 @@ export class UserService {
 		const { ids } = dto;
 		const promises = ids.map((id) => this.profileMediaService.delete(userId, id));
 		return Promise.all(promises);
+	}
+
+	async updateProfileMedia(userId: string, medias: Express.Multer.File[]) {
+		const user = await this.userRepository.findOneById(userId);
+		if (!user) {
+			throw new NotFoundException([
+				{
+					message: 'user not found'
+				}
+			]);
+		}
+
+		await this.profileMediaService.create(user.profile.id, medias);
+
+		const userWithMedias = await this.userRepository.findOneById(user.id, true);
+		return userWithMedias;
 	}
 }

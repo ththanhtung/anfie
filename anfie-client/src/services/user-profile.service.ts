@@ -28,6 +28,26 @@ export class UserProfilesServiceApis extends HttpClient {
     );
     return data;
   }
+
+  public async deleteUserProfileMedia(ids: string[]) {
+    const { data } = await this.instance.delete(
+      `${ENDPOINT_APIS.users.list}/me/medias`,
+      {
+        data: {
+          ids,
+        },
+      }
+    );
+    return data;
+  }
+
+  public async updateUserProfileMedia(form: FormData) {
+    const { data } = await this.instance.postForm(
+      `${ENDPOINT_APIS.users.list}/me/medias`,
+      form
+    );
+    return data;
+  }
 }
 
 export const userProfilesService = new UserProfilesServiceApis();

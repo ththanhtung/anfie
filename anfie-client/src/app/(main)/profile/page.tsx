@@ -15,6 +15,7 @@ import {
 import { _common } from "@/utils";
 import { Button, Divider, Form, Input, InputNumber, message } from "antd";
 import { DefaultOptionType } from "antd/es/select";
+import { profile } from "console";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import React, {
@@ -39,7 +40,12 @@ const ProfilePage = () => {
     500
   );
 
-  const { onUpdateUserProfile } = useMutationUserProfile();
+  const {
+    onUpdateUserProfile,
+    onDeleteProfileMedia,
+    onUpdateProfileMedia,
+    isLoading,
+  } = useMutationUserProfile();
 
   useEffect(() => {
     onUpdateUserProfile({
@@ -465,11 +471,33 @@ const ProfilePage = () => {
             <p className="mb-4">You can add up to 5 images</p>
             <Form.Item name="images">
               <UploadImage
-                onChange={(value) => {
-                  console.log({ value });
+                disabled={isLoading}
+                maxCount={5}
+                onChange={(value: any) => {
+                  const formData = new FormData();
+                  if (value && value.length > 0) {
+                    value.forEach((media: any) => {
+                      if (!media?.isNotLocalFile) {
+                        formData.append("medias", media?.originFileObj);
+                      }
+                    });
+                  }
+
+                  const data = Object.fromEntries(formData);
+
+                  if (data?.medias) {
+                    onUpdateProfileMedia({ form: formData });
+                  }
                 }}
                 onRemove={(value) => {
-                  console.log({ value });
+                  const medias = userProfile?.medias ?? [];
+                  const deletedMedia = medias.find(
+                    (media) => media.url === value.thumbUrl
+                  );
+
+                  if (deletedMedia) {
+                    onDeleteProfileMedia({ ids: [deletedMedia.id] });
+                  }
                 }}
               />
             </Form.Item>
