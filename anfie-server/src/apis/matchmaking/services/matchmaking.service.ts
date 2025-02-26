@@ -17,11 +17,11 @@ export class MatchmakingService {
 	async matchmaking(usersOnline: string[]) {
 		const users = await this.userService.finUsersFindFriend();
 
-		if (users.length < 2) {
+		const usersOnlineAndFindFriend = users.filter((user) => usersOnline.includes(user.id) && user.isFindFriend);
+
+		if (usersOnlineAndFindFriend.length < 2) {
 			return;
 		}
-
-		const usersOnlineAndFindFriend = users.filter((user) => usersOnline.includes(user.id) && user.isFindFriend);
 
 		const usersInQueue = usersOnlineAndFindFriend.map((user) => user.id);
 

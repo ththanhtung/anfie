@@ -98,9 +98,13 @@ const ConversationRequestModal = (
             {matchedUser?.bio && (
               <p className="text-white">{`About ${matchedUser.user?.firstName}: ${matchedUser?.bio}`}</p>
             )}
-            {/* <Flex gap="4px 0" wrap>
-              {matchedUser.ser}
-            </Flex> */}
+            <Flex gap="4px 0" wrap>
+              {matchedUser?.selfDescribed?.map((s) => (
+                <Tag key={s.id} color="lime">
+                  {s.name}
+                </Tag>
+              ))}
+            </Flex>
             <div className="mt-3 flex gap-[150px]">
               <Tooltip title="reject" key="reject" className="z-10">
                 <Button

@@ -31,6 +31,7 @@ type TUserProfile = {
   userId: string;
   user?: TUser;
   medias?: TProfileMedia[];
+  selfDescribed: TPreferGender[];
 };
 
 type TGetTUserProfileResponse = {

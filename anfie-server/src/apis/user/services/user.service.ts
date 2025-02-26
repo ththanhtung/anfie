@@ -129,7 +129,7 @@ export class UserService {
 	}
 
 	async foundMatch(id: string) {
-		await this.userProfileService.reduceStrangerConversationSlotByOne(id);
+		// await this.userProfileService.reduceStrangerConversationSlotByOne(id);
 		await this.userRepository.toggleFindingFriend(id);
 	}
 

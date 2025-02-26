@@ -79,8 +79,6 @@ export class UserProfileRepository extends Repository<UserProfiles> {
 	}
 
 	async increaseStrangerConversationSlotByOne(userId: string) {
-		console.log({ userId });
-
 		await this.update({ user: { id: userId } }, { strangerConversationSlots: () => 'user_stranger_conversation_slots + 1' });
 		const profile = await this.findOne({
 			where: {
